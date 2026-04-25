@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import ScrollToTopLazy from "./components/ScrollToTopLazy";
+import PublicChrome from "./components/PublicChrome";
 import { JsonLd, personSchema, websiteSchema } from "./components/JsonLd";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -98,6 +96,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
@@ -117,10 +116,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-background text-foreground antialiased grain">
         <ThemeProvider>
-          <Navbar />
-          {children}
-          <Footer />
-          <ScrollToTopLazy />
+          <PublicChrome>{children}</PublicChrome>
         </ThemeProvider>
         {/* Vercel real-user telemetry — Analytics: page views + custom events.
             Speed Insights: real Web Vitals from production traffic. */}

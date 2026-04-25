@@ -30,6 +30,9 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["lucide-react", "framer-motion"],
     optimizeCss: true,
   },
+  // Disable Next 16 typed routes for now — admin uses dynamic ids that
+  // typed-routes can't always infer cleanly. Reintroduce later if needed.
+  typedRoutes: false,
 
   // HTTP cache strategy — three tiers:
   //   • /_next/static + /img/*  → year-long immutable (filename is the cache key)
