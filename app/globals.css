@@ -1,26 +1,152 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --muted: #737373;
+  --muted-foreground: #a3a3a3;
+  --accent: #18181b;
+  --accent-foreground: #fafafa;
+  --primary: #18181b;
+  --border: #e5e5e5;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --glow: rgba(0, 0, 0, 0.03);
+  --gradient-start: #d4d4d8;
+  --gradient-end: #a1a1aa;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --muted: #a3a3a3;
+  --muted-foreground: #737373;
+  --accent: #fafafa;
+  --accent-foreground: #18181b;
+  --primary: #e4e4e7;
+  --border: #27272a;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --glow: rgba(255, 255, 255, 0.03);
+  --gradient-start: #3f3f46;
+  --gradient-end: #52525b;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-glow: var(--glow);
+  --color-gradient-start: var(--gradient-start);
+  --color-gradient-end: var(--gradient-end);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  /* Slightly larger, more comfortable base reading size. */
+  font-size: 16px;
+  line-height: 1.6;
+  /* Crisper glyph edges on light + dark so Geist renders evenly. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Keyboard focus — a visible, considered ring instead of nothing.
+   Uses offset so the outline sits outside content; theme-aware. */
+:focus-visible {
+  outline: 1.5px solid var(--foreground);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+button:focus-visible,
+a:focus-visible {
+  outline-offset: 3px;
+}
+
+/* Scrollbar — a hairline rail with a square slug.
+   Matches the page's vertical-rail language: thin, square, monochrome.
+   No rounded corners, no padding tricks — just a line and a marker. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-left: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--foreground) 25%, transparent);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 0;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Grain overlay */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+.dark .grain::after {
+  mix-blend-mode: screen;
+}
+
+/* Infinite marquee for the testimonials log.
+   Track contains two identical copies separated by the flex gap; the
+   -8px correction equals half the gap (gap-4 = 16px), so the end of
+   animation aligns exactly with the start of copy 2 — seamless loop. */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 8px));
+  }
 }
