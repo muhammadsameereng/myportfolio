@@ -113,8 +113,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const stored = getTheme();
     currentTheme = stored;
     applyTheme(stored);
-    setMounted(true);
     listeners.forEach((l) => l());
+    // Defer the mount flag so we don't trigger a synchronous cascading
+    // render — the theme is already applied to the <html> tag by the
+    // inline themeScript in layout.tsx, so visually nothing changes.
+    queueMicrotask(() => setMounted(true));
   }, []);
 
   const toggle = useCallback(() => {

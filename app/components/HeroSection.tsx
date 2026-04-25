@@ -1,169 +1,600 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Mail, Terminal } from "lucide-react";
-import HeroBackground from "./HeroBackground";
-import HeroTerminal from "./HeroTerminal";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import {
+  Bookmark,
+  Check,
+  Download,
+  Pause,
+  Play,
+  Repeat,
+  RotateCcw,
+  Search,
+  SkipBack,
+  SkipForward,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-function GithubIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-    </svg>
-  );
-}
-
-function LinkedInIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-    </svg>
-  );
-}
-
-function InstagramIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-    </svg>
-  );
-}
-
-const socials = [
-  { icon: GithubIcon, href: "https://github.com/saranzafar", label: "GitHub" },
-  { icon: LinkedInIcon, href: "https://linkedin.com/in/saranzafar", label: "LinkedIn" },
-  { icon: InstagramIcon, href: "https://instagram.com/saran.devvv/", label: "Instagram" },
-  { icon: Mail, href: "mailto:saran.development@gmail.com", label: "Email" },
+const skills = [
+  "Backend APIs with NestJS, Node.js & TypeScript",
+  "Web apps with Next.js, React & Tailwind CSS",
+  "Multi-tenant SaaS architecture & REST design",
+  "Offline-first desktop apps with Electron, CouchDB & PouchDB",
+  "Docker, GitLab CI/CD, AWS EC2 & Linux",
 ];
 
-export default function HeroSection() {
-  return (
-    <section className="relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden pb-10 pt-20">
-      <HeroBackground />
+const fadeUp = {
+  hidden: { opacity: 0, y: 14 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.1 + i * 0.07, duration: 0.5, ease: "easeOut" as const },
+  }),
+};
 
-      {/* Structural vertical rails — aligned with navbar container edges */}
-      <div className="pointer-events-none absolute inset-0 z-[2] mx-auto max-w-6xl px-6 sm:px-8">
-        <div className="absolute top-0 bottom-0 left-6 w-px bg-border/30 sm:left-8" />
-        <div className="absolute top-0 bottom-0 right-6 w-px bg-border/30 sm:right-8" />
+// Real face avatars (Pravatar — placeholder face photos by ID).
+const AVATAR_IDS = [12, 32, 47, 56, 65, 11, 25, 38, 49, 68];
+
+function AvatarStack({ seed = 0, count = 5 }: { seed?: number; count?: number }) {
+  return (
+    <div className="flex -space-x-1.5">
+      {Array.from({ length: count }).map((_, i) => {
+        const id = AVATAR_IDS[(seed + i) % AVATAR_IDS.length];
+        return (
+          <Image
+            key={i}
+            src={`https://i.pravatar.cc/64?img=${id}`}
+            alt=""
+            width={18}
+            height={18}
+            loading="lazy"
+            unoptimized
+            className="h-[18px] w-[18px] rounded-full border-[1.5px] border-card bg-zinc-200 object-cover dark:bg-zinc-700"
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+type ProjectItem = {
+  title: string;
+  sub: string;
+  seed: number;
+  avatars: number;
+};
+
+const PROJECT_ITEMS: ProjectItem[] = [
+  { title: "LMS SaaS Platform", sub: "Multi-Tenant", seed: 0, avatars: 5 },
+  { title: "Clinic Desktop App", sub: "Offline-First", seed: 3, avatars: 5 },
+  { title: "Multi-Vendor Store", sub: "E-Commerce", seed: 6, avatars: 4 },
+];
+
+function ProjectTile({
+  title,
+  sub,
+  seed = 0,
+  avatars = 5,
+}: {
+  title: string;
+  sub: string;
+  seed?: number;
+  avatars?: number;
+}) {
+  return (
+    <motion.div
+      whileHover={{ y: -2 }}
+      transition={{ type: "spring", stiffness: 320, damping: 20 }}
+      className="group cursor-pointer rounded-xl border border-border bg-background/40 p-3 transition-all duration-200 hover:border-blue-400/60 hover:bg-background hover:shadow-[0_8px_20px_-12px_rgba(59,130,246,0.35)]"
+    >
+      <p className="text-[12px] font-semibold leading-tight text-foreground transition-colors group-hover:text-blue-600">
+        {title}
+      </p>
+      <p className="mt-0.5 text-[11px] leading-tight text-muted-foreground">
+        {sub}
+      </p>
+      <div className="mt-2.5 transition-transform duration-200 group-hover:translate-x-0.5">
+        <AvatarStack seed={seed} count={avatars} />
+      </div>
+    </motion.div>
+  );
+}
+
+function ProjectsCard() {
+  const [query, setQuery] = useState("");
+
+  return (
+    <>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <span className="text-[14px] font-semibold text-foreground">
+          Projects
+        </span>
+        <button className="flex cursor-pointer items-center gap-1 rounded-full bg-blue-500 px-3 py-1.5 text-[11.5px] font-medium text-white transition-opacity hover:opacity-90">
+          <span className="text-[13px] leading-none">+</span>
+          <span>New</span>
+        </button>
       </div>
 
-      {/* ── Main content ──────────────────────────────────────── */}
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 sm:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_auto]">
-          {/* ── Left: Identity ────────────────────────────────── */}
-          <div>
-            {/* Greeting */}
-            <motion.p
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="font-mono text-sm text-muted"
-            >
-              hey, I&apos;m
-            </motion.p>
+      {/* Search field — real input the visitor can type into */}
+      <div className="mt-3.5 flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 transition-colors focus-within:border-blue-400/70">
+        <Search size={12} className="shrink-0 text-muted-foreground" />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          spellCheck={false}
+          placeholder="Filter projects..."
+          className="w-full bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus-visible:outline-none"
+        />
+      </div>
 
-            {/* Name */}
-            <motion.h1
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.45 }}
-              className="mt-2 text-6xl font-bold tracking-tight text-foreground sm:text-7xl lg:text-8xl"
-            >
-              Saran Zafar
-            </motion.h1>
+      {/* 2x2 tiles */}
+      <div className="mt-3.5 grid grid-cols-2 gap-2.5">
+        {PROJECT_ITEMS.map((p) => (
+          <ProjectTile
+            key={p.title}
+            title={p.title}
+            sub={p.sub}
+            seed={p.seed}
+            avatars={p.avatars}
+          />
+        ))}
+        <motion.div
+          whileHover={{ y: -2 }}
+          transition={{ type: "spring", stiffness: 320, damping: 20 }}
+          className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-border bg-background/30 p-3 transition-all duration-200 hover:border-blue-400/70 hover:bg-blue-50/40 dark:hover:bg-blue-950/20"
+        >
+          <span className="text-[16px] leading-none text-muted-foreground transition-colors group-hover:text-blue-500">
+            +
+          </span>
+          <span className="mt-1.5 text-[11.5px] font-medium text-muted-foreground transition-colors group-hover:text-blue-600">
+            New project
+          </span>
+        </motion.div>
+      </div>
+    </>
+  );
+}
 
-            {/* Role */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="mt-5 flex items-center gap-4"
-            >
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.5, delay: 0.75, ease: "easeOut" }}
-                className="h-px w-12 origin-left bg-foreground/15"
-              />
-              <span className="font-mono text-sm text-muted">
-                Software Engineer &amp; Full Stack Developer
-              </span>
-            </motion.div>
+// Track length in seconds (matches "75:50" displayed).
+const TRACK_DURATION = 75 * 60 + 50;
+const fmtTime = (s: number) => {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${String(sec).padStart(2, "0")}`;
+};
 
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.95 }}
-              className="mt-6 max-w-lg text-[16px] leading-[1.7] text-muted-foreground"
-            >
-              Software engineer experienced in building scalable systems and
-              modern web applications using TypeScript and JavaScript. I focus
-              on backend development with NestJS, API design, and
-              service-oriented architecture, alongside platforms like WordPress
-              and frontend work with Next.js and React.
-            </motion.p>
+function PodcastPlayer() {
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(24 * 60 + 16); // start at 24:16
+  const [bookmarked, setBookmarked] = useState(false);
+  const [repeating, setRepeating] = useState(false);
+  const [speed, setSpeed] = useState<1 | 1.5 | 2>(1);
+  const scrubberRef = useRef<HTMLDivElement>(null);
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.15 }}
-              className="mt-10 flex flex-wrap items-center gap-4"
-            >
-              <a
-                href="#contact"
-                className="group inline-flex h-11 items-center gap-2.5 bg-accent px-6 text-sm font-medium text-accent-foreground transition-all duration-200 hover:opacity-90"
-              >
-                <Terminal size={15} className="opacity-50" />
-                Let&apos;s build together
-              </a>
-              <a
-                href="#projects"
-                className="inline-flex h-11 items-center border border-dashed border-foreground/30 px-6 text-sm font-medium text-foreground transition-all duration-200 hover:bg-card/50"
-              >
-                View work
-              </a>
-            </motion.div>
+  // Simulated playback tick
+  useEffect(() => {
+    if (!playing) return;
+    const id = window.setInterval(() => {
+      setProgress((p) => {
+        const next = p + speed;
+        if (next >= TRACK_DURATION) {
+          if (repeating) return 0;
+          setPlaying(false);
+          return TRACK_DURATION;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [playing, speed, repeating]);
 
-            {/* Socials */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 1.35 }}
-              className="mt-8 flex items-center gap-4"
-            >
-              <div className="h-px w-8 bg-border" />
-              {socials.map(({ icon: Icon, href, label }, i) => (
-                <div key={label} className="flex items-center gap-4">
-                  {i > 0 && <div className="h-4 w-px bg-border/50" />}
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
-                  >
-                    <Icon size={16} />
-                  </a>
-                </div>
-              ))}
-            </motion.div>
+  const pct = (progress / TRACK_DURATION) * 100;
 
-          </div>
+  const seekTo = (clientX: number) => {
+    const el = scrubberRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    setProgress(Math.round(ratio * TRACK_DURATION));
+  };
 
-          {/* ── Right: Living terminal ─────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.0 }}
-            className="hidden lg:block"
-          >
-            <HeroTerminal />
-          </motion.div>
+  const cycleSpeed = () => setSpeed((s) => (s === 1 ? 1.5 : s === 1.5 ? 2 : 1));
+
+  return (
+    <>
+      {/* Cover + episode */}
+      <div className="flex items-start gap-3">
+        <Image
+          src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=200&q=80&auto=format&fit=crop"
+          alt="Notes from the Workbench cover"
+          width={68}
+          height={68}
+          loading="lazy"
+          sizes="68px"
+          className="h-[68px] w-[68px] shrink-0 rounded-lg object-cover"
+        />
+        <div className="min-w-0 flex-1 pt-1">
+          <a className="cursor-pointer text-[12px] font-medium text-blue-500 underline-offset-2 hover:underline">
+            Ep. 04
+          </a>
+          <p className="mt-0.5 truncate text-[12.5px] text-foreground/80">
+            Building Offline-First with NestJS &amp; ...
+          </p>
+          <p className="mt-1 truncate text-[16px] font-bold text-foreground">
+            Notes from the Valley
+          </p>
         </div>
       </div>
 
+      {/* Scrubber — clickable */}
+      <div className="mt-4">
+        <div
+          ref={scrubberRef}
+          onClick={(e) => seekTo(e.clientX)}
+          className="group relative h-[10px] cursor-pointer"
+        >
+          <div className="absolute top-1/2 left-0 right-0 h-[4px] -translate-y-1/2 rounded-full bg-blue-100 dark:bg-blue-950" />
+          <div
+            className="absolute top-1/2 left-0 h-[4px] -translate-y-1/2 rounded-full bg-blue-500 transition-[width] duration-200 ease-linear"
+            style={{ width: `${pct}%` }}
+          />
+          <span
+            className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background bg-blue-500 transition-[left] duration-200 ease-linear group-hover:scale-110"
+            style={{ left: `${pct}%` }}
+          />
+        </div>
+        <div className="mt-1 flex items-center justify-between text-[11px] tabular-nums text-muted-foreground">
+          <span>{fmtTime(progress)}</span>
+          <span>{fmtTime(TRACK_DURATION)}</span>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div className="mt-3 flex items-center justify-between text-foreground/85">
+        <button
+          aria-label="Bookmark"
+          onClick={() => setBookmarked((v) => !v)}
+          className={`cursor-pointer transition-colors hover:text-foreground ${
+            bookmarked ? "text-blue-500" : ""
+          }`}
+        >
+          <Bookmark size={15} fill={bookmarked ? "currentColor" : "none"} />
+        </button>
+        <button
+          aria-label="Previous"
+          onClick={() => setProgress((p) => Math.max(0, p - 30))}
+          className="cursor-pointer transition-colors hover:text-foreground"
+        >
+          <SkipBack size={15} fill="currentColor" />
+        </button>
+        <button
+          aria-label="Restart"
+          onClick={() => setProgress(0)}
+          className="cursor-pointer transition-colors hover:text-foreground"
+        >
+          <RotateCcw size={15} />
+        </button>
+        <button
+          aria-label={playing ? "Pause" : "Play"}
+          onClick={() => setPlaying((v) => !v)}
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-105 active:scale-95"
+        >
+          {playing ? (
+            <Pause size={16} fill="currentColor" />
+          ) : (
+            <Play size={16} fill="currentColor" className="ml-0.5" />
+          )}
+        </button>
+        <button
+          aria-label="Repeat"
+          onClick={() => setRepeating((v) => !v)}
+          className={`transition-colors hover:text-foreground ${
+            repeating ? "text-blue-500" : ""
+          }`}
+        >
+          <Repeat size={15} />
+        </button>
+        <button
+          aria-label="Forward"
+          onClick={() =>
+            setProgress((p) => Math.min(TRACK_DURATION, p + 30))
+          }
+          className="cursor-pointer transition-colors hover:text-foreground"
+        >
+          <SkipForward size={15} fill="currentColor" />
+        </button>
+        <button
+          aria-label="Playback speed"
+          onClick={cycleSpeed}
+          className="inline-flex h-6 cursor-pointer items-center rounded-md border border-border px-2 text-[11px] font-medium tabular-nums transition-colors hover:border-foreground/40"
+        >
+          {speed}×
+        </button>
+      </div>
+    </>
+  );
+}
+
+function ResumeDownloadButton() {
+  type State = "idle" | "downloading" | "done";
+  const [state, setState] = useState<State>("idle");
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (state !== "idle") return;
+    setState("downloading");
+    // Trigger the actual file download.
+    linkRef.current?.click();
+    // Visual states: downloading → done → idle
+    window.setTimeout(() => setState("done"), 900);
+    window.setTimeout(() => setState("idle"), 2200);
+  };
+
+  return (
+    <>
+      {/* Hidden anchor — performs the actual download. */}
+      <a
+        ref={linkRef}
+        href="/saranzafar-cv.pdf"
+        download="Saran-Zafar-CV.pdf"
+        aria-hidden="true"
+        tabIndex={-1}
+        className="hidden"
+      />
+
+      <motion.button
+        type="button"
+        onClick={handleClick}
+        disabled={state !== "idle"}
+        whileTap={state === "idle" ? { scale: 0.97 } : undefined}
+        className="group relative inline-flex h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full bg-foreground pl-6 pr-5 text-[13.5px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95 disabled:cursor-default disabled:hover:scale-100 disabled:hover:opacity-100"
+        aria-live="polite"
+      >
+        {/* Sliding progress sheen during download */}
+        <AnimatePresence>
+          {state === "downloading" && (
+            <motion.span
+              key="sheen"
+              aria-hidden="true"
+              initial={{ x: "-110%" }}
+              animate={{ x: "110%" }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.1, ease: "easeInOut" }}
+              className="pointer-events-none absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+            />
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence mode="wait" initial={false}>
+          {state === "idle" && (
+            <motion.span
+              key="idle"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 flex items-center gap-2"
+            >
+              Download Resume
+              <Download
+                size={15}
+                strokeWidth={2}
+                className="transition-transform duration-200 group-hover:translate-y-0.5"
+              />
+            </motion.span>
+          )}
+
+          {state === "downloading" && (
+            <motion.span
+              key="downloading"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 flex items-center gap-2"
+            >
+              Downloading
+              <motion.span
+                animate={{ y: [0, 4, 0] }}
+                transition={{
+                  duration: 0.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="inline-flex"
+              >
+                <Download size={15} strokeWidth={2} />
+              </motion.span>
+            </motion.span>
+          )}
+
+          {state === "done" && (
+            <motion.span
+              key="done"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 flex items-center gap-2"
+            >
+              Downloaded
+              <motion.span
+                initial={{ scale: 0, rotate: -45 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-background"
+              >
+                <Check size={11} strokeWidth={3} />
+              </motion.span>
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.button>
+    </>
+  );
+}
+
+export default function HeroSection() {
+  return (
+    <section id="home" className="relative">
+      <div className="mx-auto grid max-w-5xl items-center gap-12 px-6 pt-14 pb-12 md:grid-cols-[1fr_1fr] md:gap-10 md:pt-20 md:pb-16">
+        {/* ── LEFT — identity ─────────────────────────── */}
+        <div>
+          {/* Profile + wave badge.
+              Box-1: the outer container that defines the photo's full size.
+              Box-2: a shorter rounded bordered box pinned to the bottom — this
+              is the frame the visitor sees. The image fills box-1 and is
+              rendered on top of box-2, so the body sits inside the box and
+              the head naturally extends above its top edge. */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
+            className="relative inline-block h-[150px] w-[160px]"
+          >
+            {/* Box-2 — the visible rounded frame at the bottom.
+                Wider than the image; shorter than box-1 so the head clears
+                its top edge. */}
+            <div className="absolute bottom-0 left-0 right-0 h-[105px] rounded-2xl border border-foreground/20 bg-zinc-100 dark:bg-zinc-800" />
+
+            {/* Image — natural aspect ratio (no cropping). Height is set,
+                width auto so the image scales naturally smaller than box-2.
+                Hero LCP candidate → priority + fetchPriority high. */}
+            <Image
+              src="/img/saranzafar-image.png"
+              alt="Saran Zafar"
+              width={150}
+              height={150}
+              priority
+              fetchPriority="high"
+              sizes="160px"
+              className="pointer-events-none absolute bottom-0 left-1/2 h-[150px] w-auto -translate-x-1/2 select-none"
+            />
+
+            {/* Wave badge — bottom-right of box-2, hanging off the corner */}
+            <span
+              aria-hidden="true"
+              className="absolute -right-1 -bottom-2.5 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-background text-[17px] shadow-md ring-1 ring-border/60"
+            >
+              <span className="animate-wave">👋</span>
+            </span>
+          </motion.div>
+
+          {/* Greeting headline — large + heavy */}
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={1}
+            className="mt-5 text-[58px] font-bold leading-[1.02] tracking-tight text-foreground sm:text-[64px]"
+          >
+            Hello,
+            <br />
+            I&apos;m Saran.
+          </motion.h1>
+
+          {/* Subtitle — bold, 2 lines */}
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={2}
+            className="mt-5 max-w-[440px] text-[18px] font-bold leading-snug text-foreground"
+          >
+            Software Engineer | Full-Stack Developer for Backend &amp; Frontend
+          </motion.p>
+
+          {/* Description */}
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={3}
+            className="mt-4 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground"
+          >
+            I&apos;m a software engineer from Kotli, AJK. I build production
+            systems for healthcare, retail, and e-commerce — NestJS REST APIs,
+            multi-tenant SaaS, and offline-first Electron desktop apps that
+            sync without losing a write.
+          </motion.p>
+
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={4}
+            className="mt-3 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground"
+          >
+            Production websites and enterprise-grade systems shipped, used
+            in the real world. Looking to ship something that just works?
+            I can help.
+          </motion.p>
+
+          {/* Skill bullets */}
+          <motion.ul
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={5}
+            className="mt-3 space-y-1.5 text-[14px] text-muted-foreground"
+          >
+            {skills.map((s) => (
+              <li key={s} className="flex items-start gap-2.5">
+                <span className="mt-[9px] inline-block h-1 w-1 rounded-full bg-foreground/70" />
+                <span>{s}</span>
+              </li>
+            ))}
+            <li className="flex items-start gap-2.5">
+              <span className="mt-[9px] inline-block h-1 w-1 rounded-full bg-foreground/30" />
+              <span>and more...</span>
+            </li>
+          </motion.ul>
+
+          {/* CTAs — larger pills */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={6}
+            className="mt-6 flex flex-wrap items-center gap-3"
+          >
+            <ResumeDownloadButton />
+            <a
+              href="/contact"
+              className="inline-flex h-11 items-center rounded-full border border-border bg-background px-6 text-[13.5px] font-medium text-foreground transition-colors duration-200 hover:border-foreground/50 hover:bg-card"
+            >
+              Contact
+            </a>
+          </motion.div>
+        </div>
+
+        {/* ── RIGHT — floating UI mocks, centered vertically against the left column ─── */}
+        <div className="relative hidden h-[480px] md:block">
+          {/* Top mock — projects card */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+            className="animate-floaty absolute top-0 right-0 w-[360px] rounded-2xl border border-border bg-card p-4 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.18)]"
+          >
+            <ProjectsCard />
+          </motion.div>
+
+          {/* Bottom mock — interactive podcast / now playing */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+            className="animate-floaty-delayed absolute right-3 top-[290px] w-[330px] rounded-2xl border border-border bg-card p-4 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.22)]"
+          >
+            <PodcastPlayer />
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

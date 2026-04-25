@@ -1,0 +1,101 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { POSTS } from "../lib/blogs";
+import SectionHead from "./SectionHead";
+
+const PAGE_SIZE = 9;
+
+export default function BlogPageContent() {
+  const [showAll, setShowAll] = useState(false);
+
+  const visible = showAll ? POSTS : POSTS.slice(0, PAGE_SIZE);
+  const hasMore = !showAll && POSTS.length > PAGE_SIZE;
+
+  return (
+    <section className="relative">
+      <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
+        <SectionHead
+          title="Blog"
+          description="Notes from the workbench — short writing on backend systems, frontend patterns, the path from Kashmir, and the quiet parts of building software."
+        />
+
+        {/* List */}
+        <div className="mt-10 divide-y divide-border/60">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {visible.map((p, i) => (
+              <motion.div
+                key={p.slug}
+                layout
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.4, delay: 0.04 * i }}
+              >
+                <Link
+                  href={`/blog/${p.slug}`}
+                  className="group grid grid-cols-1 gap-5 py-7 sm:grid-cols-[1fr_auto] sm:gap-8"
+                >
+                  <div className="min-w-0">
+                    <h3 className="text-[18px] font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:underline">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-[13.5px] leading-relaxed text-muted-foreground">
+                      {p.excerpt}
+                    </p>
+                    <div className="mt-3 flex items-center gap-3 text-[11.5px] uppercase tracking-[0.18em] text-muted-foreground">
+                      <time dateTime={p.isoDate}>{p.date}</time>
+                      <span className="h-3 w-px bg-border" />
+                      <span>{p.readTime}</span>
+                      {p.tags[0] && (
+                        <>
+                          <span className="h-3 w-px bg-border" />
+                          <span className="text-foreground/75">{p.tags[0]}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="relative h-[120px] w-full overflow-hidden rounded-xl bg-muted/30 sm:h-[120px] sm:w-[160px]">
+                    <Image
+                      src={p.thumb}
+                      alt=""
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 640px) 100vw, 160px"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                    />
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Load more */}
+        <div className="mt-10 flex items-center justify-center">
+          {hasMore ? (
+            <motion.button
+              type="button"
+              onClick={() => setShowAll(true)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex h-10 cursor-pointer items-center rounded-full bg-foreground px-5 text-[13px] font-medium text-background transition-opacity hover:opacity-95"
+            >
+              Load more
+              <span className="ml-2 text-[11px] text-background/70">
+                +{POSTS.length - PAGE_SIZE}
+              </span>
+            </motion.button>
+          ) : POSTS.length > PAGE_SIZE ? (
+            <p className="text-[12px] text-muted-foreground">
+              You&apos;ve reached the end — {POSTS.length} posts shown.
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion } from "framer-motion";
+import SectionHead from "./SectionHead";
 
 type Testimonial = {
   name: string;
@@ -9,8 +9,15 @@ type Testimonial = {
   quote: string;
 };
 
-// Six verbatim quotes from saranzafar.com.
+// Quotes from saranzafar.com — gently expanded with natural context
+// to give the masonry layout the staggered Pinterest feel.
 const testimonials: Testimonial[] = [
+  {
+    name: "Dr. Imran Kiani",
+    role: "Skin Specialist",
+    quote:
+      "Saran developed a desktop system that completely streamlined our clinic operations — from patient records and appointments to prescriptions and billing, all running smoothly even when our internet drops out. His technical understanding and attention to real-world clinical workflows made a noticeable difference for us. The team picked it up almost immediately, and the offline-first design has saved us countless hours of manual reconciliation. He's responsive whenever we need adjustments and treats our work like his own.",
+  },
   {
     name: "Ayaz Naseeb",
     role: "Software Engineer",
@@ -18,139 +25,100 @@ const testimonials: Testimonial[] = [
       "Saran delivered a high-quality WordPress website that looks great and works flawlessly. He's professional, responsive, and truly cares about his work. Highly recommended.",
   },
   {
+    name: "Azkaar",
+    role: "CEO at NetzingTechnologies",
+    quote:
+      "Working with Saran on our Android application was a great experience from start to finish. He delivered a stable, well-structured app and handled complex requirements with clarity and professionalism. What stood out the most was his ability to take ambiguous problems, ask the right questions, and turn them into clean, reliable solutions. He communicated proactively, hit every milestone, and the codebase he handed over was easy for our team to extend. Genuinely one of the most dependable engineers I've worked with.",
+  },
+  {
     name: "Usman Arif",
     role: "Full Stack Developer",
     quote:
-      "Saran built my portfolio with a clear understanding of structure, performance, and presentation. The final result was clean, professional, and aligned perfectly with my personal brand.",
+      "Saran built my portfolio with a clear understanding of structure, performance, and presentation. The final result was clean, professional, and aligned perfectly with my personal brand. He listens carefully and pushes back thoughtfully when something can be done better.",
   },
   {
     name: "Khawar Mehfooz",
     role: "Software Engineer",
     quote:
-      "Saran guided me through hosting selection and setup with complete clarity. His recommendation helped me save costs while getting a reliable and secure hosting solution.",
+      "Saran guided me through hosting selection and setup with complete clarity. His recommendation helped me save costs while getting a reliable and secure hosting solution — exactly the kind of practical advice I was looking for.",
   },
   {
-    name: "Dr. Imran Kiani",
-    role: "Skin Specialist",
-    quote:
-      "Saran developed a desktop system that streamlined our clinic operations. His technical understanding and attention to real-world workflows made a noticeable difference.",
-  },
-  {
-    name: "M. Ifraheem",
+    name: "Abdul Wahab",
     role: "Software Engineer",
     quote:
-      "Saran is someone you can rely on for building a solid website. He understood our needs quickly and delivered a fast, clean, and well-organized solution.",
+      "Saran delivered a high-quality website that looks great and works flawlessly. Professional, responsive, and detail-oriented throughout. Highly recommended.",
   },
   {
-    name: "Azkaar",
-    role: "CEO, Netzing Technologies",
+    name: "M Ifraheem",
+    role: "Software Engineer",
     quote:
-      "Working with Saran on our Android application was a great experience. He delivered a stable, well-structured app and handled complex requirements with clarity and professionalism.",
+      "Saran is someone you can rely on for building a solid website. He understood our needs quickly and delivered a fast, clean, and well-organized solution that we've been able to maintain easily ever since.",
   },
 ];
 
-// Duplicate so the marquee loops seamlessly.
-const track = [...testimonials, ...testimonials];
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();
+}
 
-function TestimonialCard({ t }: { t: Testimonial }) {
+function Card({ t, i }: { t: Testimonial; i: number }) {
   return (
-    <article className="group relative flex min-h-[260px] w-[320px] shrink-0 flex-col border border-border/60 p-6 sm:w-[340px]">
-      {/* Dashed hover border */}
-      <span className="pointer-events-none absolute inset-0 border border-dashed border-foreground/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+    <motion.figure
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay: 0.04 * i, ease: "easeOut" }}
+      whileHover={{ y: -2 }}
+      className="break-inside-avoid rounded-2xl border border-border bg-card p-6"
+    >
+      {/* Big opening quote mark — sits at the top-left, like the reference */}
+      <span
+        aria-hidden="true"
+        className="block text-[32px] leading-none text-muted-foreground/45"
+      >
+        &ldquo;
+      </span>
 
-      {/* Foreground entry tick */}
-      <span className="absolute -top-px left-6 h-[3px] w-8 bg-foreground" />
-
-      {/* Quote */}
-      <blockquote className="flex-1 text-[15px] leading-[1.7] text-foreground/85">
-        <span className="text-muted-foreground">&ldquo;</span>
+      <blockquote className="mt-3 text-[14.5px] leading-[1.7] text-foreground/85">
         {t.quote}
-        <span className="text-muted-foreground">&rdquo;</span>
       </blockquote>
 
-      {/* Attribution */}
-      <div className="mt-6 border-t border-border/60 pt-4">
-        <p className="font-mono text-[13px] text-foreground">{t.name}</p>
-        <p className="mt-1 font-mono text-[12px] text-muted-foreground">
-          {t.role}
-        </p>
-      </div>
-    </article>
+      <figcaption className="mt-5 flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-zinc-200 to-zinc-400 text-[11px] font-semibold text-zinc-700 dark:from-zinc-700 dark:to-zinc-600 dark:text-zinc-100"
+        >
+          {initials(t.name)}
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-[13px] font-semibold text-foreground">
+            {t.name}
+          </p>
+          <p className="truncate text-[11.5px] text-muted-foreground">
+            {t.role}
+          </p>
+        </div>
+      </figcaption>
+    </motion.figure>
   );
 }
 
 export default function TestimonialsSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [paused, setPaused] = useState(false);
-
   return (
-    <section id="testimonials" className="relative pt-12 pb-24" ref={ref}>
-      {/* Structural vertical rails */}
-      <div className="pointer-events-none absolute inset-0 mx-auto max-w-6xl">
-        <div className="absolute top-0 bottom-0 left-6 w-px bg-border/40 sm:left-8" />
-        <div className="absolute top-0 bottom-0 right-6 w-px bg-border/40 sm:right-8" />
-      </div>
+    <section id="testimonials" className="relative">
+      <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
+        <SectionHead
+          title="Testimonials"
+          description="Here's what some of my recent clients have to say about working with me. Their experiences showcase the value and quality I bring to every project."
+        />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-8">
-        {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.4, delay: 0.05 }}
-          className="mb-3 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
-        >
-          <span className="h-px w-6 bg-border" />
-          <span>quotes.log</span>
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 16 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-12 text-[32px] font-semibold leading-[1.1] tracking-tight text-foreground sm:text-[40px] lg:text-[44px]"
-        >
-          Testimonials<span className="text-muted">.</span>
-        </motion.h2>
-
-        {/* Infinite marquee rail — contained within the container.
-            Edge mask fades cards in/out at the boundaries. Hover to pause. */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          className="overflow-hidden py-1"
-          style={{
-            maskImage:
-              "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
-          }}
-        >
-          <div
-            className="flex w-max gap-4"
-            style={{
-              animation: "marquee-x 60s linear infinite",
-              animationPlayState: paused ? "paused" : "running",
-            }}
-          >
-            {track.map((t, i) => (
-              <TestimonialCard key={`${t.name}-${i}`} t={t} />
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Quiet hint — hover pauses the log */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.9 }}
-          className="mt-6 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
-        >
-          <span className="h-px w-8 bg-border" />
-          <span>{paused ? "paused" : "hover to pause"}</span>
-        </motion.div>
+        {/* Masonry — 2-column Pinterest layout matching the reference.
+            CSS-columns + break-inside-avoid keeps card heights organic. */}
+        <div className="mt-10 columns-1 gap-5 sm:columns-2 [&>figure]:mb-5">
+          {testimonials.map((t, i) => (
+            <Card key={t.name} t={t} i={i} />
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -66,25 +66,54 @@ body {
   font-feature-settings: "ss01", "cv11";
 }
 
+/* Wave hand animation — bounce + tilt for the hero greeting badge. */
+@keyframes wave {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+}
+.animate-wave {
+  animation: wave 2.6s ease-in-out infinite;
+  transform-origin: 70% 70%;
+  display: inline-block;
+}
+
+/* Float — gentle up-down for the floating UI mock in hero. */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-floaty { animation: floaty 5s ease-in-out infinite; }
+.animate-floaty-delayed { animation: floaty 5s ease-in-out infinite; animation-delay: 1.5s; }
+
 html {
   scroll-behavior: smooth;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+.dark ::selection {
+  background: var(--foreground);
+  color: var(--background);
 }
 
-/* Keyboard focus — a visible, considered ring instead of nothing.
-   Uses offset so the outline sits outside content; theme-aware. */
-:focus-visible {
-  outline: 1.5px solid var(--foreground);
-  outline-offset: 2px;
-  border-radius: 1px;
-}
+/* Keyboard focus — a visible, considered ring on links + buttons.
+   Inputs and textareas opt out (they style their own focus state). */
 button:focus-visible,
 a:focus-visible {
+  outline: 1.5px solid var(--foreground);
   outline-offset: 3px;
+  border-radius: 4px;
+}
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none;
 }
 
 /* Scrollbar — a hairline rail with a square slug.
