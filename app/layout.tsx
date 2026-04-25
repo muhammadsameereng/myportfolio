@@ -104,10 +104,10 @@ export default function RootLayout({
         {/* Theme bootstrap — runs before paint to avoid FOUC */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
 
-        {/* Preconnect to remote image hosts so first images start downloading
-            in parallel with the document parse. */}
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="preconnect" href="https://i.pravatar.cc" />
+        {/* DNS-prefetch only — no above-the-fold images come from these
+            origins, so a full preconnect would waste a handshake. */}
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://i.pravatar.cc" />
         <link rel="dns-prefetch" href="https://api.resend.com" />
         <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
 

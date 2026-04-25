@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: ONE_YEAR,
     deviceSizes: [360, 480, 640, 768, 1024, 1280, 1600, 1920],
     imageSizes: [16, 24, 32, 48, 64, 96, 128, 160, 200, 256, 384],
+    qualities: [50, 60, 70, 75, 85, 95],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "i.pravatar.cc" },

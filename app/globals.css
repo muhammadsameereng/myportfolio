@@ -5,8 +5,11 @@
 :root {
   --background: #fafafa;
   --foreground: #0a0a0a;
-  --muted: #737373;
-  --muted-foreground: #a3a3a3;
+  /* WCAG AA contrast: #525252 on #fafafa = 7.6:1 ✓
+     Was #737373 (4.7:1 — passed AA) and #a3a3a3 (2.6:1 — failed AA).
+     Darkened both so muted text + paragraphs stay legible. */
+  --muted: #525252;
+  --muted-foreground: #6b6b6b;
   --accent: #18181b;
   --accent-foreground: #fafafa;
   --primary: #18181b;
@@ -21,8 +24,9 @@
 .dark {
   --background: #09090b;
   --foreground: #fafafa;
-  --muted: #a3a3a3;
-  --muted-foreground: #737373;
+  /* WCAG AA in dark mode: #b5b5b5 on #09090b ≈ 8.7:1, #9a9a9a ≈ 6.4:1 */
+  --muted: #b5b5b5;
+  --muted-foreground: #9a9a9a;
   --accent: #fafafa;
   --accent-foreground: #18181b;
   --primary: #e4e4e7;
