@@ -23,9 +23,12 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // Bundle hygiene — barrel-tree-shake heavy libs.
+  // Bundle hygiene — barrel-tree-shake heavy libs + inline critical CSS so
+  // the render-blocking Tailwind chunk shrinks dramatically (uses `critters`
+  // under the hood).
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
+    optimizeCss: true,
   },
 
   // HTTP cache strategy — three tiers:

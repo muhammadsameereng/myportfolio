@@ -54,6 +54,12 @@ const testimonials: Testimonial[] = [
     quote:
       "Saran is someone you can rely on for building a solid website. He understood our needs quickly and delivered a fast, clean, and well-organized solution that we've been able to maintain easily ever since.",
   },
+  {
+    name: "M Sameer",
+    role: "Software Engineer",
+    quote:
+      "Saran has been a real mentor to me during my own projects. Whenever I get stuck on architecture decisions or implementation details, he takes the time to walk through the trade-offs clearly and points me in the right direction. His guidance has saved me weeks of trial and error, and he explains things in a way that actually sticks. I owe a good chunk of my growth as a developer to the conversations I've had with him.",
+  },
 ];
 
 function initials(name: string) {

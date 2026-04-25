@@ -30,8 +30,8 @@ export default function HomeProjects() {
                   src={p.thumb}
                   alt={p.title}
                   fill
-                  quality={70}
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px"
+                  quality={60}
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 256px"
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                 />
                 <span className="absolute top-2.5 left-2.5 rounded-full bg-background/85 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-wider text-foreground backdrop-blur-sm">

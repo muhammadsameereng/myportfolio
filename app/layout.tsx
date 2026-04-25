@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTopLazy from "./components/ScrollToTopLazy";
 import { JsonLd, personSchema, websiteSchema } from "./components/JsonLd";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -120,7 +120,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
-          <ScrollToTop />
+          <ScrollToTopLazy />
         </ThemeProvider>
         {/* Vercel real-user telemetry — Analytics: page views + custom events.
             Speed Insights: real Web Vitals from production traffic. */}
