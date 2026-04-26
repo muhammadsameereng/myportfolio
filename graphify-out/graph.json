@@ -3657,8 +3657,8 @@
       "source_file": "app/lib/public/blog.ts",
       "source_location": "L66",
       "weight": 1.0,
-      "_src": "blog_fetchpublishedrows",
-      "_tgt": "static_createstaticclient",
+      "_src": "static_createstaticclient",
+      "_tgt": "blog_fetchpublishedrows",
       "source": "static_createstaticclient",
       "target": "blog_fetchpublishedrows"
     },
@@ -3669,8 +3669,8 @@
       "source_file": "app/lib/public/projects.ts",
       "source_location": "L51",
       "weight": 1.0,
-      "_src": "projects_fetchpublishedrows",
-      "_tgt": "static_createstaticclient",
+      "_src": "static_createstaticclient",
+      "_tgt": "projects_fetchpublishedrows",
       "source": "static_createstaticclient",
       "target": "projects_fetchpublishedrows"
     },
@@ -3717,8 +3717,8 @@
       "source_file": "app/lib/public/blog.ts",
       "source_location": "L66",
       "weight": 1.0,
-      "_src": "blog_fetchpublishedrows",
-      "_tgt": "client_createclient",
+      "_src": "client_createclient",
+      "_tgt": "blog_fetchpublishedrows",
       "source": "client_createclient",
       "target": "blog_fetchpublishedrows"
     },
@@ -3729,8 +3729,8 @@
       "source_file": "app/lib/public/projects.ts",
       "source_location": "L51",
       "weight": 1.0,
-      "_src": "projects_fetchpublishedrows",
-      "_tgt": "client_createclient",
+      "_src": "client_createclient",
+      "_tgt": "projects_fetchpublishedrows",
       "source": "client_createclient",
       "target": "projects_fetchpublishedrows"
     },
