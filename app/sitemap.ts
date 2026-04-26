@@ -20,6 +20,18 @@ import { getPublicProjects } from "./lib/public/projects";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
 
+// Strip query strings before emitting an image URL into the sitemap.
+// XML requires `&` to be entity-escaped as `&amp;`, but Next 16's
+// sitemap builder doesn't escape inside the image extension's
+// <image:loc> tag — Unsplash URLs with `?w=…&q=…` would produce
+// invalid XML that strict parsers reject. Dropping the query keeps
+// the URL valid and the image still resolves (at original size).
+function safeImageUrl(url: string | null | undefined): string | undefined {
+  if (!url) return undefined;
+  const q = url.indexOf("?");
+  return q === -1 ? url : url.slice(0, q);
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buildTime = new Date();
   const [PROJECTS, POSTS] = await Promise.all([
@@ -37,19 +49,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/contact`, lastModified: buildTime },
   ];
 
-  const projectRoutes: MetadataRoute.Sitemap = PROJECTS.map((p) => ({
-    url: `${SITE}/projects/${p.slug}`,
-    lastModified: p.updatedAt ? new Date(p.updatedAt) : buildTime,
-    images: p.thumb ? [p.thumb] : undefined,
-  }));
+  const projectRoutes: MetadataRoute.Sitemap = PROJECTS.map((p) => {
+    const img = safeImageUrl(p.thumb);
+    return {
+      url: `${SITE}/projects/${p.slug}`,
+      lastModified: p.updatedAt ? new Date(p.updatedAt) : buildTime,
+      images: img ? [img] : undefined,
+    };
+  });
 
-  const blogRoutes: MetadataRoute.Sitemap = POSTS.map((p) => ({
-    url: `${SITE}/blog/${p.slug}`,
-    lastModified: p.updatedAt
-      ? new Date(p.updatedAt)
-      : new Date(p.isoDate),
-    images: p.thumb ? [p.thumb] : undefined,
-  }));
+  const blogRoutes: MetadataRoute.Sitemap = POSTS.map((p) => {
+    const img = safeImageUrl(p.thumb);
+    return {
+      url: `${SITE}/blog/${p.slug}`,
+      lastModified: p.updatedAt
+        ? new Date(p.updatedAt)
+        : new Date(p.isoDate),
+      images: img ? [img] : undefined,
+    };
+  });
 
   return [...staticRoutes, ...projectRoutes, ...blogRoutes];
 }
