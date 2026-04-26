@@ -39,8 +39,8 @@
   proxy.ts → app/lib/supabase/middleware.ts
 - `add()` --calls--> `main()`  [INFERRED]
   app/components/admin/FormFields.tsx → scripts/seed-csv-projects.ts
-- `main()` --calls--> `upload()`  [INFERRED]
-  scripts/mirror-csv-thumbnails.ts → app/components/admin/FormFields.tsx
+- `upload()` --calls--> `main()`  [INFERRED]
+  app/components/admin/FormFields.tsx → scripts/mirror-csv-thumbnails.ts
 - `signInWithMagicLink()` --calls--> `GET()`  [INFERRED]
   app/admin/actions.ts → app/api/admin/auth/callback/route.ts
 - `signOut()` --calls--> `updateSession()`  [INFERRED]

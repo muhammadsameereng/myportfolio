@@ -3621,8 +3621,8 @@
       "source_file": "scripts/mirror-csv-thumbnails.ts",
       "source_location": "L102",
       "weight": 1.0,
-      "_src": "mirror_csv_thumbnails_main",
-      "_tgt": "formfields_upload",
+      "_src": "formfields_upload",
+      "_tgt": "mirror_csv_thumbnails_main",
       "source": "formfields_upload",
       "target": "mirror_csv_thumbnails_main"
     },
