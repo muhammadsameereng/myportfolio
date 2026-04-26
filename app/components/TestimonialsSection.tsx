@@ -67,7 +67,15 @@ function initials(name: string) {
   return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();
 }
 
-function Card({ t, i }: { t: Testimonial; i: number }) {
+function Card({
+  t,
+  i,
+  hideOnMobile = false,
+}: {
+  t: Testimonial;
+  i: number;
+  hideOnMobile?: boolean;
+}) {
   return (
     <motion.figure
       initial={{ opacity: 0, y: 14 }}
@@ -75,7 +83,12 @@ function Card({ t, i }: { t: Testimonial; i: number }) {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: 0.04 * i, ease: "easeOut" }}
       whileHover={{ y: -2 }}
-      className="break-inside-avoid rounded-2xl border border-border bg-card p-6"
+      // Small screens (≤sm): hide cards beyond the first 3. CSS-only,
+      // layout-shift safe — display:none means the masonry doesn't
+      // reserve space for them on mobile.
+      className={`break-inside-avoid rounded-2xl border border-border bg-card p-6 ${
+        hideOnMobile ? "hidden sm:block" : ""
+      }`}
     >
       {/* Big opening quote mark — sits at the top-left, like the reference */}
       <span
@@ -122,7 +135,7 @@ export default function TestimonialsSection() {
             CSS-columns + break-inside-avoid keeps card heights organic. */}
         <div className="mt-10 columns-1 gap-5 sm:columns-2 [&>figure]:mb-5">
           {testimonials.map((t, i) => (
-            <Card key={t.name} t={t} i={i} />
+            <Card key={t.name} t={t} i={i} hideOnMobile={i >= 3} />
           ))}
         </div>
       </div>

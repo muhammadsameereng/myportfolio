@@ -34,6 +34,8 @@ export type Project = {
   /** Editorial flag — true rows are surfaced on the homepage. Only set
    *  for DB-backed projects; static catalog entries leave this undefined. */
   featured?: boolean;
+  /** ISO timestamp of last DB update — used for sitemap `<lastmod>`. */
+  updatedAt?: string;
 
   /* ── Optional case-study sections (rendered when present) ── */
   techStack?: StackItem[];

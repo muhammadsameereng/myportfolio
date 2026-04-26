@@ -1,8 +1,12 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { createStaticClient } from "../supabase/static";
 import type { BlogPostRow } from "../supabase/types";
 import { POSTS as STATIC_POSTS, type BlogPost } from "../blogs";
+
+const CACHE_TAG = "blog";
+const CACHE_TTL_SECONDS = 3600;
 
 /**
  * Public blog data layer — mirrors `app/lib/public/projects.ts`.
@@ -57,29 +61,35 @@ function rowToPost(row: BlogPostRow): BlogPost {
     tags: row.tags || [],
     featured: row.featured,
     category: row.category?.name || undefined,
+    updatedAt: row.updated_at,
   };
 }
 
-async function fetchPublishedRows(): Promise<BlogPostRow[] | null> {
-  // Cookie-less client — public pages only read status='published',
-  // so the anon role is enough and we save a `cookies()` call per render.
-  const supabase = createStaticClient();
-  if (!supabase) return null;
-  const { data, error } = await supabase
-    .from("blog_posts")
-    .select("*, category:categories(*)")
-    .eq("status", "published")
-    .order("featured", { ascending: false })
-    .order("date", { ascending: false, nullsFirst: false })
-    .order("published_at", { ascending: false, nullsFirst: false });
-  if (error) {
-    console.error("[public/blog] fetch failed:", error.message);
-    return null;
-  }
-  return (data as BlogPostRow[]) || [];
-}
+// Two-tier caching — see note in app/lib/public/projects.ts for the
+// rationale. Admin actions call `revalidateTag("blog", "max")` to
+// invalidate this on save / delete / feature-toggle.
+const fetchPublishedRowsCached = unstable_cache(
+  async (): Promise<BlogPostRow[] | null> => {
+    const supabase = createStaticClient();
+    if (!supabase) return null;
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("*, category:categories(*)")
+      .eq("status", "published")
+      .order("featured", { ascending: false })
+      .order("date", { ascending: false, nullsFirst: false })
+      .order("published_at", { ascending: false, nullsFirst: false });
+    if (error) {
+      console.error("[public/blog] fetch failed:", error.message);
+      return null;
+    }
+    return (data as BlogPostRow[]) || [];
+  },
+  ["public:blog:rows"],
+  { tags: [CACHE_TAG], revalidate: CACHE_TTL_SECONDS }
+);
 
-const fetchRows = cache(fetchPublishedRows);
+const fetchRows = cache(fetchPublishedRowsCached);
 
 async function getPosts(): Promise<BlogPost[]> {
   const rows = await fetchRows();

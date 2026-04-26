@@ -20,11 +20,16 @@ export default async function HomeProjects() {
         />
 
         <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-7 md:grid-cols-3">
-          {featured.map((p) => (
+          {featured.map((p, i) => (
             <Link
               key={p.slug}
               href={`/projects/${p.slug}`}
-              className="group flex flex-col"
+              // Small screens (≤md): show only the first 3 cards.
+              // Larger screens: show all 6. CSS-only — no extra JS,
+              // no separate fetch, layout-shift safe.
+              className={`group flex flex-col ${
+                i >= 3 ? "hidden md:flex" : ""
+              }`}
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted/30">
                 <Image

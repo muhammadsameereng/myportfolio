@@ -19,6 +19,8 @@ export type BlogPost = {
    *  to drive the filter pills on /blog. Static catalog entries leave
    *  this undefined. */
   category?: string;
+  /** ISO timestamp of last DB update — used for sitemap `<lastmod>`. */
+  updatedAt?: string;
 };
 
 export const POSTS: BlogPost[] = [

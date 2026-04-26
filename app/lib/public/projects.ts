@@ -1,8 +1,12 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { createStaticClient } from "../supabase/static";
 import type { ProjectRow } from "../supabase/types";
 import { PROJECTS as STATIC_PROJECTS, type Project } from "../projects";
+
+const CACHE_TAG = "projects";
+const CACHE_TTL_SECONDS = 3600;
 
 /**
  * Public project data layer.
@@ -41,32 +45,43 @@ function rowToProject(row: ProjectRow): Project {
     role: row.role || "",
     liveUrl: row.live_url || undefined,
     repoUrl: row.repo_url || undefined,
+    updatedAt: row.updated_at,
   };
 }
 
-async function fetchPublishedRows(): Promise<ProjectRow[] | null> {
-  // Cookie-less client everywhere — public pages only read
-  // status='published' rows, so the anon role is sufficient and we
-  // skip a `cookies()` call on every render.
-  const supabase = createStaticClient();
-  if (!supabase) return null;
-  const { data, error } = await supabase
-    .from("projects")
-    .select("*, category:categories(*)")
-    .eq("status", "published")
-    .order("featured", { ascending: false })
-    .order("year", { ascending: false, nullsFirst: false })
-    .order("published_at", { ascending: false, nullsFirst: false });
-  if (error) {
-    // Surface the cause once per render so RLS/auth misconfig doesn't
-    // silently fall back to the static catalog.
-    console.error("[public/projects] fetch failed:", error.message);
-    return null;
-  }
-  return (data as ProjectRow[]) || [];
-}
+// Two-tier caching:
+// - `unstable_cache` is global + tag-invalidatable. Admin actions call
+//   `revalidateTag("projects", "max")` to bust this whenever a project
+//   is saved/deleted/featured-toggled. TTL is the safety net for the
+//   case where a tag bust ever drops on the floor.
+// - React `cache()` (below) provides per-render dedup so a single page
+//   render hits the unstable_cache layer at most once even if many
+//   components ask for projects.
+//
+// `createStaticClient()` is cookie-less, so it's legal inside
+// `unstable_cache` (which forbids `cookies()` calls).
+const fetchPublishedRowsCached = unstable_cache(
+  async (): Promise<ProjectRow[] | null> => {
+    const supabase = createStaticClient();
+    if (!supabase) return null;
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*, category:categories(*)")
+      .eq("status", "published")
+      .order("featured", { ascending: false })
+      .order("year", { ascending: false, nullsFirst: false })
+      .order("published_at", { ascending: false, nullsFirst: false });
+    if (error) {
+      console.error("[public/projects] fetch failed:", error.message);
+      return null;
+    }
+    return (data as ProjectRow[]) || [];
+  },
+  ["public:projects:rows"],
+  { tags: [CACHE_TAG], revalidate: CACHE_TTL_SECONDS }
+);
 
-const fetchRows = cache(fetchPublishedRows);
+const fetchRows = cache(fetchPublishedRowsCached);
 
 async function getProjects(): Promise<Project[]> {
   const rows = await fetchRows();
