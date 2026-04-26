@@ -1,9 +1,8 @@
 import { ImageResponse } from "next/og";
-import { getProjectBySlug } from "../../lib/projects";
+import { getPublicProjectBySlug } from "../../lib/public/projects";
 
-// Edge-rendered on first request, then CDN-cached. Avoids the
-// generateStaticParams + edge incompatibility while still being fast.
-export const runtime = "edge";
+// Edge-rendered on first request, then CDN-cached.
+export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Project — Saran Zafar";
@@ -14,7 +13,7 @@ export default async function OG({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getPublicProjectBySlug(slug);
   const title = project?.title ?? "Project";
   const category = project?.category ?? "Work";
   const year = project?.year ?? "";

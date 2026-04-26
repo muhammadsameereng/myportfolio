@@ -20,6 +20,19 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "i.pravatar.cc" },
+      // Supabase Storage — public bucket for project / blog / upload media.
+      // Wildcard covers any *.supabase.co project; explicit entry is a
+      // belt-and-braces fallback in case the wildcard matcher misbehaves.
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "yjmsljuwzsectyhpodvf.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
   },
 

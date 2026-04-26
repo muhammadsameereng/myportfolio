@@ -30,6 +30,13 @@ export type Project = {
   liveUrl?: string;
   repoUrl?: string;
 
+  /** Raw markdown body — rendered between the hero image and any
+   *  legacy structured sections below. Sourced from DB long_description. */
+  body?: string;
+  /** Editorial flag — true rows are surfaced on the homepage. Only set
+   *  for DB-backed projects; static catalog entries leave this undefined. */
+  featured?: boolean;
+
   /* ── Optional case-study sections (rendered when present) ── */
   techStack?: StackItem[];
   overview?: string[];

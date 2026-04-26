@@ -1,14 +1,15 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { PROJECTS } from "../lib/projects";
+import { getFeaturedProjects } from "../lib/public/projects";
 import SectionHead from "./SectionHead";
 
-// Server Component — no "use client", no JS shipped to browser.
-// Renders the first 6 projects from the shared catalog with a CTA
-// to the full /projects page.
-export default function HomeProjects() {
-  const featured = PROJECTS.slice(0, 6);
+// Server Component — fetches 6 featured projects from the public data
+// layer (Supabase, with static fallback). Zero JS shipped to browser.
+export default async function HomeProjects() {
+  const featured = await getFeaturedProjects(6);
+
+  if (featured.length === 0) return null;
 
   return (
     <section id="projects" className="relative">

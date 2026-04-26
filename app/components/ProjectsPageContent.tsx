@@ -4,29 +4,34 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import {
-  CATEGORIES,
-  type CategoryFilter,
-  PROJECTS,
-} from "../lib/projects";
+import type { Project } from "../lib/projects";
 import SectionHead from "./SectionHead";
 
 const PAGE_SIZE = 9;
 
-export default function ProjectsPageContent() {
-  const [active, setActive] = useState<CategoryFilter>("All");
+export default function ProjectsPageContent({
+  projects,
+  categories,
+}: {
+  projects: Project[];
+  categories: string[];
+}) {
+  const allCategories = useMemo(() => ["All", ...categories], [categories]);
+  const [active, setActive] = useState<string>("All");
   const [showAll, setShowAll] = useState(false);
 
   const filtered = useMemo(
     () =>
-      active === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === active),
-    [active]
+      active === "All"
+        ? projects
+        : projects.filter((p) => p.category === active),
+    [active, projects]
   );
 
   const visible = showAll ? filtered : filtered.slice(0, PAGE_SIZE);
   const hasMore = !showAll && filtered.length > PAGE_SIZE;
 
-  const onPickCategory = (c: CategoryFilter) => {
+  const onPickCategory = (c: string) => {
     setActive(c);
     setShowAll(false);
   };
@@ -41,7 +46,7 @@ export default function ProjectsPageContent() {
 
         {/* Category pills */}
         <div className="mt-8 flex flex-wrap items-center gap-2">
-          {CATEGORIES.map((c) => {
+          {allCategories.map((c) => {
             const isActive = active === c;
             return (
               <button
@@ -61,7 +66,7 @@ export default function ProjectsPageContent() {
                       isActive ? "text-background/65" : "text-muted-foreground"
                     }`}
                   >
-                    {PROJECTS.filter((p) => p.category === c).length}
+                    {projects.filter((p) => p.category === c).length}
                   </span>
                 )}
               </button>

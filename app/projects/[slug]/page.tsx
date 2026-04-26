@@ -2,19 +2,26 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetailContent from "../../components/ProjectDetailContent";
 import { JsonLd, breadcrumbSchema, projectSchema } from "../../components/JsonLd";
-import { PROJECTS, getProjectBySlug } from "../../lib/projects";
+import {
+  getPublicProjectBySlug,
+  getRelatedPublicProjects,
+  getStaticProjectSlugs,
+} from "../../lib/public/projects";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
 
 type Params = Promise<{ slug: string }>;
 
-// ISR — pre-rendered at build, regenerated hourly when CMS-backed.
+// ISR — regenerated hourly. dynamicParams=true so projects added in
+// the admin after build still render (revalidateTag busts on save).
 export const revalidate = 3600;
-// Block unknown slugs — return 404 instead of generating on demand.
-export const dynamicParams = false;
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return PROJECTS.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  // Cookie-less path — `generateStaticParams` runs without an HTTP request
+  // scope, so the cookie-based server client can't be used here.
+  const slugs = await getStaticProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +30,7 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getPublicProjectBySlug(slug);
   if (!project) return { title: "Project not found — Saran Zafar" };
   return {
     title: `${project.title} — Saran Zafar`,
@@ -38,7 +45,10 @@ export async function generateMetadata({
 
 export default async function ProjectDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const [project, related] = await Promise.all([
+    getPublicProjectBySlug(slug),
+    getRelatedPublicProjects(slug, 3),
+  ]);
   if (!project) notFound();
 
   return (
@@ -51,7 +61,7 @@ export default async function ProjectDetailPage({ params }: { params: Params }) 
           { name: project.title, url: `${SITE}/projects/${project.slug}` },
         ])}
       />
-      <ProjectDetailContent project={project} />
+      <ProjectDetailContent project={project} related={related} />
     </main>
   );
 }

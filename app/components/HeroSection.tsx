@@ -472,7 +472,8 @@ export default function HeroSection() {
               priority
               fetchPriority="high"
               sizes="160px"
-              className="pointer-events-none absolute bottom-0 left-1/2 h-[150px] w-auto -translate-x-1/2 select-none"
+              style={{ height: "150px", width: "auto" }}
+              className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 select-none"
             />
 
             {/* Wave badge — bottom-right of box-2, hanging off the corner */}
