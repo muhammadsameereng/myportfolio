@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og";
-import { getPostBySlug } from "../../lib/blogs";
+import { getPublicPostBySlug } from "../../lib/public/blog";
 
-// Edge-rendered on first request, then CDN-cached.
-export const runtime = "edge";
+// Node runtime — Supabase SSR client uses cookies; edge-cookie quirks
+// are easier to avoid than to debug.
+export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Blog — Saran Zafar";
@@ -13,7 +14,7 @@ export default async function OG({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPublicPostBySlug(slug);
   const title = post?.title ?? "Blog post";
   const date = post?.date ?? "";
   const readTime = post?.readTime ?? "";

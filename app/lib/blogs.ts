@@ -5,13 +5,18 @@ export type BlogPost = {
   title: string;
   /** One-line summary for the listing card. */
   excerpt: string;
-  /** Multi-paragraph body for the detail page. */
+  /** Multi-paragraph body for the detail page (legacy / static catalog). */
   body: string[];
   date: string; // displayed as-is, e.g. "12 Mar 2026"
   isoDate: string; // for <time> + ordering
   readTime: string; // e.g. "6 min"
   thumb: string;
   tags: string[];
+  /** Raw markdown body — set for DB-backed posts. Rendered as rich
+   *  markdown when present; legacy `body[]` paragraphs still used otherwise. */
+  markdown?: string;
+  /** Editorial flag — true posts are surfaced on the homepage. */
+  featured?: boolean;
 };
 
 export const POSTS: BlogPost[] = [

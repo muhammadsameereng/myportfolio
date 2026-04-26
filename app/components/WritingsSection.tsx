@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { POSTS } from "../lib/blogs";
+import type { BlogPost } from "../lib/blogs";
 import SectionHead from "./SectionHead";
 
-export default function WritingsSection() {
-  // Show the 3 most recent posts on the home page.
-  const featured = POSTS.slice(0, 3);
+export default function WritingsSection({ posts }: { posts: BlogPost[] }) {
+  if (posts.length === 0) return null;
+  const featured = posts;
 
   return (
     <section id="writings" className="relative">

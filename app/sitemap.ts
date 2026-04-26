@@ -1,12 +1,15 @@
 import type { MetadataRoute } from "next";
-import { POSTS } from "./lib/blogs";
+import { getPublicPosts } from "./lib/public/blog";
 import { getPublicProjects } from "./lib/public/projects";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const PROJECTS = await getPublicProjects();
+  const [PROJECTS, POSTS] = await Promise.all([
+    getPublicProjects(),
+    getPublicPosts(),
+  ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },

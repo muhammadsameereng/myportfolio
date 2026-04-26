@@ -2,19 +2,25 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BlogDetailContent from "../../components/BlogDetailContent";
 import { JsonLd, articleSchema, breadcrumbSchema } from "../../components/JsonLd";
-import { POSTS, getPostBySlug } from "../../lib/blogs";
+import {
+  getPublicPostBySlug,
+  getRelatedPublicPosts,
+  getStaticPostSlugs,
+} from "../../lib/public/blog";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
 
 type Params = Promise<{ slug: string }>;
 
-// ISR — pre-rendered at build, regenerated hourly when CMS-backed.
+// ISR — regenerated hourly. dynamicParams=true so posts added in the
+// admin after build still render (revalidatePath busts on save).
 export const revalidate = 3600;
-// Block dynamic params not in PROJECTS — return 404.
-export const dynamicParams = false;
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return POSTS.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  // Cookie-less path — required outside an HTTP request scope.
+  const slugs = await getStaticPostSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +29,7 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPublicPostBySlug(slug);
   if (!post) return { title: "Post not found — Saran Zafar" };
   return {
     title: `${post.title} — Saran Zafar`,
@@ -41,7 +47,10 @@ export async function generateMetadata({
 
 export default async function BlogDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const [post, related] = await Promise.all([
+    getPublicPostBySlug(slug),
+    getRelatedPublicPosts(slug, 3),
+  ]);
   if (!post) notFound();
 
   return (
@@ -54,7 +63,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
           { name: post.title, url: `${SITE}/blog/${post.slug}` },
         ])}
       />
-      <BlogDetailContent post={post} />
+      <BlogDetailContent post={post} related={related} />
     </main>
   );
 }

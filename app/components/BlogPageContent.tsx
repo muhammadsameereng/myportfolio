@@ -4,16 +4,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { POSTS } from "../lib/blogs";
+import type { BlogPost } from "../lib/blogs";
 import SectionHead from "./SectionHead";
 
 const PAGE_SIZE = 9;
 
-export default function BlogPageContent() {
+export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
   const [showAll, setShowAll] = useState(false);
 
-  const visible = showAll ? POSTS : POSTS.slice(0, PAGE_SIZE);
-  const hasMore = !showAll && POSTS.length > PAGE_SIZE;
+  const visible = showAll ? posts : posts.slice(0, PAGE_SIZE);
+  const hasMore = !showAll && posts.length > PAGE_SIZE;
 
   return (
     <section className="relative">
@@ -86,12 +86,12 @@ export default function BlogPageContent() {
             >
               Load more
               <span className="ml-2 text-[11px] text-background/70">
-                +{POSTS.length - PAGE_SIZE}
+                +{posts.length - PAGE_SIZE}
               </span>
             </motion.button>
-          ) : POSTS.length > PAGE_SIZE ? (
+          ) : posts.length > PAGE_SIZE ? (
             <p className="text-[12px] text-muted-foreground">
-              You&apos;ve reached the end — {POSTS.length} posts shown.
+              You&apos;ve reached the end — {posts.length} posts shown.
             </p>
           ) : null}
         </div>
