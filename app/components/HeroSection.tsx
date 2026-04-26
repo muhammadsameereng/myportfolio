@@ -467,8 +467,11 @@ export default function HeroSection() {
             <Image
               src="/img/saranzafar-image.png"
               alt="Saran Zafar"
-              width={150}
-              height={150}
+              // True intrinsic dimensions of the source PNG — letting Next
+              // know the real aspect (300:291) avoids the "modified width
+              // but not height" warning when CSS constrains only one axis.
+              width={300}
+              height={291}
               priority
               fetchPriority="high"
               sizes="160px"

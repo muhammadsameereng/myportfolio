@@ -112,8 +112,9 @@ export default function AboutPageContent() {
             <Image
               src="/img/saranzafar-image.png"
               alt="Saran Zafar"
-              width={150}
-              height={150}
+              // True intrinsic dimensions of the source PNG (300×291).
+              width={300}
+              height={291}
               priority
               fetchPriority="high"
               sizes="160px"
