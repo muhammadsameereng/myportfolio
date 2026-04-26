@@ -1,6 +1,5 @@
 import "server-only";
 import { cache } from "react";
-import { createClient } from "../supabase/server";
 import { createStaticClient } from "../supabase/static";
 import type { BlogPostRow } from "../supabase/types";
 import { POSTS as STATIC_POSTS, type BlogPost } from "../blogs";
@@ -57,13 +56,14 @@ function rowToPost(row: BlogPostRow): BlogPost {
     thumb: row.thumb_url || FALLBACK_THUMB,
     tags: row.tags || [],
     featured: row.featured,
+    category: row.category?.name || undefined,
   };
 }
 
-async function fetchPublishedRows(
-  useStatic: boolean
-): Promise<BlogPostRow[] | null> {
-  const supabase = useStatic ? createStaticClient() : await createClient();
+async function fetchPublishedRows(): Promise<BlogPostRow[] | null> {
+  // Cookie-less client — public pages only read status='published',
+  // so the anon role is enough and we save a `cookies()` call per render.
+  const supabase = createStaticClient();
   if (!supabase) return null;
   const { data, error } = await supabase
     .from("blog_posts")
@@ -79,24 +79,21 @@ async function fetchPublishedRows(
   return (data as BlogPostRow[]) || [];
 }
 
-const fetchRuntime = cache(() => fetchPublishedRows(false));
-const fetchStatic = cache(() => fetchPublishedRows(true));
+const fetchRows = cache(fetchPublishedRows);
 
-async function getPosts(useStatic: boolean): Promise<BlogPost[]> {
-  const rows = useStatic ? await fetchStatic() : await fetchRuntime();
+async function getPosts(): Promise<BlogPost[]> {
+  const rows = await fetchRows();
   if (!rows || rows.length === 0) return STATIC_POSTS;
   return rows.map(rowToPost);
 }
 
-/* ── Public API (runtime — reads cookies) ───────────────────────── */
+/* ── Public API ─────────────────────────────────────────────────── */
 
-export const getPublicPosts = cache(async (): Promise<BlogPost[]> =>
-  getPosts(false)
-);
+export const getPublicPosts = cache(getPosts);
 
 export const getFeaturedPosts = cache(
   async (limit = 3): Promise<BlogPost[]> => {
-    const all = await getPosts(false);
+    const all = await getPosts();
     const flagged = all.filter((p) => p.featured === true);
     if (flagged.length > 0) return flagged.slice(0, limit);
     return all.slice(0, limit);
@@ -105,14 +102,14 @@ export const getFeaturedPosts = cache(
 
 export const getPublicPostBySlug = cache(
   async (slug: string): Promise<BlogPost | null> => {
-    const all = await getPosts(false);
+    const all = await getPosts();
     return all.find((p) => p.slug === slug) || null;
   }
 );
 
 export const getRelatedPublicPosts = cache(
   async (slug: string, limit = 3): Promise<BlogPost[]> => {
-    const all = await getPosts(false);
+    const all = await getPosts();
     const current = all.find((p) => p.slug === slug);
     if (!current) return all.slice(0, limit);
     const sameTag = all.filter(
@@ -129,9 +126,18 @@ export const getRelatedPublicPosts = cache(
   }
 );
 
-/* ── Static API (no cookies — safe in generateStaticParams, sitemap) ── */
+export const getPublicBlogCategories = cache(async (): Promise<string[]> => {
+  const all = await getPosts();
+  const set = new Set<string>();
+  all.forEach((p) => {
+    if (p.category) set.add(p.category);
+  });
+  return Array.from(set).sort();
+});
+
+/* ── Slug list — same data, narrower payload for `generateStaticParams` ── */
 
 export const getStaticPostSlugs = cache(async (): Promise<string[]> => {
-  const all = await getPosts(true);
+  const all = await getPosts();
   return all.map((p) => p.slug);
 });

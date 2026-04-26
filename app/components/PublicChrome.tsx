@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import BackgroundDecor from "./BackgroundDecor";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import ScrollToTopLazy from "./ScrollToTopLazy";
@@ -25,6 +26,7 @@ export default function PublicChrome({
 
   return (
     <>
+      <BackgroundDecor />
       <Navbar />
       {children}
       <Footer />

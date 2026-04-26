@@ -3,17 +3,38 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { BlogPost } from "../lib/blogs";
 import SectionHead from "./SectionHead";
 
 const PAGE_SIZE = 9;
 
-export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
+export default function BlogPageContent({
+  posts,
+  categories,
+}: {
+  posts: BlogPost[];
+  categories: string[];
+}) {
+  const allCategories = useMemo(() => ["All", ...categories], [categories]);
+  const [active, setActive] = useState<string>("All");
   const [showAll, setShowAll] = useState(false);
 
-  const visible = showAll ? posts : posts.slice(0, PAGE_SIZE);
-  const hasMore = !showAll && posts.length > PAGE_SIZE;
+  const filtered = useMemo(
+    () =>
+      active === "All"
+        ? posts
+        : posts.filter((p) => p.category === active),
+    [active, posts]
+  );
+
+  const visible = showAll ? filtered : filtered.slice(0, PAGE_SIZE);
+  const hasMore = !showAll && filtered.length > PAGE_SIZE;
+
+  const onPickCategory = (c: string) => {
+    setActive(c);
+    setShowAll(false);
+  };
 
   return (
     <section className="relative">
@@ -22,6 +43,40 @@ export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
           title="Blog"
           description="Notes from the workbench — short writing on backend systems, frontend patterns, the path from Kashmir, and the quiet parts of building software."
         />
+
+        {/* Category pills — only render when there's more than one option */}
+        {categories.length > 1 && (
+          <div className="mt-8 flex flex-wrap items-center gap-2">
+            {allCategories.map((c) => {
+              const isActive = active === c;
+              const count =
+                c === "All"
+                  ? posts.length
+                  : posts.filter((p) => p.category === c).length;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => onPickCategory(c)}
+                  className={`relative inline-flex h-8 cursor-pointer items-center rounded-full px-4 text-[12.5px] font-medium transition-colors duration-200 ${
+                    isActive
+                      ? "bg-foreground text-background"
+                      : "border border-border bg-background text-foreground/75 hover:border-foreground/40 hover:text-foreground"
+                  }`}
+                >
+                  {c}
+                  <span
+                    className={`ml-1.5 text-[10.5px] tabular-nums ${
+                      isActive ? "text-background/65" : "text-muted-foreground"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {/* List */}
         <div className="mt-10 divide-y divide-border/60">
@@ -86,15 +141,22 @@ export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
             >
               Load more
               <span className="ml-2 text-[11px] text-background/70">
-                +{posts.length - PAGE_SIZE}
+                +{filtered.length - PAGE_SIZE}
               </span>
             </motion.button>
-          ) : posts.length > PAGE_SIZE ? (
+          ) : filtered.length > PAGE_SIZE ? (
             <p className="text-[12px] text-muted-foreground">
-              You&apos;ve reached the end — {posts.length} posts shown.
+              You&apos;ve reached the end — {filtered.length} posts shown.
             </p>
           ) : null}
         </div>
+
+        {filtered.length === 0 && (
+          <p className="mt-12 text-center text-[13.5px] text-muted-foreground">
+            Nothing here yet in{" "}
+            <span className="font-semibold text-foreground">{active}</span>.
+          </p>
+        )}
       </div>
     </section>
   );

@@ -33,14 +33,6 @@ const nextConfig: NextConfig = {
         hostname: "yjmsljuwzsectyhpodvf.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
-      // Temporary — thumbnails inherited from the previous portfolio
-      // project. Remove once `scripts/mirror-csv-thumbnails.ts` has
-      // mirrored these into the bucket above.
-      {
-        protocol: "https",
-        hostname: "aigxthlovwdhytxmdqpn.supabase.co",
-        pathname: "/storage/v1/object/public/**",
-      },
     ],
   },
 

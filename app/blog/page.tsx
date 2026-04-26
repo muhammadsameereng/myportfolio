@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import BlogPageContent from "../components/BlogPageContent";
-import { getPublicPosts } from "../lib/public/blog";
+import {
+  getPublicBlogCategories,
+  getPublicPosts,
+} from "../lib/public/blog";
 
 export const revalidate = 3600;
 
@@ -11,11 +14,14 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  const posts = await getPublicPosts();
+  const [posts, categories] = await Promise.all([
+    getPublicPosts(),
+    getPublicBlogCategories(),
+  ]);
 
   return (
     <main>
-      <BlogPageContent posts={posts} />
+      <BlogPageContent posts={posts} categories={categories} />
     </main>
   );
 }

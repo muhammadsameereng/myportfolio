@@ -9,7 +9,7 @@
       "source_file": "postcss.config.mjs",
       "source_location": "L1",
       "id": "postcss_config_mjs",
-      "community": 42,
+      "community": 43,
       "norm_label": "postcss.config.mjs"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "next.config.ts",
       "source_location": "L1",
       "id": "next_config_ts",
-      "community": 43,
+      "community": 44,
       "norm_label": "next.config.ts"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "eslint.config.mjs",
       "source_location": "L1",
       "id": "eslint_config_mjs",
-      "community": 44,
+      "community": 45,
       "norm_label": "eslint.config.mjs"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "next-env.d.ts",
       "source_location": "L1",
       "id": "next_env_d_ts",
-      "community": 45,
+      "community": 46,
       "norm_label": "next-env.d.ts"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "app/error.tsx",
       "source_location": "L1",
       "id": "app_error_tsx",
-      "community": 46,
+      "community": 47,
       "norm_label": "error.tsx"
     },
     {
@@ -108,7 +108,7 @@
       "source_file": "app/opengraph-image.tsx",
       "source_location": "L1",
       "id": "app_opengraph_image_tsx",
-      "community": 47,
+      "community": 48,
       "norm_label": "opengraph-image.tsx"
     },
     {
@@ -142,7 +142,7 @@
       "label": "RootLayout()",
       "file_type": "code",
       "source_file": "app/layout.tsx",
-      "source_location": "L90",
+      "source_location": "L91",
       "id": "layout_rootlayout",
       "community": 23,
       "norm_label": "rootlayout()"
@@ -171,7 +171,7 @@
       "source_file": "app/admin/page.tsx",
       "source_location": "L1",
       "id": "app_admin_page_tsx",
-      "community": 48,
+      "community": 49,
       "norm_label": "page.tsx"
     },
     {
@@ -540,7 +540,7 @@
       "source_file": "app/components/WritingsSection.tsx",
       "source_location": "L1",
       "id": "app_components_writingssection_tsx",
-      "community": 49,
+      "community": 50,
       "norm_label": "writingssection.tsx"
     },
     {
@@ -877,12 +877,30 @@
       "norm_label": "navbar()"
     },
     {
+      "label": "TopLoader.tsx",
+      "file_type": "code",
+      "source_file": "app/components/TopLoader.tsx",
+      "source_location": "L1",
+      "id": "app_components_toploader_tsx",
+      "community": 34,
+      "norm_label": "toploader.tsx"
+    },
+    {
+      "label": "TopLoader()",
+      "file_type": "code",
+      "source_file": "app/components/TopLoader.tsx",
+      "source_location": "L27",
+      "id": "toploader_toploader",
+      "community": 34,
+      "norm_label": "toploader()"
+    },
+    {
       "label": "ProjectsPageContent.tsx",
       "file_type": "code",
       "source_file": "app/components/ProjectsPageContent.tsx",
       "source_location": "L1",
       "id": "app_components_projectspagecontent_tsx",
-      "community": 34,
+      "community": 35,
       "norm_label": "projectspagecontent.tsx"
     },
     {
@@ -891,7 +909,7 @@
       "source_file": "app/components/ProjectsPageContent.tsx",
       "source_location": "L34",
       "id": "projectspagecontent_onpickcategory",
-      "community": 34,
+      "community": 35,
       "norm_label": "onpickcategory()"
     },
     {
@@ -900,7 +918,7 @@
       "source_file": "app/components/HeroSection.tsx",
       "source_location": "L1",
       "id": "app_components_herosection_tsx",
-      "community": 35,
+      "community": 36,
       "norm_label": "herosection.tsx"
     },
     {
@@ -909,7 +927,7 @@
       "source_file": "app/components/HeroSection.tsx",
       "source_location": "L326",
       "id": "herosection_handleclick",
-      "community": 35,
+      "community": 36,
       "norm_label": "handleclick()"
     },
     {
@@ -1053,7 +1071,7 @@
       "source_file": "app/components/BlogPageContent.tsx",
       "source_location": "L1",
       "id": "app_components_blogpagecontent_tsx",
-      "community": 50,
+      "community": 51,
       "norm_label": "blogpagecontent.tsx"
     },
     {
@@ -1089,7 +1107,7 @@
       "source_file": "app/components/SectionHead.tsx",
       "source_location": "L1",
       "id": "app_components_sectionhead_tsx",
-      "community": 51,
+      "community": 52,
       "norm_label": "sectionhead.tsx"
     },
     {
@@ -1098,7 +1116,7 @@
       "source_file": "app/components/admin/ProjectsTable.tsx",
       "source_location": "L1",
       "id": "app_components_admin_projectstable_tsx",
-      "community": 36,
+      "community": 37,
       "norm_label": "projectstable.tsx"
     },
     {
@@ -1107,7 +1125,7 @@
       "source_file": "app/components/admin/ProjectsTable.tsx",
       "source_location": "L21",
       "id": "projectstable_ontogglefeatured",
-      "community": 36,
+      "community": 37,
       "norm_label": "ontogglefeatured()"
     },
     {
@@ -1116,7 +1134,7 @@
       "source_file": "app/components/admin/BlogTable.tsx",
       "source_location": "L1",
       "id": "app_components_admin_blogtable_tsx",
-      "community": 37,
+      "community": 38,
       "norm_label": "blogtable.tsx"
     },
     {
@@ -1125,7 +1143,7 @@
       "source_file": "app/components/admin/BlogTable.tsx",
       "source_location": "L20",
       "id": "blogtable_ontogglefeatured",
-      "community": 37,
+      "community": 38,
       "norm_label": "ontogglefeatured()"
     },
     {
@@ -1278,7 +1296,7 @@
       "source_file": "app/components/admin/Toast.tsx",
       "source_location": "L1",
       "id": "app_components_admin_toast_tsx",
-      "community": 52,
+      "community": 53,
       "norm_label": "toast.tsx"
     },
     {
@@ -1314,7 +1332,7 @@
       "source_file": "app/components/admin/FormFields.tsx",
       "source_location": "L115",
       "id": "formfields_add",
-      "community": 2,
+      "community": 5,
       "norm_label": "add()"
     },
     {
@@ -1341,7 +1359,7 @@
       "source_file": "app/components/admin/AdminPrimitives.tsx",
       "source_location": "L1",
       "id": "app_components_admin_adminprimitives_tsx",
-      "community": 53,
+      "community": 54,
       "norm_label": "adminprimitives.tsx"
     },
     {
@@ -1386,16 +1404,16 @@
       "source_file": "app/contact/page.tsx",
       "source_location": "L1",
       "id": "app_contact_page_tsx",
-      "community": 38,
+      "community": 39,
       "norm_label": "page.tsx"
     },
     {
       "label": "ContactPage()",
       "file_type": "code",
       "source_file": "app/contact/page.tsx",
-      "source_location": "L10",
+      "source_location": "L14",
       "id": "page_contactpage",
-      "community": 38,
+      "community": 39,
       "norm_label": "contactpage()"
     },
     {
@@ -1413,7 +1431,7 @@
       "source_file": "app/projects/page.tsx",
       "source_location": "L1",
       "id": "app_projects_page_tsx",
-      "community": 39,
+      "community": 40,
       "norm_label": "page.tsx"
     },
     {
@@ -1422,7 +1440,7 @@
       "source_file": "app/projects/page.tsx",
       "source_location": "L16",
       "id": "page_projectspage",
-      "community": 39,
+      "community": 40,
       "norm_label": "projectspage()"
     },
     {
@@ -1485,7 +1503,7 @@
       "source_file": "app/projects/[slug]/opengraph-image.tsx",
       "source_location": "L1",
       "id": "app_projects_slug_opengraph_image_tsx",
-      "community": 54,
+      "community": 55,
       "norm_label": "opengraph-image.tsx"
     },
     {
@@ -1494,7 +1512,7 @@
       "source_file": "app/lib/blogs.ts",
       "source_location": "L1",
       "id": "app_lib_blogs_ts",
-      "community": 55,
+      "community": 56,
       "norm_label": "blogs.ts"
     },
     {
@@ -1503,7 +1521,7 @@
       "source_file": "app/lib/projects.ts",
       "source_location": "L1",
       "id": "app_lib_projects_ts",
-      "community": 56,
+      "community": 57,
       "norm_label": "projects.ts"
     },
     {
@@ -1539,7 +1557,7 @@
       "source_file": "app/lib/admin/data.ts",
       "source_location": "L1",
       "id": "app_lib_admin_data_ts",
-      "community": 57,
+      "community": 58,
       "norm_label": "data.ts"
     },
     {
@@ -1548,7 +1566,7 @@
       "source_file": "app/lib/supabase/types.ts",
       "source_location": "L1",
       "id": "app_lib_supabase_types_ts",
-      "community": 58,
+      "community": 59,
       "norm_label": "types.ts"
     },
     {
@@ -1557,7 +1575,7 @@
       "source_file": "app/lib/supabase/server.ts",
       "source_location": "L1",
       "id": "app_lib_supabase_server_ts",
-      "community": 40,
+      "community": 41,
       "norm_label": "server.ts"
     },
     {
@@ -1566,7 +1584,7 @@
       "source_file": "app/lib/supabase/server.ts",
       "source_location": "L9",
       "id": "server_createclient",
-      "community": 40,
+      "community": 41,
       "norm_label": "createclient()"
     },
     {
@@ -1636,7 +1654,7 @@
       "label": "estimateReadTime()",
       "file_type": "code",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L24",
+      "source_location": "L23",
       "id": "blog_estimatereadtime",
       "community": 3,
       "norm_label": "estimatereadtime()"
@@ -1645,7 +1663,7 @@
       "label": "formatDate()",
       "file_type": "code",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L30",
+      "source_location": "L29",
       "id": "blog_formatdate",
       "community": 3,
       "norm_label": "formatdate()"
@@ -1654,7 +1672,7 @@
       "label": "rowToPost()",
       "file_type": "code",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L40",
+      "source_location": "L39",
       "id": "blog_rowtopost",
       "community": 3,
       "norm_label": "rowtopost()"
@@ -1663,7 +1681,7 @@
       "label": "fetchPublishedRows()",
       "file_type": "code",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L63",
+      "source_location": "L62",
       "id": "blog_fetchpublishedrows",
       "community": 3,
       "norm_label": "fetchpublishedrows()"
@@ -1672,7 +1690,7 @@
       "label": "getPosts()",
       "file_type": "code",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L85",
+      "source_location": "L83",
       "id": "blog_getposts",
       "community": 3,
       "norm_label": "getposts()"
@@ -1690,7 +1708,7 @@
       "label": "rowToProject()",
       "file_type": "code",
       "source_file": "app/lib/public/projects.ts",
-      "source_location": "L22",
+      "source_location": "L21",
       "id": "projects_rowtoproject",
       "community": 3,
       "norm_label": "rowtoproject()"
@@ -1699,7 +1717,7 @@
       "label": "fetchPublishedRows()",
       "file_type": "code",
       "source_file": "app/lib/public/projects.ts",
-      "source_location": "L48",
+      "source_location": "L47",
       "id": "projects_fetchpublishedrows",
       "community": 3,
       "norm_label": "fetchpublishedrows()"
@@ -1708,7 +1726,7 @@
       "label": "getProjects()",
       "file_type": "code",
       "source_file": "app/lib/public/projects.ts",
-      "source_location": "L72",
+      "source_location": "L71",
       "id": "projects_getprojects",
       "community": 3,
       "norm_label": "getprojects()"
@@ -1719,7 +1737,7 @@
       "source_file": "app/blog/page.tsx",
       "source_location": "L1",
       "id": "app_blog_page_tsx",
-      "community": 41,
+      "community": 42,
       "norm_label": "page.tsx"
     },
     {
@@ -1728,7 +1746,7 @@
       "source_file": "app/blog/page.tsx",
       "source_location": "L13",
       "id": "page_blogpage",
-      "community": 41,
+      "community": 42,
       "norm_label": "blogpage()"
     },
     {
@@ -1773,7 +1791,7 @@
       "source_file": "app/blog/[slug]/opengraph-image.tsx",
       "source_location": "L1",
       "id": "app_blog_slug_opengraph_image_tsx",
-      "community": 59,
+      "community": 60,
       "norm_label": "opengraph-image.tsx"
     },
     {
@@ -2058,7 +2076,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/layout.tsx",
-      "source_location": "L90",
+      "source_location": "L91",
       "weight": 1.0,
       "_src": "app_layout_tsx",
       "_tgt": "layout_rootlayout",
@@ -3137,6 +3155,18 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/components/TopLoader.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_src": "app_components_toploader_tsx",
+      "_tgt": "toploader_toploader",
+      "source": "app_components_toploader_tsx",
+      "target": "toploader_toploader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/components/ProjectsPageContent.tsx",
       "source_location": "L34",
       "weight": 1.0,
@@ -3666,7 +3696,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/contact/page.tsx",
-      "source_location": "L10",
+      "source_location": "L14",
       "weight": 1.0,
       "_src": "app_contact_page_tsx",
       "_tgt": "page_contactpage",
@@ -3882,6 +3912,18 @@
       "relation": "calls",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
+      "source_file": "app/api/admin/auth/callback/route.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "client_createclient",
+      "_tgt": "route_get",
+      "source": "client_createclient",
+      "target": "route_get"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
       "source_file": "app/lib/public/blog.ts",
       "source_location": "L66",
       "weight": 1.0,
@@ -3903,22 +3945,10 @@
       "target": "projects_fetchpublishedrows"
     },
     {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "app/api/admin/auth/callback/route.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_src": "client_createclient",
-      "_tgt": "route_get",
-      "source": "client_createclient",
-      "target": "route_get"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L24",
+      "source_location": "L23",
       "weight": 1.0,
       "_src": "app_lib_public_blog_ts",
       "_tgt": "blog_estimatereadtime",
@@ -3930,7 +3960,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L30",
+      "source_location": "L29",
       "weight": 1.0,
       "_src": "app_lib_public_blog_ts",
       "_tgt": "blog_formatdate",
@@ -3942,7 +3972,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L40",
+      "source_location": "L39",
       "weight": 1.0,
       "_src": "app_lib_public_blog_ts",
       "_tgt": "blog_rowtopost",
@@ -3954,7 +3984,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L63",
+      "source_location": "L62",
       "weight": 1.0,
       "_src": "app_lib_public_blog_ts",
       "_tgt": "blog_fetchpublishedrows",
@@ -3966,7 +3996,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L85",
+      "source_location": "L83",
       "weight": 1.0,
       "_src": "app_lib_public_blog_ts",
       "_tgt": "blog_getposts",
@@ -3978,7 +4008,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L56",
+      "source_location": "L55",
       "weight": 1.0,
       "_src": "blog_rowtopost",
       "_tgt": "blog_estimatereadtime",
@@ -3990,7 +4020,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/blog.ts",
-      "source_location": "L54",
+      "source_location": "L53",
       "weight": 1.0,
       "_src": "blog_rowtopost",
       "_tgt": "blog_formatdate",
@@ -4002,7 +4032,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/projects.ts",
-      "source_location": "L22",
+      "source_location": "L21",
       "weight": 1.0,
       "_src": "app_lib_public_projects_ts",
       "_tgt": "projects_rowtoproject",
@@ -4014,7 +4044,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/projects.ts",
-      "source_location": "L48",
+      "source_location": "L47",
       "weight": 1.0,
       "_src": "app_lib_public_projects_ts",
       "_tgt": "projects_fetchpublishedrows",
@@ -4026,7 +4056,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/lib/public/projects.ts",
-      "source_location": "L72",
+      "source_location": "L71",
       "weight": 1.0,
       "_src": "app_lib_public_projects_ts",
       "_tgt": "projects_getprojects",

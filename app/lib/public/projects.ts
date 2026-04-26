@@ -1,6 +1,5 @@
 import "server-only";
 import { cache } from "react";
-import { createClient } from "../supabase/server";
 import { createStaticClient } from "../supabase/static";
 import type { ProjectRow } from "../supabase/types";
 import { PROJECTS as STATIC_PROJECTS, type Project } from "../projects";
@@ -45,10 +44,11 @@ function rowToProject(row: ProjectRow): Project {
   };
 }
 
-async function fetchPublishedRows(
-  useStatic: boolean
-): Promise<ProjectRow[] | null> {
-  const supabase = useStatic ? createStaticClient() : await createClient();
+async function fetchPublishedRows(): Promise<ProjectRow[] | null> {
+  // Cookie-less client everywhere — public pages only read
+  // status='published' rows, so the anon role is sufficient and we
+  // skip a `cookies()` call on every render.
+  const supabase = createStaticClient();
   if (!supabase) return null;
   const { data, error } = await supabase
     .from("projects")
@@ -66,24 +66,21 @@ async function fetchPublishedRows(
   return (data as ProjectRow[]) || [];
 }
 
-const fetchRuntime = cache(() => fetchPublishedRows(false));
-const fetchStatic = cache(() => fetchPublishedRows(true));
+const fetchRows = cache(fetchPublishedRows);
 
-async function getProjects(useStatic: boolean): Promise<Project[]> {
-  const rows = useStatic ? await fetchStatic() : await fetchRuntime();
+async function getProjects(): Promise<Project[]> {
+  const rows = await fetchRows();
   if (!rows || rows.length === 0) return STATIC_PROJECTS;
   return rows.map(rowToProject);
 }
 
-/* ── Public API (runtime — reads cookies) ───────────────────────── */
+/* ── Public API ─────────────────────────────────────────────────── */
 
-export const getPublicProjects = cache(async (): Promise<Project[]> =>
-  getProjects(false)
-);
+export const getPublicProjects = cache(getProjects);
 
 export const getFeaturedProjects = cache(
   async (limit = 6): Promise<Project[]> => {
-    const all = await getProjects(false);
+    const all = await getProjects();
     const flagged = all.filter((p) => p.featured === true);
     if (flagged.length > 0) return flagged.slice(0, limit);
     // Static fallback (no `featured` flags) — show top N so dev isn't blank.
@@ -93,14 +90,14 @@ export const getFeaturedProjects = cache(
 
 export const getPublicProjectBySlug = cache(
   async (slug: string): Promise<Project | null> => {
-    const all = await getProjects(false);
+    const all = await getProjects();
     return all.find((p) => p.slug === slug) || null;
   }
 );
 
 export const getRelatedPublicProjects = cache(
   async (slug: string, limit = 3): Promise<Project[]> => {
-    const all = await getProjects(false);
+    const all = await getProjects();
     const current = all.find((p) => p.slug === slug);
     if (!current) return all.slice(0, limit);
     const sameCat = all.filter(
@@ -115,16 +112,16 @@ export const getRelatedPublicProjects = cache(
 
 export const getPublicProjectCategories = cache(
   async (): Promise<string[]> => {
-    const all = await getProjects(false);
+    const all = await getProjects();
     const set = new Set<string>();
     all.forEach((p) => set.add(p.category));
     return Array.from(set).sort();
   }
 );
 
-/* ── Static API (no cookies — safe in generateStaticParams, sitemap) ── */
+/* ── Slug list — same data, narrower payload for `generateStaticParams` ── */
 
 export const getStaticProjectSlugs = cache(async (): Promise<string[]> => {
-  const all = await getProjects(true);
+  const all = await getProjects();
   return all.map((p) => p.slug);
 });

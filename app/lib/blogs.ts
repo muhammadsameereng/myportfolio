@@ -1,5 +1,3 @@
-import { cache } from "react";
-
 export type BlogPost = {
   slug: string;
   title: string;
@@ -17,6 +15,10 @@ export type BlogPost = {
   markdown?: string;
   /** Editorial flag — true posts are surfaced on the homepage. */
   featured?: boolean;
+  /** DB-backed category name (e.g. "Engineering", "Personal"). Used
+   *  to drive the filter pills on /blog. Static catalog entries leave
+   *  this undefined. */
+  category?: string;
 };
 
 export const POSTS: BlogPost[] = [
@@ -229,22 +231,3 @@ export const POSTS: BlogPost[] = [
   },
 ];
 
-/**
- * Cached lookups — `cache()` deduplicates within a single render so
- * the post + its related lookups only execute once per request.
- */
-export const getPostBySlug = cache(
-  (slug: string): BlogPost | undefined => POSTS.find((p) => p.slug === slug)
-);
-
-export const getRelatedPosts = cache((slug: string, limit = 3): BlogPost[] => {
-  const current = getPostBySlug(slug);
-  if (!current) return POSTS.slice(0, limit);
-  const sameTag = POSTS.filter(
-    (p) => p.slug !== slug && p.tags.some((t) => current.tags.includes(t))
-  );
-  const others = POSTS.filter(
-    (p) => p.slug !== slug && !p.tags.some((t) => current.tags.includes(t))
-  );
-  return [...sameTag, ...others].slice(0, limit);
-});

@@ -63,7 +63,9 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`sticky top-0 z-50 w-full transition-all duration-300 ease-out ${
-        scrolled ? "px-3 pt-3 pb-3" : "bg-background"
+        scrolled
+          ? "px-3 pt-3 pb-3"
+          : "bg-background border-b border-border/60 shadow-[0_1px_0_0_rgb(0_0_0_/_0.02)]"
       }`}
     >
       <nav

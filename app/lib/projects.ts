@@ -1,5 +1,3 @@
-import { cache } from "react";
-
 export type Category =
   | "SaaS"
   | "Web"
@@ -318,27 +316,3 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-export const CATEGORIES = ["All", "SaaS", "Web", "Desktop", "Mobile", "E-Commerce"] as const;
-export type CategoryFilter = (typeof CATEGORIES)[number];
-
-/**
- * Cached lookups — `cache()` deduplicates calls within a single React
- * render pass, so a page that asks for the same project + its related
- * projects only computes once even when the helper is called from
- * multiple components in the tree.  Pays off when we add async data.
- */
-export const getProjectBySlug = cache(
-  (slug: string): Project | undefined => PROJECTS.find((p) => p.slug === slug)
-);
-
-export const getRelatedProjects = cache((slug: string, limit = 3): Project[] => {
-  const current = getProjectBySlug(slug);
-  if (!current) return PROJECTS.slice(0, limit);
-  const sameCat = PROJECTS.filter(
-    (p) => p.slug !== slug && p.category === current.category
-  );
-  const others = PROJECTS.filter(
-    (p) => p.slug !== slug && p.category !== current.category
-  );
-  return [...sameCat, ...others].slice(0, limit);
-});
