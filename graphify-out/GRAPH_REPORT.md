@@ -1,11 +1,11 @@
 # Graph Report - portfolio  (2026-04-27)
 
 ## Corpus Check
-- 91 files · ~46,235 words
+- 93 files · ~46,336 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 221 nodes · 194 edges · 10 communities detected
+- 223 nodes · 194 edges · 10 communities detected
 - Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 35 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -99,9 +99,9 @@ Nodes (1): " "()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `createClient()` connect `Community 1` to `Community 0`, `Community 3`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._
 - **Why does `upload()` connect `Community 0` to `Community 1`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **Are the 14 inferred relationships involving `createClient()` (e.g. with `signInWithMagicLink()` and `signOut()`) actually correct?**
   _`createClient()` has 14 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `isSupabaseConfigured()` (e.g. with `AdminMediaPage()` and `AdminCategoriesPage()`) actually correct?**
