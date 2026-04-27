@@ -90,7 +90,7 @@ function ProjectsCard() {
         <span className="text-[14px] font-semibold text-foreground">
           Projects
         </span>
-        <button className="flex cursor-pointer items-center gap-1 rounded-full bg-blue-500 px-3 py-1.5 text-[11.5px] font-medium text-white transition-opacity hover:opacity-90">
+        <button className="flex cursor-pointer items-center gap-1 rounded-full bg-blue-600 px-3 py-1.5 text-[11.5px] font-medium text-white transition-opacity hover:opacity-90">
           <span className="text-[13px] leading-none">+</span>
           <span>New</span>
         </button>

@@ -36,12 +36,14 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // Bundle hygiene — barrel-tree-shake heavy libs + inline critical CSS so
-  // the render-blocking Tailwind chunk shrinks dramatically (uses `critters`
-  // under the hood).
+  // Bundle hygiene — barrel-tree-shake heavy libs + inline ALL CSS into the
+  // HTML so there's no render-blocking <link rel="stylesheet">. Next 16's
+  // `inlineCss` is the supported replacement for the older critters-based
+  // `optimizeCss` flag — it works at the App-Router level and produces a
+  // single inlined <style> per page.
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
-    optimizeCss: true,
+    inlineCss: true,
   },
   // Disable Next 16 typed routes for now — admin uses dynamic ids that
   // typed-routes can't always infer cleanly. Reintroduce later if needed.
