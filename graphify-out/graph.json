@@ -3231,8 +3231,8 @@
       "source_file": "OpenClaw-Architecture/stack.jsx",
       "source_location": "L77",
       "weight": 1.0,
-      "_src": "stack_stack",
-      "_tgt": "tooltip_usetooltip",
+      "_src": "tooltip_usetooltip",
+      "_tgt": "stack_stack",
       "source": "tooltip_usetooltip",
       "target": "stack_stack"
     },
@@ -5487,8 +5487,8 @@
       "source_file": "scripts/add-saranzafar-tag.ts",
       "source_location": "L22",
       "weight": 1.0,
-      "_src": "add_saranzafar_tag_main",
-      "_tgt": "client_createclient",
+      "_src": "client_createclient",
+      "_tgt": "add_saranzafar_tag_main",
       "source": "client_createclient",
       "target": "add_saranzafar_tag_main"
     },

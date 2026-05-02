@@ -44,8 +44,8 @@
   proxy.ts → app/lib/supabase/middleware.ts
 - `add()` --calls--> `main()`  [INFERRED]
   app/components/admin/FormFields.tsx → scripts/seed-csv-projects.ts
-- `main()` --calls--> `createClient()`  [INFERRED]
-  scripts/add-saranzafar-tag.ts → app/lib/supabase/client.ts
+- `createClient()` --calls--> `main()`  [INFERRED]
+  app/lib/supabase/client.ts → scripts/add-saranzafar-tag.ts
 - `signInWithMagicLink()` --calls--> `createClient()`  [INFERRED]
   app/admin/actions.ts → app/lib/supabase/client.ts
 - `signOut()` --calls--> `createClient()`  [INFERRED]
