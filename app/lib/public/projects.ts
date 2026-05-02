@@ -3,7 +3,7 @@ import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { createStaticClient } from "../supabase/static";
 import type { ProjectRow } from "../supabase/types";
-import { PROJECTS as STATIC_PROJECTS, type Project } from "../projects";
+import { type Project } from "../projects";
 
 const CACHE_TAG = "projects";
 const CACHE_TTL_SECONDS = 3600;
@@ -41,6 +41,7 @@ function rowToProject(row: ProjectRow): Project {
     thumb:
       row.thumb_url ||
       "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&q=80&auto=format&fit=crop",
+    gallery: row.gallery_urls && row.gallery_urls.length > 0 ? row.gallery_urls : undefined,
     year: row.year || new Date(row.created_at).getFullYear(),
     role: row.role || "",
     liveUrl: row.live_url || undefined,
@@ -85,7 +86,7 @@ const fetchRows = cache(fetchPublishedRowsCached);
 
 async function getProjects(): Promise<Project[]> {
   const rows = await fetchRows();
-  if (!rows || rows.length === 0) return STATIC_PROJECTS;
+  if (!rows) return [];
   return rows.map(rowToProject);
 }
 
@@ -97,9 +98,7 @@ export const getFeaturedProjects = cache(
   async (limit = 6): Promise<Project[]> => {
     const all = await getProjects();
     const flagged = all.filter((p) => p.featured === true);
-    if (flagged.length > 0) return flagged.slice(0, limit);
-    // Static fallback (no `featured` flags) — show top N so dev isn't blank.
-    return all.slice(0, limit);
+    return flagged.slice(0, limit);
   }
 );
 

@@ -29,6 +29,7 @@ create table if not exists public.projects (
   category_id uuid references public.categories(id) on delete set null,
   tags text[] not null default '{}',
   thumb_url text,
+  gallery_urls text[] not null default '{}',
   year int,
   role text,
   live_url text,
@@ -39,6 +40,10 @@ create table if not exists public.projects (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Idempotent column add for existing installations.
+alter table public.projects
+  add column if not exists gallery_urls text[] not null default '{}';
 
 create table if not exists public.blog_posts (
   id uuid primary key default gen_random_uuid(),

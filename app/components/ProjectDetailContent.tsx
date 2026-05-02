@@ -1,10 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 import { type Project } from "../lib/projects";
 
 // See BlogDetailContent — dynamic-imported so react-markdown lives in
@@ -48,6 +49,151 @@ function Para({ children, delay = 0 }: { children: React.ReactNode; delay?: numb
   );
 }
 
+/* ── Lightbox ─────────────────────────────────────────────────────────
+   Minimal accessible image viewer:
+   - Esc / backdrop click → close
+   - ← / → keys + on-screen buttons → navigate
+   - Counter shown bottom-center
+*/
+function Lightbox({
+  images,
+  index,
+  alt,
+  onClose,
+  onPrev,
+  onNext,
+}: {
+  images: string[];
+  index: number;
+  alt: string;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  const [loaded, setLoaded] = useState(false);
+
+  // Reset spinner whenever the active image changes.
+  useEffect(() => {
+    setLoaded(false);
+  }, [index]);
+
+  // Prefetch neighbours so prev/next paints instantly.
+  useEffect(() => {
+    if (images.length < 2) return;
+    const neighbours = [
+      images[(index + 1) % images.length],
+      images[(index - 1 + images.length) % images.length],
+    ];
+    neighbours.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, [index, images]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") onPrev();
+      else if (e.key === "ArrowRight") onNext();
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose, onPrev, onNext]);
+
+  const src = images[index];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${alt} — image ${index + 1} of ${images.length}`}
+      onClick={onClose}
+    >
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        aria-label="Close"
+        className="absolute top-4 right-4 z-[101] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20"
+      >
+        <X size={18} />
+      </button>
+
+      {images.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onPrev();
+            }}
+            aria-label="Previous image"
+            className="absolute left-3 top-1/2 z-[101] flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20 sm:left-6"
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onNext();
+            }}
+            aria-label="Next image"
+            className="absolute right-3 top-1/2 z-[101] flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20 sm:right-6"
+          >
+            <ChevronRight size={22} />
+          </button>
+        </>
+      )}
+
+      <motion.div
+        key={src}
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.98 }}
+        transition={{ duration: 0.2 }}
+        className="relative mx-4 flex max-h-[90vh] max-w-[95vw] items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {!loaded && (
+          <span className="absolute inline-block h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+        )}
+        <Image
+          src={src}
+          alt={`${alt} — ${index + 1}`}
+          width={3000}
+          height={2000}
+          sizes="95vw"
+          priority
+          unoptimized
+          onLoad={() => setLoaded(true)}
+          className={`h-auto max-h-[90vh] w-auto max-w-[95vw] rounded-xl object-contain shadow-2xl transition-opacity duration-200 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      </motion.div>
+
+      {images.length > 1 && (
+        <div className="absolute bottom-5 left-1/2 z-[101] -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-[12px] font-medium text-white backdrop-blur">
+          {index + 1} / {images.length}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
 export default function ProjectDetailContent({
   project,
   related,
@@ -55,6 +201,20 @@ export default function ProjectDetailContent({
   project: Project;
   related: Project[];
 }) {
+  const gallery = project.gallery && project.gallery.length > 0 ? project.gallery : null;
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
+  const close = useCallback(() => setActiveIdx(null), []);
+  const prev = useCallback(() => {
+    if (!gallery) return;
+    setActiveIdx((i) =>
+      i === null ? null : (i - 1 + gallery.length) % gallery.length
+    );
+  }, [gallery]);
+  const next = useCallback(() => {
+    if (!gallery) return;
+    setActiveIdx((i) => (i === null ? null : (i + 1) % gallery.length));
+  }, [gallery]);
 
   return (
     <article className="relative">
@@ -162,11 +322,59 @@ export default function ProjectDetailContent({
           />
         </motion.div>
 
+        {/* ── Tags ── */}
+        {project.tags && project.tags.length > 0 && (
+          <motion.div
+            {...fadeUp(0.05)}
+            className="mt-6 flex flex-wrap gap-2"
+            aria-label="Project tags"
+          >
+            {project.tags.map((t) => (
+              <span
+                key={t}
+                className="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-[11.5px] font-medium text-foreground/80"
+              >
+                {t}
+              </span>
+            ))}
+          </motion.div>
+        )}
+
         {/* ── Markdown body (DB-sourced long_description) ── */}
         {project.body && (
           <motion.div {...fadeUp(0.05)} className="mt-12">
             <ProjectMarkdown source={project.body} />
           </motion.div>
+        )}
+
+        {/* ── Gallery (optional) ── */}
+        {gallery && (
+          <>
+            <SectionTitle>Gallery</SectionTitle>
+            <motion.div
+              {...fadeUp(0.05)}
+              className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+            >
+              {gallery.map((src, i) => (
+                <button
+                  key={src + i}
+                  type="button"
+                  onClick={() => setActiveIdx(i)}
+                  aria-label={`Open image ${i + 1} of ${gallery.length}`}
+                  className="group relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded-2xl border border-border bg-muted/30"
+                >
+                  <Image
+                    src={src}
+                    alt={`${project.title} — gallery image ${i + 1}`}
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                  />
+                </button>
+              ))}
+            </motion.div>
+          </>
         )}
 
         {/* ── Tech Stack ── */}
@@ -378,6 +586,19 @@ export default function ProjectDetailContent({
           </motion.section>
         )}
       </div>
+
+      <AnimatePresence>
+        {gallery && activeIdx !== null && (
+          <Lightbox
+            images={gallery}
+            index={activeIdx}
+            alt={project.title}
+            onClose={close}
+            onPrev={prev}
+            onNext={next}
+          />
+        )}
+      </AnimatePresence>
     </article>
   );
 }

@@ -24,6 +24,7 @@ export type ProjectRow = {
   category_id: string | null;
   tags: string[];
   thumb_url: string | null;
+  gallery_urls: string[];
   year: number | null;
   role: string | null;
   live_url: string | null;

@@ -248,7 +248,7 @@ export default function ContactPageContent() {
                     Based in
                   </p>
                   <p className="mt-0.5 text-[13.5px] font-medium text-foreground">
-                    Kotli, Azad Kashmir, Pakistan
+                    AJK, Pakistan
                   </p>
                 </div>
               </li>

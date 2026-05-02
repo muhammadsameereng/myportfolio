@@ -27,6 +27,10 @@ export type Project = {
   role: string;
   liveUrl?: string;
   repoUrl?: string;
+  /** Optional gallery of additional screenshots. Sourced from DB
+   *  `gallery_urls` (text[]). Rendered as a clickable grid + lightbox
+   *  on the detail page when non-empty. */
+  gallery?: string[];
 
   /** Raw markdown body — rendered between the hero image and any
    *  legacy structured sections below. Sourced from DB long_description. */

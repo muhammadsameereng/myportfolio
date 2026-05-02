@@ -48,7 +48,7 @@ export const POSTS: BlogPost[] = [
     excerpt:
       "A short note on building a career from a place where the internet goes down more than it should, and why it shapes the way I think about reliability.",
     body: [
-      "I write this from Kotli, a small valley town in Azad Jammu and Kashmir. The internet here is good most days, fine most other days, and gone for stretches that nobody can predict.",
+      "I write this from AJK, Pakistan — a quiet stretch of valleys in Azad Jammu and Kashmir. The internet here is good most days, fine most other days, and gone for stretches that nobody can predict.",
       "I learned to build software in those gaps. I learned that 'works on my machine' isn't a joke when 'my machine' might be the only place anything is working at all for the next six hours.",
       "That experience shaped a lot of how I think now. Offline-first isn't a buzzword to me — it's a rule. Graceful degradation isn't a nice-to-have — it's the whole point. The user shouldn't notice when the network blinks, and they definitely shouldn't lose work.",
       "Most software is built in places where the network is taken for granted. Building from a place where it isn't has been, somehow, an unfair advantage.",

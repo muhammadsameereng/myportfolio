@@ -40,8 +40,8 @@ export const personSchema = {
   ],
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Kotli",
-    addressRegion: "Azad Kashmir",
+    addressLocality: "Azad Jammu and Kashmir",
+    addressRegion: "AJK",
     addressCountry: "PK",
   },
 };

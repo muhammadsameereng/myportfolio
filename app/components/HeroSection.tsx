@@ -209,10 +209,11 @@ export default function HeroSection() {
             custom={3}
             className="mt-4 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground"
           >
-            I&apos;m a software engineer from Kotli, AJK. I build production
-            systems for healthcare, retail, and e-commerce — NestJS REST APIs,
-            multi-tenant SaaS, and offline-first Electron desktop apps that
-            sync without losing a write.
+            I&apos;m a software engineer from AJK, Pakistan. I build production
+            systems across healthcare, retail and e-commerce — NestJS REST APIs,
+            multi-tenant SaaS, offline-first Electron desktop apps that sync
+            without losing a write, and WordPress / WooCommerce sites clients
+            can run themselves.
           </motion.p>
 
           <motion.p

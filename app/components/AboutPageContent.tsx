@@ -6,14 +6,18 @@ import {
   ArrowUpRight,
   CalendarClock,
   Coffee,
+  Compass,
+  Download,
+  Eye,
   Globe,
   MapPin,
-  Server,
   type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import SectionHead from "./SectionHead";
+import SDLCCycle from "./about/SDLCCycle";
+import GithubActivity from "./about/GithubActivity";
 
 type Role = {
   title: string;
@@ -28,31 +32,31 @@ type Role = {
 const experience: Role[] = [
   {
     title: "Software Engineer",
-    company: "VoltekIT",
-    period: "Present",
+    company: "Voltekit",
+    period: "2026 — Present",
     workType: "Remote",
     location: "Remote",
     summary:
-      "Building scalable web products end-to-end — NestJS REST APIs, multi-tenant SaaS architecture, and Next.js + React frontends. Working across the stack on the systems that power VoltekIT's clients, with TypeScript and AWS EC2 as the daily drivers.",
+      "Working in a hybrid software-engineer and full-stack developer role. Day to day means owning features end-to-end — shaping the data model, writing the backend, building the interface, and shipping the result to production. The focus is on scalable architecture, reliable APIs and clean, fast frontends, with TypeScript running through the whole stack.",
     isCurrent: true,
   },
   {
     title: "Full Stack Software Engineer",
     company: "Logicexer Pvt Ltd",
-    period: "Aug 2024 — Present",
+    period: "Aug 2024 — 2026",
     workType: "On-site",
-    location: "Kotli, Azad Kashmir",
+    location: "AJK, Pakistan",
     summary:
-      "Promoted from intern. Engineered 3 offline-first desktop systems (Electron + CouchDB/PouchDB) deployed across clinics, retail, and food service businesses — zero data loss during network outages via bidirectional sync. Architected NestJS REST APIs with modular service design and TypeScript DTO validation, cutting runtime errors in production to zero. Built and maintained 5+ full-stack web apps with Next.js + React. Reduced deployment time by ~60% through GitLab CI/CD pipelines on AWS EC2.",
+      "Promoted from intern into a full-stack role that touched almost everything the team shipped — backend services and APIs, web applications, offline-capable desktop systems, content and marketing sites, and the deployment pipelines underneath all of it. The breadth meant moving comfortably between architecture decisions, day-to-day feature work and the quiet fixes that keep production calm.",
   },
   {
     title: "Software Engineering Intern",
     company: "Logicexer Pvt Ltd",
     period: "Jul 2024 — Aug 2024",
     workType: "On-site",
-    location: "Kotli, Azad Kashmir",
+    location: "AJK, Pakistan",
     summary:
-      "Built and tested 4+ desktop application features using Electron.js, React, and TypeScript, contributing to a live business management system used by real clients. Resolved 20+ bug reports across CouchDB/PouchDB sync workflows. Supported deployment of 3 WordPress projects.",
+      "First step into shipping production code. Built features that real users would touch, fixed real bugs from real issue trackers, and learned how a working engineering team moves a product forward week to week.",
   },
 ];
 
@@ -60,28 +64,9 @@ type Stat = { label: string; value: string; icon: LucideIcon };
 
 const stats: Stat[] = [
   { label: "Years building", value: "02+", icon: CalendarClock },
-  { label: "Live websites", value: "16+", icon: Globe },
-  { label: "Enterprise systems", value: "03", icon: Server },
+  { label: "Live websites", value: "17+", icon: Globe },
+  { label: "Countries served", value: "05+", icon: Compass },
   { label: "Cups of chai", value: "∞", icon: Coffee },
-];
-
-const principles = [
-  {
-    title: "Boring tools, hard problems.",
-    body: "Reach for the proven thing. Spend the novelty budget where it actually pays — on the part that's hard about the problem, not the framework.",
-  },
-  {
-    title: "Code that reads like English.",
-    body: "Future-me is the most common reader. So is the next engineer to touch this. Naming, shape, and intent matter more than cleverness.",
-  },
-  {
-    title: "Trust earned slowly.",
-    body: "By showing up. By doing what was promised. By being honest about what didn't go to plan. The slow way is the only way that lasts.",
-  },
-  {
-    title: "Calm software, every time.",
-    body: "Quiet by default. Loud only when something needs the human's attention. Most of the value is in what doesn't ask to be noticed.",
-  },
 ];
 
 const fadeUp = (delay = 0) => ({
@@ -100,7 +85,7 @@ export default function AboutPageContent() {
     <>
       {/* ── Hero / intro ─────────────────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 pt-14 pb-12 md:grid-cols-[auto_1fr] md:gap-12 md:pt-20 md:pb-12">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 pt-12 pb-6 md:grid-cols-[auto_1fr] md:gap-12 md:pt-16 md:pb-8">
           {/* Profile chip — same composition as the home hero */}
           <motion.div
             initial={{ opacity: 0, scale: 0.94 }}
@@ -149,8 +134,9 @@ export default function AboutPageContent() {
               transition={{ duration: 0.5, delay: 0.18 }}
               className="mt-3 max-w-[520px] text-[15.5px] font-semibold leading-snug text-foreground"
             >
-              Software engineer from Kashmir — full-stack across backend
-              and frontend, with 2+ years shipping production systems.
+              Software engineer from AJK, Pakistan — full-stack across
+              backend and frontend, with 2+ years shipping production
+              systems.
             </motion.p>
 
             <motion.p
@@ -160,7 +146,7 @@ export default function AboutPageContent() {
               className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[12.5px] text-muted-foreground"
             >
               <span className="inline-flex items-center gap-1.5">
-                <PinIcon /> Kotli, Azad Kashmir, Pakistan
+                <PinIcon /> AJK, Pakistan
               </span>
               <span className="h-3 w-px bg-border" />
               <span className="inline-flex items-center gap-1.5">
@@ -171,35 +157,96 @@ export default function AboutPageContent() {
                 Ready to work
               </span>
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.32 }}
+              className="mt-6 flex flex-wrap items-center gap-2.5"
+            >
+              <a
+                href="/saranzafar-cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full bg-foreground px-5 text-[13px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95"
+              >
+                <Eye size={14} strokeWidth={1.9} />
+                View resume
+              </a>
+              <a
+                href="/saranzafar-cv.pdf"
+                download="Saran-Zafar-Resume.pdf"
+                className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-5 text-[13px] font-medium text-foreground transition-colors duration-200 hover:border-foreground/50 hover:bg-card"
+              >
+                <Download
+                  size={14}
+                  strokeWidth={1.9}
+                  className="transition-transform duration-200 group-hover:translate-y-0.5"
+                />
+                Download
+              </a>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── Story ─────────────────────────────────────────── */}
+      {/* ── Story + Numbers ─────────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+        <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
           <SectionHead
             title="The short story"
             description="Where I'm from, what I work on, and the path that got me here."
           />
 
+          {/* Stats strip — sits high so the headline numbers anchor the
+              section before the long-form copy starts. */}
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {stats.map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <motion.div
+                  key={s.label}
+                  {...fadeUp(0.04 * i)}
+                  whileHover={{ y: -3 }}
+                  className="group rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/30"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/[0.05] text-foreground/75 transition-colors group-hover:bg-foreground/[0.08] group-hover:text-foreground">
+                      <Icon size={15} strokeWidth={1.8} />
+                    </span>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                      {s.label}
+                    </p>
+                  </div>
+                  <p className="mt-4 text-[28px] font-semibold leading-none tracking-tight tabular-nums text-foreground sm:text-[30px]">
+                    {s.value}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
+
           <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
             <motion.div {...fadeUp(0)} className="space-y-5 text-[15.5px] leading-[1.75] text-foreground/85">
               <p>
-                I&apos;m Saran — a software engineer from Kotli, in Azad
-                Kashmir. I build full-stack production systems for
-                healthcare, retail, and e-commerce businesses, with live
-                websites and enterprise-grade desktop systems running in
-                real-world environments.
+                I&apos;m Saran — a software engineer from AJK, Pakistan.
+                I build full-stack production systems across a
+                handful of industries — education, retail, healthcare,
+                logistics and e-commerce — from multi-tenant SaaS platforms
+                to marketing sites that have to load fast on a thin
+                connection.
               </p>
               <p>
                 My core stack is{" "}
                 <span className="font-medium text-foreground">NestJS</span>{" "}
                 for backend APIs and{" "}
                 <span className="font-medium text-foreground">Next.js + React</span>{" "}
-                for the web. I work in TypeScript end-to-end, deploy with
-                Docker on AWS EC2, and reach for whatever the problem
-                actually needs — not whatever&apos;s trendy.
+                for the web, with{" "}
+                <span className="font-medium text-foreground">WordPress / WooCommerce</span>{" "}
+                whenever a client needs to ship and edit a site themselves.
+                TypeScript end-to-end, Docker on AWS, and a strong bias
+                for whatever the problem actually needs — not whatever&apos;s
+                trendy.
               </p>
             </motion.div>
 
@@ -213,94 +260,54 @@ export default function AboutPageContent() {
                 single lost write.
               </p>
               <p className="text-muted-foreground">
-                Currently a Full-Stack Engineer at Logicexer — promoted from
-                intern in 2024. BSc Software Engineering from the University
-                of Kotli. Always up to talk about products, teams, and the
-                quiet parts of software.
+                Currently working as a Software Engineer and Backend
+                Engineer at Voltekit. Previously a Full-Stack Developer at
+                Logicexer, promoted from intern in 2024. BSc Software
+                Engineering from the University of Kotli. Always up to
+                talk about products, teams, and the quiet parts of
+                software.
               </p>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── Numbers ─────────────────────────────────────────── */}
+      {/* ── How I work — SDLC cycle ─────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+        <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
           <SectionHead
-            title="By the numbers"
-            description="A few honest counters from the last couple of years of work."
+            title="How I work"
+            description="A loop, not a checklist. Software is never done — it just gets sharper with each pass."
           />
-
-          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {stats.map((s, i) => {
-              const Icon = s.icon;
-              return (
-                <motion.div
-                  key={s.label}
-                  {...fadeUp(0.04 * i)}
-                  whileHover={{ y: -3 }}
-                  className="group rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/30"
-                >
-                  {/* Header row — small icon tile + label, same pattern
-                      used by Skills + Contact rows for a consistent feel. */}
-                  <div className="flex items-center gap-2.5">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/[0.05] text-foreground/75 transition-colors group-hover:bg-foreground/[0.08] group-hover:text-foreground">
-                      <Icon size={15} strokeWidth={1.8} />
-                    </span>
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                      {s.label}
-                    </p>
-                  </div>
-
-                  {/* Value — the headline number */}
-                  <p className="mt-4 text-[28px] font-semibold leading-none tracking-tight tabular-nums text-foreground sm:text-[30px]">
-                    {s.value}
-                  </p>
-                </motion.div>
-              );
-            })}
+          <div className="mt-10">
+            <SDLCCycle />
           </div>
         </div>
       </section>
 
-      {/* ── Principles ─────────────────────────────────────────── */}
+      {/* ── On GitHub ───────────────────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+        <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
           <SectionHead
-            title="How I work"
-            description="A few quiet principles I keep coming back to. Not rules — habits."
+            title="On GitHub"
+            description="A live snapshot of the streak, the longest run, and the year so far."
           />
-
-          <div className="mt-10 grid gap-3 sm:grid-cols-2">
-            {principles.map((p, i) => (
-              <motion.div
-                key={p.title}
-                {...fadeUp(0.04 * i)}
-                whileHover={{ y: -3 }}
-                className="rounded-2xl border border-border bg-card p-6 transition-colors hover:border-foreground/30"
-              >
-                <h3 className="text-[15px] font-semibold tracking-tight text-foreground">
-                  {p.title}
-                </h3>
-                <p className="mt-2.5 text-[14px] leading-[1.7] text-muted-foreground">
-                  {p.body}
-                </p>
-              </motion.div>
-            ))}
+          <div className="mt-8">
+            <GithubActivity />
           </div>
         </div>
       </section>
 
       {/* ── Experience ─────────────────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+        <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
           <SectionHead
             title="Experience"
             description="The places I've shown up. Newest first."
           />
 
           {/* Timeline */}
-          <div className="relative mt-10 pl-7 sm:pl-9">
+          <div className="relative mt-8 pl-7 sm:pl-9">
             <span className="absolute top-2 bottom-2 left-[3px] w-px bg-border sm:left-[7px]" />
 
             <div className="space-y-9">
@@ -358,72 +365,95 @@ export default function AboutPageContent() {
         </div>
       </section>
 
-      {/* ── Outside of work ─────────────────────────────────────────── */}
+      {/* ── Outside of work + CTA ───────────────────────────────────
+          Two-card bento row. Long form on the left, sharp call to action
+          on the right — same bottom rhythm so the page exits as one
+          confident beat instead of two trailing thoughts. */}
       <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 py-12 md:py-16">
-          <SectionHead
-            title="Outside of work"
-            description="The parts of me that don't show up on a CV."
-          />
+        <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
+          <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+            {/* Outside of work — paragraph prose, with the key
+                personal touchstones (reading, walks, chai, etc.) bolded
+                so they stand out as a scan-friendly read. */}
+            <motion.div
+              {...fadeUp(0)}
+              className="flex flex-col rounded-2xl border border-border bg-card p-6 sm:p-8"
+            >
+              <div className="flex items-baseline justify-between">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Outside of work
+                </p>
+                <p className="text-[11px] text-muted-foreground/70">
+                  the unofficial bio
+                </p>
+              </div>
 
-          <motion.div
-            {...fadeUp(0)}
-            className="mt-10 rounded-2xl border border-border bg-card p-6 sm:p-8"
-          >
-            <div className="space-y-4 text-[15px] leading-[1.75] text-foreground/85">
-              <p>
-                Outside the editor, you&apos;ll find me reading more than I
-                write, walking long distances at no particular pace, and
-                making chai for anyone who shows up at the door.
-              </p>
-              <p>
-                I&apos;m a slow learner of new languages, a stubborn collector
-                of half-finished side projects, and a very loud cheerleader
-                for anyone teaching themselves to code from a place that
-                doesn&apos;t make it easy.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+              <div className="mt-4 space-y-4 text-[15px] leading-[1.75] text-foreground/85">
+                <p>
+                  When the editor closes, you&apos;ll find me{" "}
+                  <span className="font-semibold text-foreground">reading</span>{" "}
+                  more than I write,{" "}
+                  <span className="font-semibold text-foreground">walking long distances</span>{" "}
+                  at no particular pace, and brewing{" "}
+                  <span className="font-semibold text-foreground">chai</span>{" "}
+                  for anyone who shows up at the door — there&apos;s always one
+                  extra cup.
+                </p>
+                <p>
+                  I&apos;m a{" "}
+                  <span className="font-semibold text-foreground">slow learner of new languages</span>,
+                  a stubborn collector of{" "}
+                  <span className="font-semibold text-foreground">half-finished side projects</span>,
+                  and a very loud{" "}
+                  <span className="font-semibold text-foreground">cheerleader for self-taught devs</span>{" "}
+                  learning to code from a place that doesn&apos;t make it
+                  easy.
+                </p>
+              </div>
+            </motion.div>
 
-      {/* ── CTA ─────────────────────────────────────────── */}
-      <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
-          <motion.div
-            {...fadeUp(0)}
-            className="overflow-hidden rounded-2xl border border-border bg-card p-8 text-center sm:p-12"
-          >
-            <h2 className="text-[24px] font-bold tracking-tight text-foreground sm:text-[28px]">
-              Got something to build?
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-[14.5px] leading-relaxed text-muted-foreground">
-              Whether it&apos;s a fresh idea, a stuck project, or a long-term
-              partnership — I&apos;d love to hear about it.
-            </p>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/contact"
-                className="group inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-foreground px-6 text-[13.5px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95"
-              >
-                Get in touch
-                <ArrowRight
-                  size={15}
-                  className="transition-transform duration-200 group-hover:translate-x-0.5"
-                />
-              </Link>
-              <Link
-                href="/projects"
-                className="group inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-6 text-[13.5px] font-medium text-foreground transition-colors duration-200 hover:border-foreground/50 hover:bg-card"
-              >
-                See my work
-                <ArrowUpRight
-                  size={14}
-                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </Link>
-            </div>
-          </motion.div>
+            {/* CTA */}
+            <motion.div
+              {...fadeUp(0.05)}
+              className="flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
+            >
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Let&apos;s talk
+                </p>
+                <h2 className="mt-3 text-[22px] font-bold leading-tight tracking-tight text-foreground sm:text-[24px]">
+                  Got something to build?
+                </h2>
+                <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">
+                  Whether it&apos;s a fresh idea, a stuck project, or a
+                  long-term partnership — I&apos;d love to hear about it.
+                </p>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-2.5">
+                <Link
+                  href="/contact"
+                  className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full bg-foreground px-5 text-[13px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95"
+                >
+                  Get in touch
+                  <ArrowRight
+                    size={14}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
+                </Link>
+                <Link
+                  href="/projects"
+                  className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-5 text-[13px] font-medium text-foreground transition-colors duration-200 hover:border-foreground/50 hover:bg-card"
+                >
+                  See my work
+                  <ArrowUpRight
+                    size={13}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </Link>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
     </>

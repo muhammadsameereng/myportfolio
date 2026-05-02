@@ -13,6 +13,7 @@ type ProjectInput = {
   category_id: string | null;
   tags: string[];
   thumb_url: string | null;
+  gallery_urls: string[];
   year: number | null;
   role: string | null;
   live_url: string | null;
@@ -41,6 +42,9 @@ function clean(input: ProjectInput): ProjectInput {
     live_url: input.live_url?.trim() || null,
     repo_url: input.repo_url?.trim() || null,
     tags: input.tags.map((t) => t.trim()).filter(Boolean),
+    gallery_urls: (input.gallery_urls || [])
+      .map((u) => u.trim())
+      .filter(Boolean),
   };
 }
 

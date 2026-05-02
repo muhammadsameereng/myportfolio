@@ -15,6 +15,7 @@ import {
   Field,
   ImageUploader,
   MarkdownEditor,
+  MultiImageUploader,
   TagInput,
   TextInput,
   Textarea,
@@ -54,6 +55,9 @@ export default function ProjectEditor({
   );
   const [tags, setTags] = useState<string[]>(initial?.tags || []);
   const [thumbUrl, setThumbUrl] = useState<string | null>(initial?.thumb_url || null);
+  const [galleryUrls, setGalleryUrls] = useState<string[]>(
+    initial?.gallery_urls || []
+  );
   const [year, setYear] = useState<string>(
     initial?.year ? String(initial.year) : new Date().getFullYear().toString()
   );
@@ -77,6 +81,7 @@ export default function ProjectEditor({
         category_id: categoryId,
         tags,
         thumb_url: thumbUrl,
+        gallery_urls: galleryUrls,
         year: year ? parseInt(year, 10) : null,
         role: role || null,
         live_url: liveUrl || null,
@@ -192,6 +197,17 @@ export default function ProjectEditor({
 
             <Field label="Hero image">
               <ImageUploader value={thumbUrl} onChange={setThumbUrl} pathPrefix="projects" />
+            </Field>
+
+            <Field
+              label="Gallery"
+              hint="Optional — drag arrows to reorder, X to remove"
+            >
+              <MultiImageUploader
+                value={galleryUrls}
+                onChange={setGalleryUrls}
+                pathPrefix="projects/gallery"
+              />
             </Field>
 
             <Field

@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, ImageIcon, Pencil, Plus, Upload, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, ImageIcon, Pencil, Plus, Upload, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -272,6 +272,167 @@ export function ImageUploader({
         onChange={(e) => {
           const f = e.target.files?.[0];
           if (f) upload(f);
+          e.target.value = "";
+        }}
+      />
+
+      {error && (
+        <p className="text-[12px] text-rose-600 dark:text-rose-300">{error}</p>
+      )}
+    </div>
+  );
+}
+
+/* ── Multi-image uploader (gallery) ──────────────────────────────────── */
+export function MultiImageUploader({
+  value,
+  onChange,
+  bucket = "media",
+  pathPrefix = "uploads",
+  maxFileMB = 5,
+}: {
+  value: string[];
+  onChange: (urls: string[]) => void;
+  bucket?: string;
+  pathPrefix?: string;
+  maxFileMB?: number;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const uploadFiles = async (files: FileList | File[]) => {
+    setError(null);
+    const supabase = createClient();
+    if (!supabase) {
+      setError("Supabase isn't configured yet.");
+      return;
+    }
+    const list = Array.from(files);
+    for (const f of list) {
+      if (f.size > maxFileMB * 1024 * 1024) {
+        setError(`Each image must be under ${maxFileMB}MB.`);
+        return;
+      }
+    }
+    setBusy(true);
+    try {
+      const next = [...value];
+      for (const file of list) {
+        const ext = file.name.split(".").pop() || "png";
+        const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const path = `${pathPrefix}/${filename}`;
+        const { error: uploadError } = await supabase.storage
+          .from(bucket)
+          .upload(path, file, { cacheControl: "31536000", upsert: false });
+        if (uploadError) throw uploadError;
+        const { data: pub } = supabase.storage.from(bucket).getPublicUrl(path);
+        next.push(pub.publicUrl);
+      }
+      onChange(next);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Upload failed.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const remove = (idx: number) => {
+    const next = value.filter((_, i) => i !== idx);
+    onChange(next);
+  };
+
+  const move = (idx: number, dir: -1 | 1) => {
+    const j = idx + dir;
+    if (j < 0 || j >= value.length) return;
+    const next = [...value];
+    [next[idx], next[j]] = [next[j], next[idx]];
+    onChange(next);
+  };
+
+  return (
+    <div className="space-y-3">
+      {value.length > 0 && (
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {value.map((url, i) => (
+            <li
+              key={url + i}
+              className="group relative overflow-hidden rounded-xl border border-border bg-muted/30"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt=""
+                className="aspect-[4/3] w-full object-cover"
+              />
+              <div className="absolute inset-x-2 top-2 flex items-center justify-between gap-1.5 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+                <span className="rounded-full bg-background/85 px-2 py-0.5 text-[10.5px] font-medium text-foreground backdrop-blur">
+                  #{i + 1}
+                </span>
+                <div className="flex gap-1">
+                  <button
+                    type="button"
+                    onClick={() => move(i, -1)}
+                    disabled={i === 0}
+                    aria-label="Move left"
+                    className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-background/85 text-foreground backdrop-blur transition-colors hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ArrowLeft size={12} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(i, 1)}
+                    disabled={i === value.length - 1}
+                    aria-label="Move right"
+                    className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-background/85 text-foreground backdrop-blur transition-colors hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ArrowRight size={12} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => remove(i)}
+                    aria-label="Remove image"
+                    className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-background/85 text-rose-600 backdrop-blur transition-colors hover:bg-background"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        disabled={busy}
+        className="group flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border bg-background/40 transition-all duration-200 hover:border-blue-400/60 hover:bg-blue-50/40 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-blue-950/20"
+      >
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/[0.06] text-foreground/70 transition-colors group-hover:bg-blue-500/15 group-hover:text-blue-600">
+          {busy ? (
+            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-foreground/20 border-t-foreground" />
+          ) : (
+            <Plus size={16} strokeWidth={1.8} />
+          )}
+        </span>
+        <p className="text-[12.5px] font-medium text-foreground">
+          {busy ? "Uploading…" : value.length === 0 ? "Add gallery images" : "Add more images"}
+        </p>
+        <p className="text-[11px] text-muted-foreground">
+          You can select multiple files — PNG, JPG, WebP up to {maxFileMB}MB each
+        </p>
+      </button>
+
+      <input
+        ref={fileRef}
+        type="file"
+        multiple
+        accept="image/png,image/jpeg,image/webp,image/avif"
+        className="hidden"
+        onChange={(e) => {
+          const fs = e.target.files;
+          if (fs && fs.length > 0) uploadFiles(fs);
           e.target.value = "";
         }}
       />
