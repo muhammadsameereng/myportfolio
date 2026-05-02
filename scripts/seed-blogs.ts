@@ -200,6 +200,20 @@ const POSTS: PostMeta[] = [
     category_slug: "engineering",
   },
   {
+    bodyFile: "12-docker-for-beginners-why-it-changes-everything.md",
+    slug: "docker-for-beginners-why-it-changes-everything",
+    title: "Docker for Beginners: Why It Quietly Changes How You Ship Software",
+    excerpt:
+      "A friendly, jargon-light walkthrough of what Docker actually does, why people get evangelical about it, and how to ship your first container without copy-pasting a tutorial you don't understand.",
+    date: "2026-05-02",
+    read_time: "10 min",
+    thumb_url:
+      "https://images.unsplash.com/photo-1605745341112-85968b19335b?auto=format&fit=crop&w=1600&q=80",
+    tags: ["docker", "devops", "beginners", "containers", "tutorial"],
+    category_slug: "engineering",
+    featured: true,
+  },
+  {
     bodyFile: "11-openclaw-architecture-dissected.md",
     slug: "openclaw-architecture-dissected",
     title: "OpenClaw, Dissected: One Daemon, Many Mouths, and a Folder of Markdown",
