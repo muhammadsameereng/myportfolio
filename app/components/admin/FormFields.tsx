@@ -186,8 +186,8 @@ export function ImageUploader({
       setError("Supabase isn't configured yet.");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Image must be under 5MB.");
+    if (file.size > 20 * 1024 * 1024) {
+      setError("Image must be under 20MB.");
       return;
     }
     setBusy(true);
@@ -259,7 +259,7 @@ export function ImageUploader({
             {busy ? "Uploading…" : "Click to upload"}
           </p>
           <p className="text-[11px] text-muted-foreground">
-            PNG, JPG, WebP up to 5MB
+            PNG, JPG, WebP up to 20MB
           </p>
         </button>
       )}
@@ -289,7 +289,7 @@ export function MultiImageUploader({
   onChange,
   bucket = "media",
   pathPrefix = "uploads",
-  maxFileMB = 5,
+  maxFileMB = 20,
 }: {
   value: string[];
   onChange: (urls: string[]) => void;

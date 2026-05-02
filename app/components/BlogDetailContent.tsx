@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { type BlogPost } from "../lib/blogs";
+import ShareRow from "./ShareRow";
 
 // Code-split the markdown renderer into its own async chunk so
 // react-markdown + the unified/remark dep tree (which carries ~14 KiB
@@ -117,6 +118,11 @@ export default function BlogDetailContent({
             ))}
           </div>
         )}
+
+        {/* Share */}
+        <motion.div {...fadeUp(0.05)}>
+          <ShareRow title={post.title} excerpt={post.excerpt} />
+        </motion.div>
 
         {/* Tags */}
         {post.tags.length > 0 && (

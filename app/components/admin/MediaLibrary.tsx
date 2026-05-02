@@ -89,8 +89,8 @@ export default function MediaLibrary() {
     setUploading(true);
     try {
       for (const file of Array.from(files)) {
-        if (file.size > 5 * 1024 * 1024) {
-          toast.push(`${file.name} is over 5MB — skipped`, "error");
+        if (file.size > 20 * 1024 * 1024) {
+          toast.push(`${file.name} is over 20MB — skipped`, "error");
           continue;
         }
         const ext = file.name.split(".").pop() || "png";
