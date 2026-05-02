@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAdminEmail } from "../admin/auth";
+import { safeNextPath } from "../admin/redirect";
 
 /**
  * Refreshes the auth session on every request and gates /admin behind:
@@ -61,7 +62,7 @@ export async function updateSession(req: NextRequest) {
 
   // Already signed in and visiting /admin/login? Send them to the dashboard.
   if (isLoginRoute && user && isAdminEmail(user.email)) {
-    const next = req.nextUrl.searchParams.get("next") || "/admin";
+    const next = safeNextPath(req.nextUrl.searchParams.get("next"));
     const dashboardUrl = req.nextUrl.clone();
     dashboardUrl.pathname = next;
     dashboardUrl.search = "";

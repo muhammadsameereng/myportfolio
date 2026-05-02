@@ -1,32 +1,31 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { createClient } from "@/app/lib/supabase/server";
 import { isAdminEmail } from "@/app/lib/admin/auth";
+import { getSiteOrigin, safeNextPath } from "@/app/lib/admin/url";
 
 type AuthState = { error?: string; ok?: boolean };
 
 /**
  * Sends a magic-link email if the address is on the allow-list.
- * For non-admin emails we silently report success (to avoid leaking
- * which addresses are admin) — but the link is never actually sent.
+ * For non-admin emails we surface a generic error rather than silently
+ * succeeding — the allow-list is small and the email is private, so
+ * leaking "not authorised" is acceptable and avoids confusing UX.
  */
 export async function signInWithMagicLink(
   _prev: AuthState,
   formData: FormData
 ): Promise<AuthState> {
   const email = String(formData.get("email") || "").trim().toLowerCase();
-  const next = String(formData.get("next") || "/admin");
+  const next = safeNextPath(String(formData.get("next") || ""));
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { error: "Please enter a valid email address." };
   }
 
   if (!isAdminEmail(email)) {
-    return {
-      error: "This email isn't authorised for admin access.",
-    };
+    return { error: "This email isn't authorised for admin access." };
   }
 
   const supabase = await createClient();
@@ -37,18 +36,12 @@ export async function signInWithMagicLink(
     };
   }
 
-  const h = await headers();
-  const origin =
-    h.get("origin") ||
-    `https://${h.get("host")}` ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://saranzafar.com";
+  const origin = await getSiteOrigin();
+  const redirectTo = `${origin}/api/admin/auth/callback?next=${encodeURIComponent(next)}`;
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: {
-      emailRedirectTo: `${origin}/api/admin/auth/callback?next=${encodeURIComponent(next)}`,
-    },
+    options: { emailRedirectTo: redirectTo },
   });
 
   if (error) {
