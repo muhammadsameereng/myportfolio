@@ -80,7 +80,6 @@ const fetchPublishedRowsCached = unstable_cache(
       .order("date", { ascending: false, nullsFirst: false })
       .order("published_at", { ascending: false, nullsFirst: false });
     if (error) {
-      console.error("[public/blog] fetch failed:", error.message);
       return null;
     }
     return (data as BlogPostRow[]) || [];
