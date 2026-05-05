@@ -13,6 +13,7 @@ import {
   SkipForward,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useMusic } from "./music/MusicProvider";
 
 const AVATAR_IDS = [12, 32, 47, 56, 65, 11, 25, 38, 49, 68];
 
@@ -143,12 +144,19 @@ const fmtTime = (s: number) => {
 };
 
 function PodcastPlayer() {
+  const music = useMusic();
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(24 * 60 + 16);
   const [bookmarked, setBookmarked] = useState(false);
   const [repeating, setRepeating] = useState(false);
   const [speed, setSpeed] = useState<1 | 1.5 | 2>(1);
   const scrubberRef = useRef<HTMLDivElement>(null);
+
+  // Mirror the real player's play state so the mock stays in sync when the
+  // visitor pauses/resumes from the bottom dock.
+  useEffect(() => {
+    setPlaying(music.playing);
+  }, [music.playing]);
 
   useEffect(() => {
     if (!playing) return;
@@ -251,7 +259,7 @@ function PodcastPlayer() {
         </button>
         <button
           aria-label={playing ? "Pause" : "Play"}
-          onClick={() => setPlaying((v) => !v)}
+          onClick={() => music.toggle()}
           className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-105 active:scale-95"
         >
           {playing ? (

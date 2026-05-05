@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function GlobalError({
   error,
@@ -10,13 +9,6 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Wire to your real telemetry sink later (Sentry, Logtail, etc).
-    if (process.env.NODE_ENV === "development") {
-      console.error("App-level error:", error);
-    }
-  }, [error]);
-
   return (
     <main>
       <section className="relative">
