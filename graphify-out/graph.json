@@ -1942,7 +1942,7 @@
       "label": "dismiss()",
       "file_type": "code",
       "source_file": "app/components/music/MusicWelcome.tsx",
-      "source_location": "L55",
+      "source_location": "L50",
       "id": "musicwelcome_dismiss",
       "community": 55,
       "norm_label": "dismiss()"
@@ -1957,13 +1957,13 @@
       "norm_label": "welcome-messages.ts"
     },
     {
-      "label": "pickWelcomeMessage()",
+      "label": "pickMessage()",
       "file_type": "code",
       "source_file": "app/components/music/welcome-messages.ts",
-      "source_location": "L22",
-      "id": "welcome_messages_pickwelcomemessage",
+      "source_location": "L34",
+      "id": "welcome_messages_pickmessage",
       "community": 56,
-      "norm_label": "pickwelcomemessage()"
+      "norm_label": "pickmessage()"
     },
     {
       "label": "MusicProvider.tsx",
@@ -1987,7 +1987,7 @@
       "label": "useMusic()",
       "file_type": "code",
       "source_file": "app/components/music/MusicProvider.tsx",
-      "source_location": "L123",
+      "source_location": "L129",
       "id": "musicprovider_usemusic",
       "community": 21,
       "norm_label": "usemusic()"
@@ -1996,7 +1996,7 @@
       "label": "onProgress()",
       "file_type": "code",
       "source_file": "app/components/music/MusicProvider.tsx",
-      "source_location": "L201",
+      "source_location": "L216",
       "id": "musicprovider_onprogress",
       "community": 21,
       "norm_label": "onprogress()"
@@ -5259,7 +5259,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/components/music/MusicWelcome.tsx",
-      "source_location": "L55",
+      "source_location": "L50",
       "weight": 1.0,
       "_src": "app_components_music_musicwelcome_tsx",
       "_tgt": "musicwelcome_dismiss",
@@ -5271,12 +5271,12 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/components/music/welcome-messages.ts",
-      "source_location": "L22",
+      "source_location": "L34",
       "weight": 1.0,
       "_src": "app_components_music_welcome_messages_ts",
-      "_tgt": "welcome_messages_pickwelcomemessage",
+      "_tgt": "welcome_messages_pickmessage",
       "source": "app_components_music_welcome_messages_ts",
-      "target": "welcome_messages_pickwelcomemessage",
+      "target": "welcome_messages_pickmessage",
       "confidence_score": 1.0
     },
     {
@@ -5295,7 +5295,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/components/music/MusicProvider.tsx",
-      "source_location": "L123",
+      "source_location": "L129",
       "weight": 1.0,
       "_src": "app_components_music_musicprovider_tsx",
       "_tgt": "musicprovider_usemusic",
@@ -5307,7 +5307,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/components/music/MusicProvider.tsx",
-      "source_location": "L201",
+      "source_location": "L216",
       "weight": 1.0,
       "_src": "app_components_music_musicprovider_tsx",
       "_tgt": "musicprovider_onprogress",
