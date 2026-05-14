@@ -1,12 +1,12 @@
-# Graph Report - portfolio  (2026-05-06)
+# Graph Report - portfolio  (2026-05-14)
 
 ## Corpus Check
-- 119 files · ~88,697 words
+- 131 files · ~97,460 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 318 nodes · 288 edges · 14 communities detected
-- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 46 edges (avg confidence: 0.8)
+- 361 nodes · 343 edges · 17 communities detected
+- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 59 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -18,24 +18,27 @@
 - [[_COMMUNITY_Community 5|Community 5]]
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
+- [[_COMMUNITY_Community 8|Community 8]]
 - [[_COMMUNITY_Community 9|Community 9]]
 - [[_COMMUNITY_Community 10|Community 10]]
-- [[_COMMUNITY_Community 16|Community 16]]
-- [[_COMMUNITY_Community 17|Community 17]]
-- [[_COMMUNITY_Community 18|Community 18]]
+- [[_COMMUNITY_Community 12|Community 12]]
+- [[_COMMUNITY_Community 13|Community 13]]
+- [[_COMMUNITY_Community 19|Community 19]]
 - [[_COMMUNITY_Community 20|Community 20]]
+- [[_COMMUNITY_Community 21|Community 21]]
+- [[_COMMUNITY_Community 22|Community 22]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `createClient()` - 16 edges
-2. `GET()` - 11 edges
-3. `isSupabaseConfigured()` - 9 edges
-4. `signInWithMagicLink()` - 6 edges
-5. `Loading()` - 6 edges
-6. `isAdminEmail()` - 6 edges
-7. `updateSession()` - 6 edges
-8. `POST()` - 6 edges
-9. `main()` - 6 edges
-10. `signOut()` - 5 edges
+2. `GET()` - 12 edges
+3. `POST()` - 11 edges
+4. `isSupabaseConfigured()` - 9 edges
+5. `buildVariableSuffix()` - 8 edges
+6. `signInWithMagicLink()` - 6 edges
+7. `Loading()` - 6 edges
+8. `isAdminEmail()` - 6 edges
+9. `updateSession()` - 6 edges
+10. `main()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `proxy()` --calls--> `updateSession()`  [INFERRED]
@@ -44,16 +47,16 @@
   app/lib/supabase/client.ts → scripts/add-saranzafar-tag.ts
 - `add()` --calls--> `main()`  [INFERRED]
   app/components/admin/FormFields.tsx → scripts/seed-csv-projects.ts
+- `POST()` --calls--> `getValidSlugs()`  [INFERRED]
+  app/api/chat/send-email/route.ts → app/lib/agent/system-prompt.ts
 - `signInWithMagicLink()` --calls--> `createClient()`  [INFERRED]
-  app/admin/actions.ts → app/lib/supabase/client.ts
-- `signOut()` --calls--> `createClient()`  [INFERRED]
   app/admin/actions.ts → app/lib/supabase/client.ts
 
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.12
-Nodes (17): signInWithMagicLink(), signOut(), getAdminEmails(), isAdminEmail(), AdminLayout(), updateSession(), proxy(), safeNextPath() (+9 more)
+Cohesion: 0.13
+Nodes (14): signInWithMagicLink(), signOut(), getAdminEmails(), isAdminEmail(), AdminLayout(), updateSession(), proxy(), getClientIp() (+6 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.14
@@ -72,65 +75,77 @@ Cohesion: 0.15
 Nodes (7): FlowDiagram(), FlowToken(), pathBetween(), pos(), MemorySection(), Stack(), useTooltip()
 
 ### Community 5 - "Community 5"
+Cohesion: 0.24
+Nodes (13): classifyIntent(), describeIntent(), renderExpandedPosts(), renderExpandedProjects(), score(), selectRelevantPosts(), selectRelevantProjects(), tokenize() (+5 more)
+
+### Community 6 - "Community 6"
+Cohesion: 0.18
+Nodes (7): compactHistory(), isValidEmail(), jsonError(), POST(), escapeHtml(), newIdempotencyKey(), sendContactEmail()
+
+### Community 7 - "Community 7"
 Cohesion: 0.36
 Nodes (6): clipToRect(), DeepDrawer(), edgePath(), Graph(), nodeById(), usePanZoom()
 
-### Community 6 - "Community 6"
+### Community 8 - "Community 8"
+Cohesion: 0.32
+Nodes (3): handleNewChat(), newId(), welcomeMessage()
+
+### Community 9 - "Community 9"
 Cohesion: 0.38
 Nodes (4): clipToRect(), edgePath(), Graph(), usePanZoom()
 
-### Community 7 - "Community 7"
+### Community 10 - "Community 10"
 Cohesion: 0.29
 Nodes (1): Loading()
 
-### Community 9 - "Community 9"
+### Community 12 - "Community 12"
 Cohesion: 0.47
 Nodes (3): fadeUp(), Para(), SectionTitle()
 
-### Community 10 - "Community 10"
+### Community 13 - "Community 13"
 Cohesion: 0.4
 Nodes (2): generateMetadata(), generateStaticParams()
 
-### Community 16 - "Community 16"
+### Community 19 - "Community 19"
 Cohesion: 0.6
 Nodes (3): refresh(), remove(), upload()
 
-### Community 17 - "Community 17"
+### Community 20 - "Community 20"
 Cohesion: 0.5
 Nodes (2): fadeUp(), GithubActivity()
 
-### Community 18 - "Community 18"
+### Community 21 - "Community 21"
 Cohesion: 0.6
 Nodes (3): estimateReadTime(), formatDate(), rowToPost()
 
-### Community 20 - "Community 20"
+### Community 22 - "Community 22"
 Cohesion: 0.5
 Nodes (1): " "()
 
 ## Knowledge Gaps
-- **Thin community `Community 7`** (7 nodes): `loading.tsx`, `loading.tsx`, `loading.tsx`, `loading.tsx`, `loading.tsx`, `loading.tsx`, `Loading()`
+- **Thin community `Community 10`** (7 nodes): `loading.tsx`, `loading.tsx`, `loading.tsx`, `loading.tsx`, `loading.tsx`, `loading.tsx`, `Loading()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 10`** (6 nodes): `page.tsx`, `page.tsx`, `BlogDetailPage()`, `generateMetadata()`, `generateStaticParams()`, `ProjectDetailPage()`
+- **Thin community `Community 13`** (6 nodes): `page.tsx`, `page.tsx`, `BlogDetailPage()`, `generateMetadata()`, `generateStaticParams()`, `ProjectDetailPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 17`** (5 nodes): `GithubActivity.tsx`, `buildStreakUrl()`, `fadeUp()`, `GithubActivity()`, `GithubMark()`
+- **Thin community `Community 20`** (5 nodes): `GithubActivity.tsx`, `buildStreakUrl()`, `fadeUp()`, `GithubActivity()`, `GithubMark()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 20`** (4 nodes): `page.tsx`, `LoginForm.tsx`, `" "()`, `LoginPage()`
+- **Thin community `Community 22`** (4 nodes): `page.tsx`, `LoginForm.tsx`, `" "()`, `LoginPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `createClient()` connect `Community 1` to `Community 0`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
-- **Why does `add()` connect `Community 2` to `Community 1`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `GET()` connect `Community 0` to `Community 1`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+- **Why does `GET()` connect `Community 0` to `Community 1`, `Community 6`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Why does `add()` connect `Community 2` to `Community 1`, `Community 5`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Are the 15 inferred relationships involving `createClient()` (e.g. with `signInWithMagicLink()` and `signOut()`) actually correct?**
   _`createClient()` has 15 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 9 inferred relationships involving `GET()` (e.g. with `signInWithMagicLink()` and `getSiteOrigin()`) actually correct?**
-  _`GET()` has 9 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 10 inferred relationships involving `GET()` (e.g. with `signInWithMagicLink()` and `getSiteOrigin()`) actually correct?**
+  _`GET()` has 10 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 6 inferred relationships involving `POST()` (e.g. with `getClientIp()` and `sendContactEmail()`) actually correct?**
+  _`POST()` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `isSupabaseConfigured()` (e.g. with `AdminMediaPage()` and `AdminCategoriesPage()`) actually correct?**
   _`isSupabaseConfigured()` has 8 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 5 inferred relationships involving `signInWithMagicLink()` (e.g. with `GET()` and `safeNextPath()`) actually correct?**
-  _`signInWithMagicLink()` has 5 INFERRED edges - model-reasoned connections that need verification._
