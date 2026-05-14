@@ -3,6 +3,22 @@
 > Living document. Updated continuously as the project evolves.
 > Last updated: 2026-04-20 (rev 2)
 
+> ⚠ **DESIGN NOTICE — read before using §4 / §5 / §10.**
+> The "lines, not boxes / sharp edges / mono / max-w-6xl / shell prompts"
+> direction documented below was **superseded** during May 2026. The shipped
+> site now uses rounded-2xl cards, pill CTAs, glass nav, soft shadows,
+> Geist Sans body, blue focus rings, and `max-w-5xl` containers.
+>
+> **Do not design from this document.** The live components are the spec.
+> See the "design source of truth" block in `AGENTS.md` and read
+> `app/components/Navbar.tsx`, `Footer.tsx`, `ContactPageContent.tsx`,
+> `HomeProjects.tsx`, and `SectionHead.tsx` before touching UI.
+>
+> Sections that remain valid: §1 (Who & Why), §2 (Soul — *principles only,
+> not visual rules*), §3 (Tech Stack), §6 (Workflow), §7 (Content), §11
+> (Testimonials data). The Decisions Log (§8) and Changelog (§10) are kept
+> for history, not as current spec.
+
 ---
 
 ## 1. Who & Why

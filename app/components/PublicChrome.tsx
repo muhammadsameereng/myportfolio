@@ -15,6 +15,9 @@ const MusicDock = dynamic(() => import("./music/MusicDock"), { ssr: false });
 const MusicWelcome = dynamic(() => import("./music/MusicWelcome"), {
   ssr: false,
 });
+const ChatLauncher = dynamic(() => import("./agent/ChatLauncher"), {
+  ssr: false,
+});
 
 /**
  * Renders the public site's chrome (Navbar, Footer, ScrollToTop) only on
@@ -41,6 +44,7 @@ export default function PublicChrome({
       {children}
       <Footer />
       <ScrollToTopLazy />
+      <ChatLauncher />
       <MusicDock />
       <MusicWelcome />
     </MusicProvider>
