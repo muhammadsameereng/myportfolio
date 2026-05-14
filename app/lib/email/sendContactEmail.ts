@@ -50,13 +50,11 @@ export async function sendContactEmail(
   const idempotencyPrefix =
     source === "ask-saran-bot" ? "ask-saran" : "contact";
 
+  const isAi = source === "ask-saran-bot";
+  const aiSuffix = isAi ? " (by AI)" : "";
   const subject = name
-    ? `Message from ${name} via saranzafar.com${
-        source === "ask-saran-bot" ? " (via Ask-Saran)" : ""
-      }`
-    : `Message via saranzafar.com${
-        source === "ask-saran-bot" ? " (via Ask-Saran)" : ""
-      }`;
+    ? `Message from ${name} via saranzafar.com${aiSuffix}`
+    : `Message via saranzafar.com${aiSuffix}`;
 
   const safeName = escapeHtml(name || "Visitor");
   const safeEmail = escapeHtml(email);
@@ -108,9 +106,22 @@ export async function sendContactEmail(
               </td>
             </tr>
 
+            ${
+              isAi
+                ? `<tr>
+              <td style="padding:18px 24px 0;">
+                <div style="display:inline-block; padding:6px 12px; background:#fef3c7; border:1px solid #fde68a; border-radius:999px; font-size:11px; font-weight:600; color:#854d0e; letter-spacing:0.04em;">
+                  ✦ Sent by AI &mdash; this message was composed by a visitor and dispatched through Caret, your site assistant.
+                </div>
+              </td>
+            </tr>`
+                : ""
+            }
             <tr>
               <td style="padding:28px 24px 8px;">
-                <p style="margin:0 0 6px; font-size:11px; color:#737373; text-transform:uppercase; letter-spacing:0.16em;">From</p>
+                <p style="margin:0 0 6px; font-size:11px; color:#737373; text-transform:uppercase; letter-spacing:0.16em;">From${
+                  isAi ? " (via AI)" : ""
+                }</p>
                 <p style="margin:0 0 22px; font-size:15px; color:#0a0a0a;">
                   <strong>${safeName}</strong>
                   &nbsp;&middot;&nbsp;
@@ -154,7 +165,15 @@ export async function sendContactEmail(
 </html>`;
 
   const text = [
-    `Message from ${name || "Visitor"} via saranzafar.com (${sourceLabel})`,
+    `Message from ${name || "Visitor"} via saranzafar.com${
+      isAi ? " (by AI)" : ""
+    }`,
+    ...(isAi
+      ? [
+          ``,
+          `[Sent by AI — composed by a visitor, dispatched through Caret, your site assistant.]`,
+        ]
+      : []),
     ``,
     `From: ${name || "Visitor"} <${email}>`,
     `Sent: ${sentAt} (PKT)`,

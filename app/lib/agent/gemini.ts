@@ -4,7 +4,11 @@ import "server-only";
 // We avoid @google/generative-ai to keep the edge bundle slim and the
 // failure modes obvious — this is just `fetch` + line parsing.
 
-const MODEL = "gemini-2.5-flash";
+// Flash-lite is plenty for a grounded portfolio chat — we hand the model
+// a curated knowledge file + few-shot examples + retrieval-ranked items
+// + intent hint, so it doesn't need to "think" much. Higher free-tier
+// quota (~15 RPM, ~1,000 RPD) and ~5× cheaper per token than flash.
+const MODEL = "gemini-2.5-flash-lite";
 const ENDPOINT = (key: string) =>
   `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse&key=${encodeURIComponent(
     key

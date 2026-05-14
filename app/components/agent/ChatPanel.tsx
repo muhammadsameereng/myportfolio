@@ -1,9 +1,12 @@
 "use client";
 
 import {
+  forwardRef,
+  memo,
   useCallback,
   useEffect,
   useId,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
@@ -21,6 +24,8 @@ import {
 import Link from "next/link";
 import ConfirmEmailPill, { type EmailDraft } from "./ConfirmEmailPill";
 
+/* ── Types ─────────────────────────────────────────────────────────── */
+
 type Role = "user" | "model";
 type Reference = { kind: "projects" | "blog"; slug: string; title: string };
 
@@ -37,10 +42,10 @@ type RenderPart =
   | { kind: "ref"; ref: Reference }
   | { kind: "link"; label: string; href: string };
 
-// Combined parser that matches:
-//   1. Internal site references — [ref:projects/slug|Title], [ref:blog/slug|Title]
-//   2. External markdown links — [Label](https://…) or [Label](mailto:…)
-// Anything else stays as plain text.
+/* ── Constants ─────────────────────────────────────────────────────── */
+
+// Combined parser: internal `[ref:projects/slug|Title]` chips + external
+// markdown links `[Label](https://…)`. Anything else is plain text.
 const PART_RE =
   /\[ref:(projects|blog)\/([a-z0-9][a-z0-9-]*)(?:\|([^\]]+))?\]|\[([^\]\n]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/gi;
 
@@ -53,6 +58,8 @@ const STARTER_PROMPTS = [
 
 const WELCOME_TEXT =
   "Hi, I'm Caret — Saran's assistant. Ask me about his work, writing, or how to reach him.";
+
+const MAX_CHARS = 2000;
 
 const newId = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -72,7 +79,6 @@ function parseMessage(text: string): RenderPart[] {
       parts.push({ kind: "text", text: text.slice(lastIdx, m.index) });
     }
     if (m[1]) {
-      // Internal ref marker
       const slug = m[2];
       const title = (m[3] || "").trim() || slug;
       parts.push({
@@ -80,7 +86,6 @@ function parseMessage(text: string): RenderPart[] {
         ref: { kind: m[1] as Reference["kind"], slug, title },
       });
     } else if (m[4] && m[5]) {
-      // External markdown link
       parts.push({ kind: "link", label: m[4].trim(), href: m[5].trim() });
     }
     lastIdx = m.index + m[0].length;
@@ -91,7 +96,10 @@ function parseMessage(text: string): RenderPart[] {
   return parts;
 }
 
-function MessageBody({
+/* ── MessageBody — text + chips + caret. Memoized: only re-renders when
+      its own text or showCaret changes. ───────────────────────────────── */
+
+const MessageBody = memo(function MessageBody({
   text,
   showCaret,
 }: {
@@ -147,7 +155,242 @@ function MessageBody({
       )}
     </div>
   );
-}
+});
+
+/* ── MessageRow — one bubble (+ optional confirm-email pill). Memoized
+      so messages whose props haven't changed skip re-render entirely
+      during streaming. The streaming bot message keeps re-rendering;
+      every other row is bypassed. ──────────────────────────────────── */
+
+const MessageRow = memo(function MessageRow({
+  message,
+  isStreaming,
+  onEmailResolved,
+}: {
+  message: Message;
+  isStreaming: boolean;
+  onEmailResolved: (id: string) => void;
+}) {
+  const handleResolved = useCallback(
+    () => onEmailResolved(message.id),
+    [message.id, onEmailResolved]
+  );
+
+  return (
+    <li
+      className={`ask-saran-msg animate-[ask-saran-msg-in_320ms_cubic-bezier(0.22,1,0.36,1)_both] ${
+        message.role === "user" ? "flex justify-end" : "flex"
+      }`}
+    >
+      <div
+        className={
+          message.role === "user"
+            ? "max-w-[82%] rounded-2xl rounded-br-md bg-foreground px-4 py-3 text-background shadow-[0_4px_12px_-6px_rgba(0,0,0,0.18)]"
+            : "max-w-[88%] rounded-2xl rounded-bl-md border border-border/60 bg-card/80 px-4 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+        }
+      >
+        {message.role === "user" ? (
+          <p className="whitespace-pre-wrap break-words text-[14px] leading-relaxed">
+            {message.text}
+          </p>
+        ) : (
+          <MessageBody text={message.text} showCaret={isStreaming} />
+        )}
+        {message.pendingEmail && !message.emailHandled && (
+          <ConfirmEmailPill
+            draft={message.pendingEmail}
+            onSent={handleResolved}
+            onCancel={handleResolved}
+          />
+        )}
+      </div>
+    </li>
+  );
+});
+
+/* ── ThinkingLine — shown between user message and first streamed token */
+
+const ThinkingLine = memo(function ThinkingLine({
+  reduceMotion,
+}: {
+  reduceMotion: boolean;
+}) {
+  return (
+    <motion.li
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="flex items-center gap-2 pl-1 text-[12px] text-muted-foreground"
+    >
+      <span className="flex items-center gap-1.5">
+        <span aria-hidden className="flex items-center gap-0.5">
+          {[0, 180, 360].map((delay) => (
+            <span
+              key={delay}
+              className="h-1 w-1 rounded-full bg-foreground/40"
+              style={
+                reduceMotion
+                  ? undefined
+                  : {
+                      animation: "ask-saran-pulse 1.2s ease-in-out infinite",
+                      animationDelay: `${delay}ms`,
+                    }
+              }
+            />
+          ))}
+        </span>
+        Thinking…
+      </span>
+    </motion.li>
+  );
+});
+
+/* ── StarterPrompts — cold-open chips (memoized) ───────────────────── */
+
+const StarterPrompts = memo(function StarterPrompts({
+  reduceMotion,
+  onPick,
+}: {
+  reduceMotion: boolean;
+  onPick: (text: string) => void;
+}) {
+  return (
+    <motion.li
+      initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+      className="overflow-hidden"
+    >
+      <div className="flex flex-wrap gap-1.5">
+        {STARTER_PROMPTS.map((p, idx) => (
+          <motion.button
+            key={p}
+            type="button"
+            onClick={() => onPick(p)}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.32,
+              delay: 0.05 + idx * 0.07,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            whileHover={reduceMotion ? undefined : { y: -1 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+            className="group inline-flex h-8 cursor-pointer items-center gap-1 rounded-full border border-border bg-background pl-3 pr-2.5 text-[12px] font-medium text-foreground/85 transition-colors hover:border-foreground/40 hover:bg-card hover:text-foreground"
+          >
+            {p}
+            <ArrowUpRight
+              size={11}
+              strokeWidth={2}
+              className="text-muted-foreground/60 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground"
+            />
+          </motion.button>
+        ))}
+      </div>
+    </motion.li>
+  );
+});
+
+/* ── Composer — owns its OWN input state internally so typing in the
+      textarea does NOT re-render the parent ChatPanel (and therefore
+      doesn't re-render the message list). Single biggest perf win. ──── */
+
+export type ComposerHandle = {
+  focus: () => void;
+  clear: () => void;
+};
+
+type ComposerProps = {
+  disabled: boolean;
+  onSend: (text: string) => void;
+  onEmailShortcut: () => void;
+};
+
+const Composer = memo(
+  forwardRef<ComposerHandle, ComposerProps>(function Composer(
+    { disabled, onSend, onEmailShortcut },
+    ref
+  ) {
+    const [input, setInput] = useState("");
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        focus: () => inputRef.current?.focus(),
+        clear: () => setInput(""),
+      }),
+      []
+    );
+
+    const submit = () => {
+      const text = input.trim();
+      if (!text || disabled) return;
+      onSend(text);
+      setInput("");
+    };
+
+    const charCountVisible = input.length >= 1700;
+
+    return (
+      <div className="border-t border-border/40 px-3 pt-3 pb-2.5">
+        <div className="group relative rounded-2xl border border-border bg-background transition-[border-color,box-shadow] duration-200 hover:border-foreground/30 focus-within:border-blue-400/70 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                submit();
+              }
+            }}
+            rows={1}
+            placeholder="Ask about Saran's work…"
+            maxLength={MAX_CHARS}
+            disabled={disabled}
+            aria-label="Message Caret"
+            className="block max-h-[140px] min-h-[44px] w-full resize-none appearance-none rounded-2xl bg-transparent px-4 py-3 pr-12 font-sans text-[14px] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/70 focus-visible:outline-none disabled:opacity-60"
+          />
+          <button
+            type="button"
+            onClick={submit}
+            disabled={disabled || !input.trim()}
+            aria-label="Send message"
+            className="absolute bottom-2 right-2 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-foreground text-background transition-all duration-200 hover:scale-[1.06] hover:opacity-95 disabled:cursor-not-allowed disabled:bg-foreground/20 disabled:text-background/60 disabled:hover:scale-100"
+          >
+            {disabled ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <ArrowUp size={14} strokeWidth={2.2} />
+            )}
+          </button>
+        </div>
+        <div className="mt-2 flex min-h-[14px] items-center justify-between gap-2 px-1 text-[10.5px] text-muted-foreground/80">
+          <button
+            type="button"
+            onClick={onEmailShortcut}
+            disabled={disabled}
+            className="inline-flex cursor-pointer items-center gap-1.5 text-muted-foreground/80 transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Mail size={11} strokeWidth={2} />
+            Email Saran
+          </button>
+          {charCountVisible && (
+            <span className="tabular-nums">
+              {input.length} / {MAX_CHARS}
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  })
+);
+
+/* ── ChatPanel — orchestrator. Holds messages + streaming state. The
+      Composer is isolated so input typing doesn't ripple through here. */
 
 export default function ChatPanel({
   onClose,
@@ -156,56 +399,41 @@ export default function ChatPanel({
   onClose: () => void;
   returnFocusRef?: React.RefObject<HTMLElement | null>;
 }) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion() ?? false;
   const dialogTitleId = useId();
 
   const [messages, setMessages] = useState<Message[]>(() => [welcomeMessage()]);
-  const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const composerRef = useRef<ComposerHandle>(null);
+  const scrollRafRef = useRef<number | null>(null);
 
-  const hasUserSent = useMemo(
-    () => messages.some((m) => m.role === "user"),
-    [messages]
-  );
-
-  // Last message check — drives the inline "thinking" line placement.
-  const showThinkingLine =
-    streaming &&
-    messages.length > 0 &&
-    messages[messages.length - 1].role === "user";
-
-  // The currently-streaming bot message (if any) — gets the blinking caret.
+  const hasUserSent = messages.some((m) => m.role === "user");
+  const lastMessage = messages[messages.length - 1];
+  const showThinkingLine = streaming && lastMessage?.role === "user";
   const streamingMessageId =
-    streaming &&
-    messages.length > 0 &&
-    messages[messages.length - 1].role === "model"
-      ? messages[messages.length - 1].id
-      : null;
+    streaming && lastMessage?.role === "model" ? lastMessage.id : null;
 
-  /* ── Lifecycle: focus, esc, focus restore ─────────────────────── */
+  /* ── Lifecycle ──────────────────────────────────────────────── */
+
   useEffect(() => {
-    inputRef.current?.focus();
+    composerRef.current?.focus();
     return () => abortRef.current?.abort();
   }, []);
 
-  // Focus restore — when the panel unmounts, return focus to the launcher.
-  // Capture the ref inside the effect so the cleanup uses the value that
-  // existed when the panel mounted (lints clean and matches intent).
+  // Focus restore — capture target inside the effect for lint-clean cleanup.
   useEffect(() => {
     const restoreTarget = returnFocusRef?.current ?? null;
     return () => {
-      // Defer to allow the AnimatePresence exit animation to complete.
       setTimeout(() => restoreTarget?.focus(), 0);
     };
   }, [returnFocusRef]);
 
-  // Esc closes; Tab traps focus inside the dialog.
+  // Esc + Tab focus trap
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -235,30 +463,52 @@ export default function ChatPanel({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  // Pin to bottom on new content.
+  // RAF-throttled auto-scroll. Many tokens may arrive in one frame; we
+  // coalesce them into a single scrollTop write per animation frame.
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollTop = el.scrollHeight;
+    if (scrollRafRef.current !== null) return;
+    scrollRafRef.current = requestAnimationFrame(() => {
+      scrollRafRef.current = null;
+      const el = scrollRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    });
   }, [messages, streaming]);
 
-  /* ── Send ────────────────────────────────────────────────────── */
-  const send = useCallback(
-    async (textOverride?: string) => {
-      const text = (textOverride ?? input).trim();
-      if (!text || streaming) return;
+  useEffect(
+    () => () => {
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
+      }
+    },
+    []
+  );
 
-      const userMsg: Message = { id: newId(), role: "user", text };
-      const nextMessages = [...messages, userMsg];
-      setMessages(nextMessages);
-      if (textOverride === undefined) setInput("");
+  /* ── Send ───────────────────────────────────────────────────── */
+
+  const handleEmailResolved = useCallback((msgId: string) => {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === msgId ? { ...m, emailHandled: true } : m))
+    );
+  }, []);
+
+  const send = useCallback(
+    async (text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed || streaming) return;
+
+      const userMsg: Message = { id: newId(), role: "user", text: trimmed };
+      let snapshot: Message[] = [];
+      setMessages((prev) => {
+        snapshot = [...prev, userMsg];
+        return snapshot;
+      });
       setStreaming(true);
       setError(null);
 
       const ctrl = new AbortController();
       abortRef.current = ctrl;
 
-      const history = nextMessages.map((m) => ({ role: m.role, text: m.text }));
+      const history = snapshot.map((m) => ({ role: m.role, text: m.text }));
       const modelMsgId = newId();
       let modelBubbleAdded = false;
 
@@ -323,10 +573,7 @@ export default function ChatPanel({
                   m.id === modelMsgId ? { ...m, text: m.text + chunk } : m
                 )
               );
-            } else if (
-              event === "tool" &&
-              payload.name === "sendEmailToSaran"
-            ) {
+            } else if (event === "tool" && payload.name === "sendEmailToSaran") {
               ensureModelBubble();
               const args = (payload.args as Partial<EmailDraft>) || {};
               const draft: EmailDraft = {
@@ -339,10 +586,7 @@ export default function ChatPanel({
                   m.id === modelMsgId ? { ...m, pendingEmail: draft } : m
                 )
               );
-            } else if (
-              event === "error" &&
-              typeof payload.message === "string"
-            ) {
+            } else if (event === "error" && typeof payload.message === "string") {
               setError(payload.message);
             }
           }
@@ -355,30 +599,24 @@ export default function ChatPanel({
         abortRef.current = null;
       }
     },
-    [input, streaming, messages]
+    [streaming]
   );
 
-  const handleEmailResolved = (msgId: string) => {
-    setMessages((prev) =>
-      prev.map((m) => (m.id === msgId ? { ...m, emailHandled: true } : m))
-    );
-  };
+  const handleEmailShortcut = useCallback(
+    () => send("I'd like to email Saran."),
+    [send]
+  );
 
-  const handleNewChat = () => {
+  const handleNewChat = useCallback(() => {
     abortRef.current?.abort();
     setMessages([welcomeMessage()]);
-    setInput("");
     setError(null);
     setStreaming(false);
-    inputRef.current?.focus();
-  };
+    composerRef.current?.clear();
+    composerRef.current?.focus();
+  }, []);
 
-  /* ── Composer details ────────────────────────────────────────── */
-  const MAX_CHARS = 2000;
-  const charCountVisible = input.length >= 1700;
-
-  const enter = reduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 };
-  const enterFrom = reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 };
+  /* ── Render ─────────────────────────────────────────────────── */
 
   return (
     <>
@@ -401,11 +639,12 @@ export default function ChatPanel({
         animate={{ opacity: 1, y: 0 }}
         exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }}
         transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+        style={{ contain: "layout paint" }}
         className="fixed z-50 flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/95 text-foreground shadow-[0_24px_60px_-20px_rgba(0,0,0,0.28)] backdrop-blur-xl backdrop-saturate-150
                    inset-x-3 bottom-3 max-h-[80vh]
                    sm:left-8 sm:right-auto sm:bottom-24 sm:inset-x-auto sm:w-[420px] sm:max-h-[620px]"
       >
-        {/* ── Header — single line: avatar (with status dot) · title · actions */}
+        {/* ── Header ──────────────────────────────────────────── */}
         <div className="flex items-center justify-between gap-3 border-b border-border/40 px-4 py-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <motion.span
@@ -422,7 +661,6 @@ export default function ChatPanel({
               className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground/80"
             >
               <Sparkles size={13} strokeWidth={2} />
-              {/* Slack-style status pip — small, alive, but quiet */}
               <span
                 aria-hidden
                 className="absolute -bottom-0.5 -right-0.5 flex h-2 w-2"
@@ -467,146 +705,28 @@ export default function ChatPanel({
           }`}
         >
           <ul className="space-y-4">
-            <AnimatePresence initial={false}>
-              {messages.map((m) => (
-                <motion.li
-                  key={m.id}
-                  layout="position"
-                  initial={enterFrom}
-                  animate={enter}
-                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                  className={m.role === "user" ? "flex justify-end" : "flex"}
-                >
-                  <div
-                    className={
-                      m.role === "user"
-                        ? "max-w-[82%] rounded-2xl rounded-br-md bg-foreground px-4 py-3 text-background shadow-[0_4px_12px_-6px_rgba(0,0,0,0.18)]"
-                        : "max-w-[88%] rounded-2xl rounded-bl-md border border-border/60 bg-card/80 px-4 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
-                    }
-                  >
-                    {m.role === "user" ? (
-                      <p className="whitespace-pre-wrap break-words text-[14px] leading-relaxed">
-                        {m.text}
-                      </p>
-                    ) : (
-                      <MessageBody
-                        text={m.text}
-                        showCaret={
-                          !reduceMotion && m.id === streamingMessageId
-                        }
-                      />
-                    )}
-                    {m.pendingEmail && !m.emailHandled && (
-                      <ConfirmEmailPill
-                        draft={m.pendingEmail}
-                        onSent={() => handleEmailResolved(m.id)}
-                        onCancel={() => handleEmailResolved(m.id)}
-                      />
-                    )}
-                  </div>
-                </motion.li>
-              ))}
-            </AnimatePresence>
+            {messages.map((m) => (
+              <MessageRow
+                key={m.id}
+                message={m}
+                isStreaming={!reduceMotion && m.id === streamingMessageId}
+                onEmailResolved={handleEmailResolved}
+              />
+            ))}
 
-            {/* Thinking line — appears only between a user message and the
-                first streamed token. Subtler than an empty bot bubble. */}
             <AnimatePresence>
               {showThinkingLine && (
-                <motion.li
-                  key="thinking"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex items-center gap-2 pl-1 text-[12px] text-muted-foreground"
-                >
-                  <span className="flex items-center gap-1.5">
-                    <span aria-hidden className="flex items-center gap-0.5">
-                      <span
-                        className="h-1 w-1 rounded-full bg-foreground/40"
-                        style={
-                          reduceMotion
-                            ? undefined
-                            : {
-                                animation:
-                                  "ask-saran-pulse 1.2s ease-in-out infinite",
-                                animationDelay: "0ms",
-                              }
-                        }
-                      />
-                      <span
-                        className="h-1 w-1 rounded-full bg-foreground/40"
-                        style={
-                          reduceMotion
-                            ? undefined
-                            : {
-                                animation:
-                                  "ask-saran-pulse 1.2s ease-in-out infinite",
-                                animationDelay: "180ms",
-                              }
-                        }
-                      />
-                      <span
-                        className="h-1 w-1 rounded-full bg-foreground/40"
-                        style={
-                          reduceMotion
-                            ? undefined
-                            : {
-                                animation:
-                                  "ask-saran-pulse 1.2s ease-in-out infinite",
-                                animationDelay: "360ms",
-                              }
-                        }
-                      />
-                    </span>
-                    Thinking…
-                  </span>
-                </motion.li>
+                <ThinkingLine key="thinking" reduceMotion={reduceMotion} />
               )}
             </AnimatePresence>
 
-            {/* Suggested prompts — cold-open only. */}
             <AnimatePresence>
               {!hasUserSent && !streaming && (
-                <motion.li
+                <StarterPrompts
                   key="starters"
-                  initial={enterFrom}
-                  animate={enter}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                  className="overflow-hidden"
-                >
-                  <div className="flex flex-wrap gap-1.5">
-                    {STARTER_PROMPTS.map((p, idx) => (
-                      <motion.button
-                        key={p}
-                        type="button"
-                        onClick={() => send(p)}
-                        initial={
-                          reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 }
-                        }
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          duration: 0.32,
-                          delay: 0.05 + idx * 0.07,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        whileHover={
-                          reduceMotion ? undefined : { y: -1 }
-                        }
-                        whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                        className="group inline-flex h-8 cursor-pointer items-center gap-1 rounded-full border border-border bg-background pl-3 pr-2.5 text-[12px] font-medium text-foreground/85 transition-colors hover:border-foreground/40 hover:bg-card hover:text-foreground"
-                      >
-                        {p}
-                        <ArrowUpRight
-                          size={11}
-                          strokeWidth={2}
-                          className="text-muted-foreground/60 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground"
-                        />
-                      </motion.button>
-                    ))}
-                  </div>
-                </motion.li>
+                  reduceMotion={reduceMotion}
+                  onPick={send}
+                />
               )}
             </AnimatePresence>
           </ul>
@@ -618,102 +738,13 @@ export default function ChatPanel({
           )}
         </div>
 
-        {/* ── Composer — input + send button unified in one rounded surface */}
-        <div className="border-t border-border/40 px-3 pt-3 pb-2.5">
-          <div className="group relative rounded-2xl border border-border bg-background transition-[border-color,box-shadow] duration-200 hover:border-foreground/30 focus-within:border-blue-400/70 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  send();
-                }
-              }}
-              rows={1}
-              placeholder="Ask about Saran's work…"
-              maxLength={MAX_CHARS}
-              disabled={streaming}
-              aria-label="Message Caret"
-              className="block max-h-[140px] min-h-[44px] w-full resize-none appearance-none rounded-2xl bg-transparent px-4 py-3 pr-12 font-sans text-[14px] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/70 focus-visible:outline-none disabled:opacity-60"
-            />
-            <button
-              type="button"
-              onClick={() => send()}
-              disabled={streaming || !input.trim()}
-              aria-label="Send message"
-              className="absolute bottom-2 right-2 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-foreground text-background transition-all duration-200 hover:scale-[1.06] hover:opacity-95 disabled:cursor-not-allowed disabled:bg-foreground/20 disabled:text-background/60 disabled:hover:scale-100"
-            >
-              {streaming ? (
-                <Loader2 size={13} className="animate-spin" />
-              ) : (
-                <ArrowUp size={14} strokeWidth={2.2} />
-              )}
-            </button>
-          </div>
-          <div className="mt-2 flex min-h-[14px] items-center justify-between gap-2 px-1 text-[10.5px] text-muted-foreground/80">
-            <button
-              type="button"
-              onClick={() => send("I'd like to email Saran.")}
-              disabled={streaming}
-              className="inline-flex cursor-pointer items-center gap-1.5 text-muted-foreground/80 transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <Mail size={11} strokeWidth={2} />
-              Email Saran
-            </button>
-            {charCountVisible && (
-              <span className="tabular-nums">
-                {input.length} / {MAX_CHARS}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Inline keyframes + scoped scrollbar. */}
-        <style>{`
-          @keyframes ask-saran-pulse {
-            0%, 80%, 100% { opacity: 0.25; transform: scale(0.85); }
-            40% { opacity: 1; transform: scale(1); }
-          }
-          @keyframes ask-saran-caret {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-          }
-          @keyframes ask-saran-chip-in {
-            from { opacity: 0; transform: translateY(2px) scale(0.96); }
-            to   { opacity: 1; transform: translateY(0)   scale(1); }
-          }
-
-          /* Refined thin scrollbar — subtle by default, more visible on hover. */
-          .ask-saran-scroll {
-            scrollbar-width: thin;
-            scrollbar-color: transparent transparent;
-            transition: scrollbar-color 0.2s ease;
-          }
-          .ask-saran-scroll:hover {
-            scrollbar-color: var(--border) transparent;
-          }
-          .ask-saran-scroll::-webkit-scrollbar {
-            width: 8px;
-          }
-          .ask-saran-scroll::-webkit-scrollbar-track {
-            background: transparent;
-          }
-          .ask-saran-scroll::-webkit-scrollbar-thumb {
-            background-color: transparent;
-            border-radius: 999px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-            transition: background-color 0.2s ease;
-          }
-          .ask-saran-scroll:hover::-webkit-scrollbar-thumb {
-            background-color: var(--border);
-          }
-          .ask-saran-scroll::-webkit-scrollbar-thumb:hover {
-            background-color: var(--muted-foreground);
-          }
-        `}</style>
+        {/* ── Composer (isolated state) ────────────────────────── */}
+        <Composer
+          ref={composerRef}
+          disabled={streaming}
+          onSend={send}
+          onEmailShortcut={handleEmailShortcut}
+        />
       </motion.div>
     </>
   );

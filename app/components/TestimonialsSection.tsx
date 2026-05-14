@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import SectionHead from "./SectionHead";
 
 type Testimonial = {
@@ -9,8 +8,7 @@ type Testimonial = {
   quote: string;
 };
 
-// Quotes from saranzafar.com — gently expanded with natural context
-// to give the masonry layout the staggered Pinterest feel.
+// Quotes from saranzafar.com — gently expanded with natural context.
 const testimonials: Testimonial[] = [
   {
     name: "Dr. Imran Kiani",
@@ -64,33 +62,15 @@ const testimonials: Testimonial[] = [
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
-  return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();
+  return (
+    (parts[0]?.[0] || "") +
+    (parts.length > 1 ? parts[parts.length - 1][0] : "")
+  ).toUpperCase();
 }
 
-function Card({
-  t,
-  i,
-  hideOnMobile = false,
-}: {
-  t: Testimonial;
-  i: number;
-  hideOnMobile?: boolean;
-}) {
+function Card({ t }: { t: Testimonial }) {
   return (
-    <motion.figure
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay: 0.04 * i, ease: "easeOut" }}
-      whileHover={{ y: -2 }}
-      // Small screens (≤sm): hide cards beyond the first 3. CSS-only,
-      // layout-shift safe — display:none means the masonry doesn't
-      // reserve space for them on mobile.
-      className={`break-inside-avoid rounded-2xl border border-border bg-card p-6 ${
-        hideOnMobile ? "hidden sm:block" : ""
-      }`}
-    >
-      {/* Big opening quote mark — sits at the top-left, like the reference */}
+    <figure className="break-inside-avoid rounded-2xl border border-border bg-card p-6 transition-colors duration-200 hover:border-foreground">
       <span
         aria-hidden="true"
         className="block text-[32px] leading-none text-muted-foreground/45"
@@ -118,9 +98,52 @@ function Card({
           </p>
         </div>
       </figcaption>
-    </motion.figure>
+    </figure>
   );
 }
+
+/**
+ * Vertical infinite-scroll column.
+ * - Items duplicated so the marquee loops seamlessly.
+ * - `group` scope means hovering anywhere INSIDE this column pauses
+ *   ONLY this column — the other one keeps scrolling.
+ * - Top + bottom gradient overlays dissolve cards at the edges instead
+ *   of hard-clipping them.
+ */
+function MarqueeColumn({
+  items,
+  speedSec,
+}: {
+  items: Testimonial[];
+  speedSec: number;
+}) {
+  const loop = [...items, ...items];
+  return (
+    <div className="testimonial-col relative h-[560px] overflow-hidden sm:h-[640px]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-background via-background/80 to-transparent"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-background via-background/80 to-transparent"
+      />
+      <div
+        className="testimonial-track flex flex-col gap-5"
+        style={{ "--ts-speed": `${speedSec}s` } as React.CSSProperties}
+      >
+        {loop.map((t, i) => (
+          <Card key={`${t.name}-${i}`} t={t} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Split into alternating halves so each column has a varied mix of
+// short + long quotes (mirrors what the old masonry naturally produced).
+const colA = testimonials.filter((_, i) => i % 2 === 0);
+const colB = testimonials.filter((_, i) => i % 2 === 1);
 
 export default function TestimonialsSection() {
   return (
@@ -131,12 +154,18 @@ export default function TestimonialsSection() {
           description="Here's what some of my recent clients have to say about working with me. Their experiences showcase the value and quality I bring to every project."
         />
 
-        {/* Masonry — 2-column Pinterest layout matching the reference.
-            CSS-columns + break-inside-avoid keeps card heights organic. */}
-        <div className="mt-10 columns-1 gap-5 sm:columns-2 [&>figure]:mb-5">
-          {testimonials.map((t, i) => (
-            <Card key={t.name} t={t} i={i} hideOnMobile={i >= 3} />
-          ))}
+        {/* Mobile — single column with all 8, slightly slower so each
+            card is on screen long enough to read on small viewports. */}
+        <div className="mt-10 sm:hidden">
+          <MarqueeColumn items={testimonials} speedSec={70} />
+        </div>
+
+        {/* Desktop — 2 columns side-by-side, each scrolling at slightly
+            different speeds (55s vs 65s) so they don't lock-step. The
+            asymmetry creates an organic, alive feel without being chaotic. */}
+        <div className="mt-10 hidden gap-5 sm:grid sm:grid-cols-2">
+          <MarqueeColumn items={colA} speedSec={55} />
+          <MarqueeColumn items={colB} speedSec={65} />
         </div>
       </div>
     </section>

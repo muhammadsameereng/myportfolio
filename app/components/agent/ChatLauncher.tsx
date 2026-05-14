@@ -21,7 +21,7 @@ export default function ChatLauncher() {
         ref={buttonRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close Ask Saran" : "Ask Saran"}
+        aria-label={open ? "Close Caret" : "Ask Caret"}
         aria-expanded={open}
         aria-haspopup="dialog"
         initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
@@ -29,8 +29,11 @@ export default function ChatLauncher() {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         whileHover={reduceMotion ? undefined : { scale: 1.03 }}
         whileTap={reduceMotion ? undefined : { scale: 0.96 }}
-        className="group fixed left-6 bottom-6 z-40 inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-foreground pl-3.5 pr-4 text-[13px] font-medium text-background shadow-[0_18px_40px_-20px_rgba(0,0,0,0.35)] transition-opacity duration-200 hover:opacity-95 sm:left-8 sm:bottom-8"
+        className="group fixed left-6 bottom-6 z-40 inline-flex h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full bg-foreground pl-3.5 pr-4 text-[13px] font-medium text-background shadow-[0_18px_40px_-20px_rgba(0,0,0,0.35)] transition-opacity duration-200 hover:opacity-95 sm:left-8 sm:bottom-8"
       >
+        {/* Animated sheen — sits underneath the icon + label via z-index. */}
+        {!reduceMotion && <span aria-hidden className="caret-launcher-sheen" />}
+
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={open ? "x" : "sparkles"}
@@ -40,7 +43,7 @@ export default function ChatLauncher() {
             animate={reduceMotion ? { opacity: 1 } : { rotate: 0, opacity: 1 }}
             exit={reduceMotion ? { opacity: 0 } : { rotate: 45, opacity: 0 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="flex items-center justify-center"
+            className="relative z-10 flex items-center justify-center"
           >
             {open ? (
               <X size={14} strokeWidth={2.2} />
@@ -49,7 +52,7 @@ export default function ChatLauncher() {
             )}
           </motion.span>
         </AnimatePresence>
-        <span>{open ? "Close" : "Ask Saran"}</span>
+        <span className="relative z-10">{open ? "Close" : "Ask Caret"}</span>
       </motion.button>
 
       <AnimatePresence>

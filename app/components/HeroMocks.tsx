@@ -13,28 +13,20 @@ import {
   SkipForward,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useMusic } from "./music/MusicProvider";
 
-const AVATAR_IDS = [12, 32, 47, 56, 65, 11, 25, 38, 49, 68];
-
-function AvatarStack({ seed = 0, count = 5 }: { seed?: number; count?: number }) {
+// CSS-only avatar placeholders — uniform soft-gray spheres. Zero network,
+// zero decode, neutral palette that doesn't pull attention away from the
+// real content of the project tiles.
+function AvatarStack({ count = 5 }: { count?: number }) {
   return (
     <div className="flex -space-x-1.5">
-      {Array.from({ length: count }).map((_, i) => {
-        const id = AVATAR_IDS[(seed + i) % AVATAR_IDS.length];
-        return (
-          <Image
-            key={i}
-            src={`https://i.pravatar.cc/64?img=${id}`}
-            alt=""
-            width={18}
-            height={18}
-            loading="lazy"
-            unoptimized
-            className="h-[18px] w-[18px] rounded-full border-[1.5px] border-card bg-zinc-200 object-cover dark:bg-zinc-700"
-          />
-        );
-      })}
+      {Array.from({ length: count }).map((_, i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="block h-[18px] w-[18px] rounded-full border-[1.5px] border-card bg-zinc-300 dark:bg-zinc-600"
+        />
+      ))}
     </div>
   );
 }
@@ -42,25 +34,22 @@ function AvatarStack({ seed = 0, count = 5 }: { seed?: number; count?: number })
 type ProjectItem = {
   title: string;
   sub: string;
-  seed: number;
   avatars: number;
 };
 
 const PROJECT_ITEMS: ProjectItem[] = [
-  { title: "LMS SaaS Platform", sub: "Multi-Tenant", seed: 0, avatars: 5 },
-  { title: "Clinic Desktop App", sub: "Offline-First", seed: 3, avatars: 5 },
-  { title: "Multi-Vendor Store", sub: "E-Commerce", seed: 6, avatars: 4 },
+  { title: "LMS SaaS Platform", sub: "Multi-Tenant", avatars: 5 },
+  { title: "Clinic Desktop App", sub: "Offline-First", avatars: 5 },
+  { title: "Multi-Vendor Store", sub: "E-Commerce", avatars: 4 },
 ];
 
 function ProjectTile({
   title,
   sub,
-  seed = 0,
   avatars = 5,
 }: {
   title: string;
   sub: string;
-  seed?: number;
   avatars?: number;
 }) {
   return (
@@ -76,7 +65,7 @@ function ProjectTile({
         {sub}
       </p>
       <div className="mt-2.5 transition-transform duration-200 group-hover:translate-x-0.5">
-        <AvatarStack seed={seed} count={avatars} />
+        <AvatarStack count={avatars} />
       </div>
     </motion.div>
   );
@@ -115,7 +104,6 @@ function ProjectsCard() {
             key={p.title}
             title={p.title}
             sub={p.sub}
-            seed={p.seed}
             avatars={p.avatars}
           />
         ))}
@@ -143,20 +131,16 @@ const fmtTime = (s: number) => {
   return `${m}:${String(sec).padStart(2, "0")}`;
 };
 
+// Decorative-only mock — no real audio, no global music context. Local
+// state simulates playback so the controls feel alive when the visitor
+// pokes at them, but nothing actually plays.
 function PodcastPlayer() {
-  const music = useMusic();
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(24 * 60 + 16);
   const [bookmarked, setBookmarked] = useState(false);
   const [repeating, setRepeating] = useState(false);
   const [speed, setSpeed] = useState<1 | 1.5 | 2>(1);
   const scrubberRef = useRef<HTMLDivElement>(null);
-
-  // Mirror the real player's play state so the mock stays in sync when the
-  // visitor pauses/resumes from the bottom dock.
-  useEffect(() => {
-    setPlaying(music.playing);
-  }, [music.playing]);
 
   useEffect(() => {
     if (!playing) return;
@@ -259,7 +243,7 @@ function PodcastPlayer() {
         </button>
         <button
           aria-label={playing ? "Pause" : "Play"}
-          onClick={() => music.toggle()}
+          onClick={() => setPlaying((v) => !v)}
           className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-105 active:scale-95"
         >
           {playing ? (
