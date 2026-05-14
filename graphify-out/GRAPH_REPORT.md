@@ -47,8 +47,8 @@
   app/lib/supabase/client.ts → scripts/add-saranzafar-tag.ts
 - `add()` --calls--> `main()`  [INFERRED]
   app/components/admin/FormFields.tsx → scripts/seed-csv-projects.ts
-- `POST()` --calls--> `getValidSlugs()`  [INFERRED]
-  app/api/chat/send-email/route.ts → app/lib/agent/system-prompt.ts
+- `getValidSlugs()` --calls--> `POST()`  [INFERRED]
+  app/lib/agent/system-prompt.ts → app/api/chat/send-email/route.ts
 - `signInWithMagicLink()` --calls--> `createClient()`  [INFERRED]
   app/admin/actions.ts → app/lib/supabase/client.ts
 
