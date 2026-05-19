@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import SectionHead from "./SectionHead";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 // SimpleIcons SVG paths — inlined, monochrome via currentColor.
 const icons: Record<string, string> = {
@@ -70,43 +70,104 @@ const skills: Skill[] = [
 ];
 
 export default function SkillsSection() {
-  return (
-    <section id="skills" className="relative">
-      <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
-        <SectionHead
-          title="Skills"
-          description="The tools I reach for when building. A small, dependable stack — picked for the problems I keep solving."
-        />
+  const ref = useRef<HTMLElement>(null);
 
-        {/* Skill cards — same rounded-card language as Portfolio + Side Projects */}
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {skills.map((skill, i) => (
+  // Precomputed once + on resize — avoids window.innerWidth reads on every animation frame.
+  const [initialMargin, setInitialMargin] = useState(24);
+  useEffect(() => {
+    const compute = () =>
+      setInitialMargin(Math.max(24, (window.innerWidth - 1024) / 2));
+    compute();
+    window.addEventListener("resize", compute, { passive: true });
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+
+  const { scrollYProgress: raw } = useScroll({
+    target: ref,
+    offset: ["start 0.85", "start 0.0"],
+  });
+
+  // Cubic ease-out: snaps open fast, decelerates into full-bleed.
+  const progress = useTransform(raw, (p) => 1 - Math.pow(1 - p, 3));
+
+  const borderRadius = useTransform(progress, [0, 1], [20, 0]);
+  const marginX = useTransform(progress, [0, 1], [initialMargin, 0]);
+  // Content brightens slightly as the container opens — ties the reveal together.
+  const contentOpacity = useTransform(progress, [0, 0.4], [0.72, 1]);
+
+  return (
+    <section id="skills" ref={ref} className="relative py-8 md:py-10">
+      <motion.div
+        style={{ borderRadius, marginLeft: marginX, marginRight: marginX }}
+        className="overflow-hidden bg-zinc-950 dark:bg-zinc-50"
+      >
+        <motion.div
+          style={{ opacity: contentOpacity }}
+          className="mx-auto max-w-5xl px-6 py-16 md:py-20"
+        >
+          <div className="grid gap-6 sm:grid-cols-[1fr_1fr] sm:items-center sm:gap-10">
+            <div>
+              <motion.h2
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="text-[26px] font-bold tracking-tight text-white dark:text-zinc-900"
+              >
+                Skills
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-2 max-w-md text-[13.5px] leading-relaxed text-zinc-400 dark:text-zinc-600"
+              >
+                The tools I reach for when building. A small, dependable stack — picked for the problems I keep solving.
+              </motion.p>
+            </div>
             <motion.div
-              key={skill.name + i}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.4, delay: 0.04 * i }}
-              whileHover={{ y: -3 }}
-              className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 transition-colors hover:border-foreground/30"
-            >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-foreground/85 transition-colors group-hover:text-foreground dark:bg-zinc-800">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-[17px] w-[17px]"
-                >
-                  <path d={icons[skill.icon]} />
-                </svg>
-              </span>
-              <span className="truncate text-[13px] font-medium text-foreground">
-                {skill.name}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="hidden h-px origin-left bg-zinc-800 dark:bg-zinc-200 sm:block"
+            />
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {skills.map((skill, i) => (
+              <motion.div
+                key={skill.name}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  duration: 0.4,
+                  delay: Math.min(0.03 * i, 0.27),
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
+                className="group flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 p-3.5 transition-[colors,shadow] duration-200 hover:border-zinc-600 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] dark:border-zinc-200 dark:bg-white dark:hover:border-zinc-400 dark:hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.12)]"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-800 text-zinc-400 transition-colors duration-200 group-hover:bg-zinc-700 group-hover:text-white dark:bg-zinc-100 dark:text-zinc-500 dark:group-hover:bg-zinc-200 dark:group-hover:text-zinc-900">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="h-[17px] w-[17px]"
+                  >
+                    <path d={icons[skill.icon]} />
+                  </svg>
+                </span>
+                <span className="truncate text-[13px] font-medium text-zinc-200 dark:text-zinc-800">
+                  {skill.name}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
