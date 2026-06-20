@@ -1,12 +1,12 @@
 # Graph Report - portfolio  (2026-06-20)
 
 ## Corpus Check
-- 136 files · ~100,271 words
+- 137 files · ~100,489 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 396 nodes · 425 edges · 18 communities detected
-- Extraction: 79% EXTRACTED · 21% INFERRED · 0% AMBIGUOUS · INFERRED: 91 edges (avg confidence: 0.8)
+- 399 nodes · 430 edges · 18 communities detected
+- Extraction: 78% EXTRACTED · 22% INFERRED · 0% AMBIGUOUS · INFERRED: 94 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -37,9 +37,9 @@
 5. `generateOnce()` - 9 edges
 6. `isAdminEmail()` - 8 edges
 7. `buildVariableSuffix()` - 8 edges
-8. `signInWithMagicLink()` - 6 edges
-9. `adminClient()` - 6 edges
-10. `Loading()` - 6 edges
+8. `main()` - 7 edges
+9. `signInWithMagicLink()` - 6 edges
+10. `adminClient()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `proxy()` --calls--> `updateSession()`  [INFERRED]
@@ -48,10 +48,10 @@
   app/lib/supabase/client.ts → scripts/add-saranzafar-tag.ts
 - `add()` --calls--> `main()`  [INFERRED]
   app/components/admin/FormFields.tsx → scripts/seed-csv-projects.ts
-- `getValidSlugs()` --calls--> `POST()`  [INFERRED]
-  app/lib/agent/system-prompt.ts → app/api/blog-jobs/[id]/process/route.ts
-- `signInWithMagicLink()` --calls--> `createClient()`  [INFERRED]
-  app/admin/actions.ts → app/lib/supabase/client.ts
+- `tokenize()` --calls--> `has()`  [INFERRED]
+  app/lib/agent/retrieval.ts → scripts/watch-blog-jobs.mjs
+- `score()` --calls--> `has()`  [INFERRED]
+  app/lib/agent/retrieval.ts → scripts/watch-blog-jobs.mjs
 
 ## Communities
 
@@ -80,12 +80,12 @@ Cohesion: 0.1
 Nodes (10): AdminBlogList(), AdminCategoriesPage(), AdminMediaPage(), AdminProjectsList(), EditBlogPostPage(), EditProjectPage(), GenerateBlogPage(), NewBlogPostPage() (+2 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.15
-Nodes (7): FlowDiagram(), FlowToken(), pathBetween(), pos(), MemorySection(), Stack(), useTooltip()
+Cohesion: 0.19
+Nodes (14): classifyIntent(), describeIntent(), renderExpandedPosts(), renderExpandedProjects(), score(), selectRelevantPosts(), selectRelevantProjects(), tokenize() (+6 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.24
-Nodes (13): classifyIntent(), describeIntent(), renderExpandedPosts(), renderExpandedProjects(), score(), selectRelevantPosts(), selectRelevantProjects(), tokenize() (+5 more)
+Cohesion: 0.15
+Nodes (7): FlowDiagram(), FlowToken(), pathBetween(), pos(), MemorySection(), Stack(), useTooltip()
 
 ### Community 8 - "Community 8"
 Cohesion: 0.22
@@ -143,9 +143,9 @@ Nodes (1): " "()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `createClient()` connect `Community 3` to `Community 8`, `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.101) - this node is a cross-community bridge._
-- **Why does `POST()` connect `Community 1` to `Community 0`, `Community 2`, `Community 3`, `Community 7`?**
-  _High betweenness centrality (0.082) - this node is a cross-community bridge._
+  _High betweenness centrality (0.103) - this node is a cross-community bridge._
+- **Why does `POST()` connect `Community 1` to `Community 0`, `Community 2`, `Community 3`, `Community 6`?**
+  _High betweenness centrality (0.083) - this node is a cross-community bridge._
 - **Why does `adminClient()` connect `Community 8` to `Community 2`, `Community 3`?**
   _High betweenness centrality (0.064) - this node is a cross-community bridge._
 - **Are the 17 inferred relationships involving `createClient()` (e.g. with `signInWithMagicLink()` and `signOut()`) actually correct?**
