@@ -8595,8 +8595,8 @@
       "source_file": "scripts/seed-csv-projects.ts",
       "source_location": "L198",
       "weight": 1.0,
-      "_src": "seed_csv_projects_main",
-      "_tgt": "watch_blog_jobs_has",
+      "_src": "watch_blog_jobs_has",
+      "_tgt": "seed_csv_projects_main",
       "source": "watch_blog_jobs_has",
       "target": "seed_csv_projects_main"
     },
