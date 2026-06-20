@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 // SimpleIcons SVG paths — inlined, monochrome via currentColor.
 const icons: Record<string, string> = {
@@ -44,6 +43,17 @@ const icons: Record<string, string> = {
   vue: "M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z",
   wordpress:
     "M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 6.9c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .915-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0",
+  // ── Custom monochrome glyphs (SimpleIcons-style single path) for
+  //    capability skills that have no brand mark. ──────────────────────
+  // Four-point sparkle — the universal "AI" mark.
+  aiagents:
+    "M12 0C12 6 6 12 0 12C6 12 12 18 12 24C12 18 18 12 24 12C18 12 12 6 12 0Z",
+  // Symmetric audio waveform — five rounded bars.
+  voice:
+    "M2 9h2v6H2zM6.5 6h2v12h-2zM11 4h2v16h-2zM15.5 6h2v12h-2zM20 9h2v6h-2z",
+  // Stacked database discs — a retrieval / knowledge store.
+  rag:
+    "M4 5a8 2 0 1 0 16 0a8 2 0 1 0-16 0zM4 12a8 2 0 1 0 16 0a8 2 0 1 0-16 0zM4 19a8 2 0 1 0 16 0a8 2 0 1 0-16 0z",
 };
 
 type Skill = { name: string; icon: keyof typeof icons };
@@ -67,107 +77,78 @@ const skills: Skill[] = [
   { name: "Docker", icon: "docker" },
   { name: "AWS", icon: "aws" },
   { name: "Git / GitHub", icon: "github" },
+  { name: "AI Agents", icon: "aiagents" },
+  { name: "Voice Agents", icon: "voice" },
+  { name: "RAG Tooling", icon: "rag" },
+  { name: "OpenAI", icon: "openai" },
+  { name: "Claude", icon: "claude" },
+  { name: "Gemini", icon: "gemini" },
 ];
 
 export default function SkillsSection() {
-  const ref = useRef<HTMLElement>(null);
-
-  // Precomputed once + on resize — avoids window.innerWidth reads on every animation frame.
-  const [initialMargin, setInitialMargin] = useState(24);
-  useEffect(() => {
-    const compute = () =>
-      setInitialMargin(Math.max(24, (window.innerWidth - 1024) / 2));
-    compute();
-    window.addEventListener("resize", compute, { passive: true });
-    return () => window.removeEventListener("resize", compute);
-  }, []);
-
-  const { scrollYProgress: raw } = useScroll({
-    target: ref,
-    offset: ["start 0.85", "start 0.0"],
-  });
-
-  // Cubic ease-out: snaps open fast, decelerates into full-bleed.
-  const progress = useTransform(raw, (p) => 1 - Math.pow(1 - p, 3));
-
-  const borderRadius = useTransform(progress, [0, 1], [20, 0]);
-  const marginX = useTransform(progress, [0, 1], [initialMargin, 0]);
-  // Content brightens slightly as the container opens — ties the reveal together.
-  const contentOpacity = useTransform(progress, [0, 0.4], [0.72, 1]);
-
   return (
-    <section id="skills" ref={ref} className="relative py-8 md:py-10">
-      <motion.div
-        style={{ borderRadius, marginLeft: marginX, marginRight: marginX }}
-        className="overflow-hidden bg-zinc-950 dark:bg-zinc-50"
-      >
+    <section id="skills" className="mx-auto max-w-5xl px-6 py-16 md:py-24">
+      <div className="grid gap-6 sm:grid-cols-[1fr_1fr] sm:items-center sm:gap-10">
+        <div>
+          <motion.h2
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[26px] font-bold tracking-tight text-foreground"
+          >
+            Skills
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-2 max-w-md text-[13.5px] leading-relaxed text-muted-foreground"
+          >
+            The tools I reach for when building. A small, dependable stack — picked for the problems I keep solving.
+          </motion.p>
+        </div>
         <motion.div
-          style={{ opacity: contentOpacity }}
-          className="mx-auto max-w-5xl px-6 py-16 md:py-20"
-        >
-          <div className="grid gap-6 sm:grid-cols-[1fr_1fr] sm:items-center sm:gap-10">
-            <div>
-              <motion.h2
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[26px] font-bold tracking-tight text-white dark:text-zinc-900"
-              >
-                Skills
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-2 max-w-md text-[13.5px] leading-relaxed text-zinc-400 dark:text-zinc-600"
-              >
-                The tools I reach for when building. A small, dependable stack — picked for the problems I keep solving.
-              </motion.p>
-            </div>
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden h-px origin-left bg-zinc-800 dark:bg-zinc-200 sm:block"
-            />
-          </div>
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="hidden h-px origin-left bg-border sm:block"
+        />
+      </div>
 
-          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {skills.map((skill, i) => (
-              <motion.div
-                key={skill.name}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{
-                  duration: 0.4,
-                  delay: Math.min(0.03 * i, 0.27),
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
-                className="group flex items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900 p-3.5 transition-[colors,shadow] duration-200 hover:border-zinc-600 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] dark:border-zinc-200 dark:bg-white dark:hover:border-zinc-400 dark:hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.12)]"
+      <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {skills.map((skill, i) => (
+          <motion.div
+            key={skill.name}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{
+              duration: 0.4,
+              delay: Math.min(0.03 * i, 0.27),
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
+            className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 transition-[colors,shadow] duration-200 hover:border-foreground/40 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.12)]"
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                className="h-[17px] w-[17px]"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-800 text-zinc-400 transition-colors duration-200 group-hover:bg-zinc-700 group-hover:text-white dark:bg-zinc-100 dark:text-zinc-500 dark:group-hover:bg-zinc-200 dark:group-hover:text-zinc-900">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="h-[17px] w-[17px]"
-                  >
-                    <path d={icons[skill.icon]} />
-                  </svg>
-                </span>
-                <span className="truncate text-[13px] font-medium text-zinc-200 dark:text-zinc-800">
-                  {skill.name}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </motion.div>
+                <path d={icons[skill.icon]} />
+              </svg>
+            </span>
+            <span className="truncate text-[13px] font-medium text-foreground">
+              {skill.name}
+            </span>
+          </motion.div>
+        ))}
+      </div>
     </section>
   );
 }

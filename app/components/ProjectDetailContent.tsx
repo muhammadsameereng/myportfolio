@@ -77,19 +77,6 @@ function Lightbox({
     setLoaded(false);
   }, [index]);
 
-  // Prefetch neighbours so prev/next paints instantly.
-  useEffect(() => {
-    if (images.length < 2) return;
-    const neighbours = [
-      images[(index + 1) % images.length],
-      images[(index - 1 + images.length) % images.length],
-    ];
-    neighbours.forEach((src) => {
-      const img = new window.Image();
-      img.src = src;
-    });
-  }, [index, images]);
-
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -176,8 +163,9 @@ function Lightbox({
           width={3000}
           height={2000}
           sizes="95vw"
-          priority
-          unoptimized
+          quality={85}
+          loading="eager"
+          fetchPriority="high"
           onLoad={() => setLoaded(true)}
           className={`h-auto max-h-[90vh] w-auto max-w-[95vw] rounded-xl object-contain shadow-2xl transition-opacity duration-200 ${
             loaded ? "opacity-100" : "opacity-0"
@@ -316,7 +304,7 @@ export default function ProjectDetailContent({
             alt={project.title}
             width={1600}
             height={900}
-            priority
+            preload
             sizes="(max-width: 768px) 100vw, 768px"
             className="aspect-[16/9] w-full object-cover"
           />
@@ -368,6 +356,7 @@ export default function ProjectDetailContent({
                     alt={`${project.title} — gallery image ${i + 1}`}
                     fill
                     loading="lazy"
+                    quality={60}
                     sizes="(max-width: 640px) 100vw, 50vw"
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                   />
