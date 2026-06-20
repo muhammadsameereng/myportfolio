@@ -21,15 +21,6 @@ const skills = [
   "Docker, GitLab CI/CD, AWS EC2 & Linux",
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 14 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: 0.1 + i * 0.07, duration: 0.5, ease: "easeOut" as const },
-  }),
-};
-
 function ResumeDownloadButton() {
   type State = "idle" | "downloading" | "done";
   const [state, setState] = useState<State>("idle");
@@ -150,14 +141,13 @@ export default function HeroSection() {
   return (
     <section id="home" className="relative">
       <div className="mx-auto grid max-w-5xl items-center gap-12 px-6 pt-14 pb-12 md:grid-cols-[1fr_1fr] md:gap-10 md:pt-20 md:pb-16">
-        {/* ── LEFT — identity ─────────────────────────── */}
+        {/* ── LEFT — identity ─────────────────────────────────────────
+            No entrance animation here by design (the elements render at
+            their final state). Kept as plain HTML — not framer-motion —
+            so the LCP <h1> and hero block don't carry motion's hydration
+            and layout cost into the critical render path. */}
         <div>
-          <motion.div
-            initial={false}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
-            className="relative inline-block h-[150px] w-[160px]"
-          >
+          <div className="relative inline-block h-[150px] w-[160px]">
             <div className="absolute bottom-0 left-0 right-0 h-[105px] rounded-2xl border border-foreground/20 bg-zinc-100 dark:bg-zinc-800" />
 
             <Image
@@ -178,63 +168,33 @@ export default function HeroSection() {
             >
               <span className="animate-wave">👋</span>
             </span>
-          </motion.div>
+          </div>
 
-          <motion.h1
-            variants={fadeUp}
-            initial={false}
-            animate="show"
-            custom={1}
-            className="mt-5 text-[58px] font-bold leading-[1.02] tracking-tight text-foreground sm:text-[64px]"
-          >
+          <h1 className="mt-5 text-[58px] font-bold leading-[1.02] tracking-tight text-foreground sm:text-[64px]">
             Hello,
             <br />
             I&apos;m Saran.
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            variants={fadeUp}
-            initial={false}
-            animate="show"
-            custom={2}
-            className="mt-5 max-w-[440px] text-[18px] font-bold leading-snug text-foreground"
-          >
+          <p className="mt-5 max-w-[440px] text-[18px] font-bold leading-snug text-foreground">
             Software Engineer | Full-Stack Developer for Backend &amp; Frontend
-          </motion.p>
+          </p>
 
-          <motion.p
-            variants={fadeUp}
-            initial={false}
-            animate="show"
-            custom={3}
-            className="mt-4 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground"
-          >
+          <p className="mt-4 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground">
             I&apos;m a software engineer from AJK, Pakistan. I build production
             systems across healthcare, retail and e-commerce — NestJS REST APIs,
             multi-tenant SaaS, offline-first Electron desktop apps that sync
             without losing a write, and WordPress / WooCommerce sites clients
             can run themselves.
-          </motion.p>
+          </p>
 
-          <motion.p
-            variants={fadeUp}
-            initial={false}
-            animate="show"
-            custom={4}
-            className="mt-3 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground"
-          >
+          <p className="mt-3 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground">
             Production websites and enterprise-grade systems shipped, used
             in the real world. Looking to ship something that just works?
             I can help.
-          </motion.p>
+          </p>
 
-          <motion.ul
-            variants={fadeUp}
-            initial={false}
-            animate="show"
-            custom={5}
-            className="mt-3 space-y-1.5 text-[14px] text-muted-foreground"
-          >
+          <ul className="mt-3 space-y-1.5 text-[14px] text-muted-foreground">
             {skills.map((s) => (
               <li key={s} className="flex items-start gap-2.5">
                 <span className="mt-[9px] inline-block h-1 w-1 rounded-full bg-foreground/70" />
@@ -245,15 +205,9 @@ export default function HeroSection() {
               <span className="mt-[9px] inline-block h-1 w-1 rounded-full bg-foreground/30" />
               <span>and more...</span>
             </li>
-          </motion.ul>
+          </ul>
 
-          <motion.div
-            variants={fadeUp}
-            initial={false}
-            animate="show"
-            custom={6}
-            className="mt-6 flex flex-wrap items-center gap-3"
-          >
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <ResumeDownloadButton />
             <a
               href="/contact"
@@ -261,7 +215,7 @@ export default function HeroSection() {
             >
               Contact
             </a>
-          </motion.div>
+          </div>
         </div>
 
         {/* ── RIGHT — desktop-only decorative mocks, lazily hydrated ─── */}
