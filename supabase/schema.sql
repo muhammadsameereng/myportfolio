@@ -167,3 +167,49 @@ create policy "media: admin update" on storage.objects
 drop policy if exists "media: admin delete" on storage.objects;
 create policy "media: admin delete" on storage.objects
   for delete using (bucket_id = 'media' and public.is_admin());
+
+-- ---------------------------------------------------------------------
+-- 4) AI blog pipeline — job queue / resumable state machine
+--
+-- Drives the "Generate with AI" flow: one row per generation job. Each
+-- stage persists its output column AND advances `stage` before the next
+-- runs, so an interrupted job resumes from exactly where it stopped.
+-- Admin-only (no public read).
+-- ---------------------------------------------------------------------
+
+create table if not exists public.blog_jobs (
+  id             uuid primary key default gen_random_uuid(),
+  topic          text not null,
+  angle          text not null default '',
+  depth          text not null default 'standard',   -- short | standard | deep
+  status         text not null default 'pending'
+                   check (status in ('pending','processing','done','error')),
+  stage          text not null default 'research'
+                   check (stage in ('research','outline','draft','metadata','image','save','complete')),
+  -- per-stage persisted outputs (resumability):
+  research_notes text,
+  outline        text,
+  draft_md       text,
+  metadata_json  jsonb,
+  thumb_url      text,
+  post_id        uuid references public.blog_posts(id) on delete set null,  -- idempotency guard
+  -- resilience / observability:
+  attempts       int not null default 0,
+  locked_at      timestamptz,
+  error          text,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
+);
+
+create index if not exists blog_jobs_status_idx
+  on public.blog_jobs (status, updated_at desc);
+
+drop trigger if exists blog_jobs_updated on public.blog_jobs;
+create trigger blog_jobs_updated before update on public.blog_jobs
+  for each row execute function public.set_updated_at();
+
+alter table public.blog_jobs enable row level security;
+
+drop policy if exists "blog_jobs: admin all" on public.blog_jobs;
+create policy "blog_jobs: admin all" on public.blog_jobs
+  for all using (public.is_admin()) with check (public.is_admin());
