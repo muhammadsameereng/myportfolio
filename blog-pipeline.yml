@@ -1,0 +1,141 @@
+# =====================================================================
+# blog-pipeline.yml — single source of truth for the AI blog pipeline.
+#
+# Swap any model / prompt / temperature / token-limit / grounding flag
+# here. NO code change is required. Edit, save, regenerate.
+#
+# In dev (`next dev`) edits hot-apply on the next run. In production the
+# config is read once and cached, so a redeploy picks up changes.
+#
+# Placeholders available in prompts (an UNRESOLVED placeholder is a
+# hard load-time error, never silently blank):
+#   {{topic}} {{angle}} {{depth}} {{targetWords}} {{researchCalls}}
+#   {{styleGuide}} {{examples}} {{researchNotes}} {{outline}} {{draftMarkdown}}
+# =====================================================================
+version: 1
+
+# Applied to any stage that omits a given key.
+defaults:
+  model: gemini-2.5-flash-lite
+  temperature: 0.7
+  maxOutputTokens: 2048
+  thinkingBudget: 0            # 0 disables Gemini 2.5's internal "thinking" phase
+  safety: BLOCK_ONLY_HIGH      # one of: BLOCK_NONE | BLOCK_ONLY_HIGH | BLOCK_MEDIUM_AND_ABOVE | BLOCK_LOW_AND_ABOVE
+
+# depth → target length + how many grounded search clusters research may use.
+# (Grounding is free up to ~5,000 prompts/month, so "deep" costs more quota.)
+depthPresets:
+  short:    { targetWords: 700,  researchCalls: 1 }
+  standard: { targetWords: 1300, researchCalls: 2 }
+  deep:     { targetWords: 2200, researchCalls: 3 }
+
+# Teaches the model Saran's voice. Example files are read from the repo
+# root, truncated to `exampleMaxChars` each, and injected as {{examples}}.
+style:
+  examples:
+    - scripts/blogs/01-developer-portfolio-that-gets-you-hired-2026.md
+    - scripts/blogs/04-clarity-over-cleverness-2026-developer-mindset.md
+    - scripts/blogs/08-ai-coding-agents-rewriting-pull-request-workflow.md
+  exampleMaxChars: 4000
+  styleGuide: |
+    Voice: opinionated, first-person, concrete. Open with a sharp claim — no
+    "In this post" preamble. Prefer numbers over adjectives.
+    Structure: ## section headers; occasional > blockquotes for cited lines;
+    ASCII box tables for comparisons; fenced code blocks for examples.
+    Recurring motifs: "What changed", "Three signs", short punchy closers.
+    Never write "In conclusion". Reader is tech-literate. British-neutral spelling.
+
+# Each stage merges over `defaults`. `prompt` is a template; see placeholders above.
+stages:
+  research:
+    model: gemini-2.5-flash       # grounding works best on flash, not flash-lite
+    grounding: true
+    temperature: 0.4
+    maxOutputTokens: 1536
+    prompt: |
+      You are researching a blog post on: "{{topic}}".
+      Angle/notes: "{{angle}}".
+      Depth: {{depth}} (~{{targetWords}} words target).
+
+      Use web search to gather up to {{researchCalls}} clusters of CURRENT,
+      citable facts (favour 2025–2026 sources). Output terse bullet notes
+      grouped by sub-topic, each bullet ending with its source URL in
+      parentheses. Do NOT write prose or an intro — notes only.
+
+  outline:
+    grounding: false
+    temperature: 0.5
+    maxOutputTokens: 1024
+    prompt: |
+      Topic: "{{topic}}". Angle: "{{angle}}". Target ~{{targetWords}} words.
+
+      Research notes:
+      {{researchNotes}}
+
+      Produce a tight markdown outline: H2 section titles plus a one-line
+      intent under each. Lead with the strongest hook. No body prose yet.
+
+  draft:
+    model: gemini-2.5-flash
+    grounding: false
+    temperature: 0.75
+    maxOutputTokens: 4096
+    prompt: |
+      Write the full blog post body in markdown. Match this voice EXACTLY:
+      {{styleGuide}}
+
+      Reference posts (study the VOICE only — never copy their content):
+      {{examples}}
+
+      Topic: "{{topic}}". Angle: "{{angle}}". Target ~{{targetWords}} words.
+
+      Follow this outline:
+      {{outline}}
+
+      Weave in these researched facts and cite sources inline where natural:
+      {{researchNotes}}
+
+      Output ONLY the post body markdown. No frontmatter. No top-level H1
+      title (the title is set separately). End the post with a short
+      "## Sources" list of the URLs you used.
+
+  metadata:
+    grounding: false
+    temperature: 0.3
+    maxOutputTokens: 512
+    prompt: |
+      From the blog draft below, output STRICT JSON only (no prose, no code
+      fence) with EXACTLY these keys:
+        "title"     — <= 70 chars, compelling, no quotes
+        "excerpt"   — <= 160 chars, one sentence
+        "slug"      — kebab-case, ascii, derived from the title
+        "tags"      — array of 3–6 lowercase strings
+        "read_time" — e.g. "6 min read"
+
+      Draft:
+      {{draftMarkdown}}
+
+  image:
+    enabled: true                 # non-LLM: branded title card via next/og
+
+# Branded cover-image (title card) styling. Mirrors the site OG cards.
+image:
+  gradient: "linear-gradient(135deg, #fafafa 0%, #f3f4f6 60%, #e5e7eb 100%)"
+  brandMark: "saranzafar"
+  background: "#fafafa"
+  color: "#0a0a0a"
+  mutedColor: "#737373"
+  fontSizes:
+    brand: 26
+    meta: 22
+    title: 72
+    footer: 20
+  titleMaxWidth: 1050
+  footer:
+    left: "saranzafar.com / blog"
+    right: "Saran Zafar"
+  bucket: media
+  pathPrefix: blog
+  size:
+    width: 1200
+    height: 630

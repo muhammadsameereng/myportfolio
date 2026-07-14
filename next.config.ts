@@ -49,6 +49,17 @@ const nextConfig: NextConfig = {
   // typed-routes can't always infer cleanly. Reintroduce later if needed.
   typedRoutes: false,
 
+  // The AI blog pipeline reads `blog-pipeline.yml` and the example posts at
+  // runtime via fs. Those aren't `import`ed, so Next's output file tracing
+  // wouldn't bundle them into the serverless function on its own — declare
+  // them explicitly for the processing route.
+  outputFileTracingIncludes: {
+    "/api/blog-jobs/[id]/process": [
+      "./blog-pipeline.yml",
+      "./scripts/blogs/*.md",
+    ],
+  },
+
   // HTTP cache strategy — three tiers:
   //   • /_next/static + /img/*  → year-long immutable (filename is the cache key)
   //   • HTML pages              → CDN s-maxage 1h, SWR 1d

@@ -1,5 +1,6 @@
-import { Plus } from "lucide-react";
+import { Plus, Sparkles } from "lucide-react";
 import {
+  GhostButton,
   PageHeader,
   PrimaryButton,
 } from "@/app/components/admin/AdminPrimitives";
@@ -22,10 +23,16 @@ export default async function AdminBlogList() {
         title="Blog"
         description="Write, edit, feature, and unpublish blog posts."
         actions={
-          <PrimaryButton href="/admin/blog/new">
-            <Plus size={13} />
-            New post
-          </PrimaryButton>
+          <>
+            <GhostButton href="/admin/blog/generate">
+              <Sparkles size={13} />
+              Generate with AI
+            </GhostButton>
+            <PrimaryButton href="/admin/blog/new">
+              <Plus size={13} />
+              New post
+            </PrimaryButton>
+          </>
         }
       />
 

@@ -110,9 +110,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://i.pravatar.cc" />
         <link rel="dns-prefetch" href="https://api.resend.com" />
         <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
-        {/* Music dock — resolves the SoundCloud widget host before the
-            visitor's first play tap, shaving ~50ms off iframe boot. */}
-        <link rel="dns-prefetch" href="https://w.soundcloud.com" />
 
         {/* Site-wide structured data */}
         <JsonLd data={personSchema} />

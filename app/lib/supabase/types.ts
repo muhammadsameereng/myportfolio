@@ -56,3 +56,42 @@ export type BlogPostRow = {
   updated_at: string;
   category?: CategoryRow | null;
 };
+
+/* ── AI blog pipeline job (see blog-pipeline.yml + app/lib/pipeline) ──── */
+export type BlogJobStatus = "pending" | "processing" | "done" | "error";
+export type BlogJobStage =
+  | "research"
+  | "outline"
+  | "draft"
+  | "metadata"
+  | "image"
+  | "save"
+  | "complete";
+
+export type BlogJobMetadata = {
+  title: string;
+  excerpt: string;
+  slug: string;
+  tags: string[];
+  read_time: string;
+};
+
+export type BlogJobRow = {
+  id: string;
+  topic: string;
+  angle: string;
+  depth: string; // short | standard | deep
+  status: BlogJobStatus;
+  stage: BlogJobStage;
+  research_notes: string | null;
+  outline: string | null;
+  draft_md: string | null;
+  metadata_json: BlogJobMetadata | null;
+  thumb_url: string | null;
+  post_id: string | null;
+  attempts: number;
+  locked_at: string | null;
+  error: string | null;
+  created_at: string;
+  updated_at: string;
+};

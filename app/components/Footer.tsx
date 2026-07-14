@@ -30,7 +30,15 @@ export default function Footer() {
               saranzafar
             </span>
           </span>
-          <span>© {new Date().getFullYear()} Saran Zafar. All rights reserved.</span>
+          {/* `new Date()` is a moving value evaluated on BOTH the server (UTC,
+              baked into SSR HTML) and again on the client at hydration. Across a
+              year boundary in a visitor's timezone the two can differ, which is a
+              classic React hydration mismatch (#418). suppressHydrationWarning is
+              React's documented fix for unavoidably time-dependent text — the
+              server-rendered year is kept and never patched. */}
+          <span suppressHydrationWarning>
+            © {new Date().getFullYear()} Saran Zafar. All rights reserved.
+          </span>
         </div>
 
         {/* Right — socials */}
