@@ -88,9 +88,9 @@ export default function SkillsSection() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.4, delay: 0.04 * i }}
               whileHover={{ y: -3 }}
-              className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 transition-colors hover:border-foreground/30"
+              className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 transition-all duration-200 hover:border-accent/50 hover:shadow-[0_0_16px_-4px_rgba(59,130,246,0.25)]"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-foreground/85 transition-colors group-hover:text-foreground dark:bg-zinc-800">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600/80 transition-colors group-hover:text-blue-600 dark:bg-blue-950/50 dark:text-blue-400 dark:group-hover:text-blue-300">
                 <svg
                   viewBox="0 0 24 24"
                   fill="currentColor"

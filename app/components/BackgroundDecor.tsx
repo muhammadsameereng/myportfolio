@@ -15,23 +15,22 @@ export default function BackgroundDecor() {
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[640px]"
         style={{
           backgroundImage:
-            "radial-gradient(circle, currentColor 1.25px, transparent 1.25px)",
+            "radial-gradient(circle, #3b82f6 1.25px, transparent 1.25px)",
           backgroundSize: "24px 24px",
-          color: "currentColor",
-          opacity: 0.18,
+          opacity: 0.14,
           maskImage:
             "radial-gradient(ellipse 95% 75% at 50% 0%, black 0%, black 30%, transparent 85%)",
           WebkitMaskImage:
             "radial-gradient(ellipse 95% 75% at 50% 0%, black 0%, black 30%, transparent 85%)",
         }}
       />
-      {/* Soft top-of-page glow */}
+      {/* Blue gradient glow at top */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[500px]"
         style={{
           background:
-            "radial-gradient(ellipse 60% 100% at 50% 0%, rgb(0 0 0 / 0.05), transparent 70%)",
+            "radial-gradient(ellipse 75% 120% at 50% 0%, rgba(59,130,246,0.13), rgba(124,58,237,0.06) 55%, transparent 80%)",
         }}
       />
     </>

@@ -67,8 +67,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+    { media: "(prefers-color-scheme: light)", color: "#f8faff" },
+    { media: "(prefers-color-scheme: dark)", color: "#04091a" },
   ],
   colorScheme: "light dark",
 };
@@ -101,7 +101,8 @@ export default function RootLayout({
     >
       <head>
         {/* Theme bootstrap — runs before paint to avoid FOUC */}
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* suppressHydrationWarning: browser extensions inject attributes/src onto this tag */}
+        <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: themeScript }} />
 
         {/* DNS-prefetch only — no above-the-fold images come from these
             origins, so a full preconnect would waste a handshake. */}
@@ -117,7 +118,8 @@ export default function RootLayout({
         <JsonLd data={personSchema} />
         <JsonLd data={websiteSchema} />
       </head>
-      <body className="min-h-screen bg-background text-foreground antialiased grain">
+      {/* suppressHydrationWarning: browser extensions inject __processed_* and bis_register attrs */}
+      <body suppressHydrationWarning className="min-h-screen bg-background text-foreground antialiased grain">
         <ThemeProvider>
           <PublicChrome>{children}</PublicChrome>
         </ThemeProvider>

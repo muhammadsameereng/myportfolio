@@ -54,7 +54,8 @@ export default async function HomeProjects() {
         <div className="mt-10 flex justify-center">
           <Link
             href="/projects"
-            className="group inline-flex h-9 items-center gap-1.5 rounded-full bg-foreground pl-4 pr-3.5 text-[12.5px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95"
+            className="group inline-flex h-9 items-center gap-1.5 rounded-full pl-4 pr-3.5 text-[12.5px] font-medium text-white transition-all duration-200 hover:scale-[1.02] hover:opacity-90"
+            style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
           >
             View All Projects
             <ArrowRight

@@ -15,6 +15,8 @@ export function JsonLd({ data }: { data: JsonValue }) {
     <script
       type="application/ld+json"
       // Safe: the data is server-controlled, not user input.
+      // suppressHydrationWarning: browser extensions replace type/src on script tags
+      suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
     />
   );

@@ -41,7 +41,8 @@ export default function SectionHead({
         whileInView={{ scaleX: 1 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-        className="hidden h-px origin-left bg-border/70 sm:block"
+        className="hidden h-px origin-left sm:block"
+        style={{ background: "linear-gradient(to right, #3b82f6, #7c3aed, transparent)" }}
       />
     </div>
   );

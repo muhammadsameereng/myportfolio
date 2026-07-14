@@ -3,39 +3,37 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
-  /* WCAG AA contrast: #525252 on #fafafa = 7.6:1 ✓
-     Was #737373 (4.7:1 — passed AA) and #a3a3a3 (2.6:1 — failed AA).
-     Darkened both so muted text + paragraphs stay legible. */
-  --muted: #525252;
-  --muted-foreground: #6b6b6b;
-  --accent: #18181b;
-  --accent-foreground: #fafafa;
-  --primary: #18181b;
-  --border: #e5e5e5;
+  --background: #f8faff;
+  --foreground: #0f172a;
+  /* WCAG AA: #475569 on #f8faff ≈ 7.1:1 ✓ */
+  --muted: #475569;
+  --muted-foreground: #64748b;
+  --accent: #2563eb;
+  --accent-foreground: #ffffff;
+  --primary: #1d4ed8;
+  --border: #dbeafe;
   --card: #ffffff;
-  --card-foreground: #0a0a0a;
-  --glow: rgba(0, 0, 0, 0.03);
-  --gradient-start: #d4d4d8;
-  --gradient-end: #a1a1aa;
+  --card-foreground: #0f172a;
+  --glow: rgba(37, 99, 235, 0.07);
+  --gradient-start: #3b82f6;
+  --gradient-end: #7c3aed;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  /* WCAG AA in dark mode: #b5b5b5 on #09090b ≈ 8.7:1, #9a9a9a ≈ 6.4:1 */
-  --muted: #b5b5b5;
-  --muted-foreground: #9a9a9a;
-  --accent: #fafafa;
-  --accent-foreground: #18181b;
-  --primary: #e4e4e7;
-  --border: #27272a;
-  --card: #18181b;
-  --card-foreground: #fafafa;
-  --glow: rgba(255, 255, 255, 0.03);
-  --gradient-start: #3f3f46;
-  --gradient-end: #52525b;
+  --background: #04091a;
+  --foreground: #e2e8f0;
+  /* WCAG AA in dark mode: #94a3b8 on #04091a ≈ 8.2:1 ✓ */
+  --muted: #94a3b8;
+  --muted-foreground: #7c8db0;
+  --accent: #60a5fa;
+  --accent-foreground: #04091a;
+  --primary: #60a5fa;
+  --border: #1e3558;
+  --card: #0d1a30;
+  --card-foreground: #e2e8f0;
+  --glow: rgba(96, 165, 250, 0.1);
+  --gradient-start: #3b82f6;
+  --gradient-end: #7c3aed;
 }
 
 @theme inline {
@@ -97,19 +95,19 @@ html {
 }
 
 ::selection {
-  background: var(--foreground);
-  color: var(--background);
+  background: var(--accent);
+  color: #ffffff;
 }
 .dark ::selection {
-  background: var(--foreground);
-  color: var(--background);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 
 /* Keyboard focus — a visible, considered ring on links + buttons.
    Inputs and textareas opt out (they style their own focus state). */
 button:focus-visible,
 a:focus-visible {
-  outline: 1.5px solid var(--foreground);
+  outline: 1.5px solid var(--accent);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -139,7 +137,7 @@ textarea:focus-visible {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color-mix(in oklab, var(--foreground) 25%, transparent);
+  background: color-mix(in oklab, var(--accent) 40%, transparent);
   border: 3px solid transparent;
   background-clip: content-box;
   border-radius: 0;
@@ -147,7 +145,7 @@ textarea:focus-visible {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground);
+  background: var(--accent);
   background-clip: content-box;
 }
 

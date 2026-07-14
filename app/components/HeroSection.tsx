@@ -60,7 +60,8 @@ function ResumeDownloadButton() {
         onClick={handleClick}
         disabled={state !== "idle"}
         whileTap={state === "idle" ? { scale: 0.97 } : undefined}
-        className="group relative inline-flex h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full bg-foreground pl-6 pr-5 text-[13.5px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95 disabled:cursor-default disabled:hover:scale-100 disabled:hover:opacity-100"
+        className="group relative inline-flex h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full pl-6 pr-5 text-[13.5px] font-medium text-white transition-all duration-200 hover:scale-[1.02] hover:opacity-95 disabled:cursor-default disabled:hover:scale-100 disabled:hover:opacity-100"
+        style={{ background: "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)" }}
         aria-live="polite"
       >
         <AnimatePresence>
@@ -237,12 +238,12 @@ export default function HeroSection() {
           >
             {skills.map((s) => (
               <li key={s} className="flex items-start gap-2.5">
-                <span className="mt-[9px] inline-block h-1 w-1 rounded-full bg-foreground/70" />
+                <span className="mt-[9px] inline-block h-1.5 w-1.5 rounded-full bg-accent/80" />
                 <span>{s}</span>
               </li>
             ))}
             <li className="flex items-start gap-2.5">
-              <span className="mt-[9px] inline-block h-1 w-1 rounded-full bg-foreground/30" />
+              <span className="mt-[9px] inline-block h-1.5 w-1.5 rounded-full bg-accent/30" />
               <span>and more...</span>
             </li>
           </motion.ul>
@@ -257,7 +258,7 @@ export default function HeroSection() {
             <ResumeDownloadButton />
             <a
               href="/contact"
-              className="inline-flex h-11 items-center rounded-full border border-border bg-background px-6 text-[13.5px] font-medium text-foreground transition-colors duration-200 hover:border-foreground/50 hover:bg-card"
+              className="inline-flex h-11 items-center rounded-full border border-accent/50 bg-background px-6 text-[13.5px] font-medium text-accent transition-colors duration-200 hover:border-accent hover:bg-accent/5"
             >
               Contact
             </a>

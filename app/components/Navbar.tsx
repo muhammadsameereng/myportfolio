@@ -102,7 +102,8 @@ export default function Navbar() {
                 {active && (
                   <motion.span
                     layoutId="nav-active"
-                    className="absolute -bottom-1.5 left-0 right-0 h-px bg-foreground"
+                    className="absolute -bottom-1.5 left-0 right-0 h-px"
+                    style={{ background: "linear-gradient(to right, #3b82f6, #7c3aed)" }}
                     transition={{ duration: 0.25, ease: "easeOut" }}
                   />
                 )}
@@ -229,7 +230,8 @@ export default function Navbar() {
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
-                  className="flex h-10 w-full items-center justify-center rounded-full bg-foreground text-[13px] font-medium text-background transition-opacity hover:opacity-95"
+                  className="flex h-10 w-full items-center justify-center rounded-full text-[13px] font-medium text-white transition-opacity hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
                 >
                   Get in touch
                 </Link>
