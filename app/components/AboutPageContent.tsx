@@ -13,9 +13,9 @@ import {
   MapPin,
   type LucideIcon,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import SectionHead from "./SectionHead";
+import TiltPortrait from "./TiltPortrait";
 import SDLCCycle from "./about/SDLCCycle";
 import GithubActivity from "./about/GithubActivity";
 
@@ -117,36 +117,20 @@ export default function AboutPageContent() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.55, ease: "easeOut" }}
-              className="relative order-1 mx-auto w-full max-w-[260px] sm:max-w-[300px] md:max-w-none"
+              className="order-1 mx-auto w-full max-w-[260px] sm:max-w-[300px] md:max-w-none"
             >
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -inset-5 -z-10 rounded-[2.25rem] opacity-70 blur-2xl"
-                style={{
-                  background:
-                    "radial-gradient(60% 55% at 30% 20%, rgba(14,116,144,0.38), transparent 70%), radial-gradient(55% 55% at 82% 88%, rgba(217,138,61,0.32), transparent 70%)",
-                }}
+              <TiltPortrait
+                src="/img/msameer-image.png"
+                alt="Muhammad Sameer — Full-Stack Software Engineer"
+                priority
+                sizes="(max-width: 768px) 300px, 380px"
+                overlay={
+                  <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                    <MapPin size={11} strokeWidth={1.8} />
+                    Kotli, Azad Kashmir
+                  </div>
+                }
               />
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-[0_30px_70px_-30px_rgba(0,0,0,0.4)]">
-                <Image
-                  src="/img/msameer-image.png"
-                  alt="Muhammad Sameer — Full-Stack Software Engineer"
-                  fill
-                  priority
-                  fetchPriority="high"
-                  sizes="(max-width: 768px) 300px, 380px"
-                  className="select-none object-cover object-top"
-                />
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/35 to-transparent"
-                />
-                {/* Location chip pinned to the frame */}
-                <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                  <MapPin size={11} strokeWidth={1.8} />
-                  Kotli, Azad Kashmir
-                </div>
-              </div>
             </motion.div>
 
             {/* Identity */}

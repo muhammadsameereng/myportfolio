@@ -1,9 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import { Check, Download } from "lucide-react";
 import { useRef, useState } from "react";
+import TiltPortrait from "./TiltPortrait";
 
 const skills = [
   "React & Next.js frontends with TypeScript & Tailwind CSS",
@@ -146,43 +146,22 @@ export default function HeroSection() {
       />
 
       <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 pt-10 pb-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:pt-16 md:pb-20">
-        {/* ── PORTRAIT — big, framed, first on mobile ─────────────────── */}
-        <div className="relative order-1 mx-auto w-full max-w-[300px] sm:max-w-[340px] md:order-2 md:max-w-none">
-          {/* Soft color glow behind the frame */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -inset-5 -z-10 rounded-[2.25rem] opacity-70 blur-2xl"
-            style={{
-              background:
-                "radial-gradient(60% 55% at 32% 18%, rgba(14,116,144,0.38), transparent 70%), radial-gradient(55% 55% at 82% 88%, rgba(217,138,61,0.32), transparent 70%)",
-            }}
-          />
-
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-[0_30px_70px_-30px_rgba(0,0,0,0.4)]">
-            <Image
-              src="/img/msameer-image.png"
-              alt="Muhammad Sameer — Full-Stack Software Engineer"
-              fill
-              priority
-              fetchPriority="high"
-              sizes="(max-width: 768px) 340px, 460px"
-              className="select-none object-cover object-top"
-            />
-            {/* Bottom fade so the frame reads as one object against any bg */}
-            <div
+        {/* ── PORTRAIT — 3D tilt, first on mobile ─────────────────────── */}
+        <TiltPortrait
+          className="order-1 mx-auto w-full max-w-[300px] sm:max-w-[340px] md:order-2 md:max-w-none"
+          src="/img/msameer-image.png"
+          alt="Muhammad Sameer — Full-Stack Software Engineer"
+          priority
+          sizes="(max-width: 768px) 340px, 460px"
+          badge={
+            <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/25 to-transparent"
-            />
-          </div>
-
-          {/* Waving badge, overlapping the top-right corner */}
-          <span
-            aria-hidden="true"
-            className="absolute -right-2 -top-2 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-background text-[20px] shadow-md ring-1 ring-border/60"
-          >
-            <span className="animate-wave">👋</span>
-          </span>
-        </div>
+              className="absolute -right-2 -top-2 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-background text-[20px] shadow-md ring-1 ring-border/60"
+            >
+              <span className="animate-wave">👋</span>
+            </span>
+          }
+        />
 
         {/* ── IDENTITY — text, second on mobile ───────────────────────── */}
         <div className="order-2 md:order-1">

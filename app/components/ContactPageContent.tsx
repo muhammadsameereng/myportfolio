@@ -207,9 +207,9 @@ export default function ContactPageContent() {
             </p>
 
             {/* Detail rows */}
-            <ul className="mt-6 space-y-4">
+            <ul className="mt-6 space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6">
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-foreground/80">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-accent/10 text-accent">
                   <Mail size={15} />
                 </span>
                 <div className="min-w-0">
@@ -218,7 +218,7 @@ export default function ContactPageContent() {
                   </p>
                   <a
                     href={`mailto:${EMAIL}`}
-                    className="mt-0.5 block truncate text-[13.5px] font-medium text-foreground transition-colors hover:underline"
+                    className="mt-0.5 block truncate text-[13.5px] font-medium text-foreground transition-colors hover:text-accent"
                   >
                     {EMAIL}
                   </a>
@@ -226,7 +226,7 @@ export default function ContactPageContent() {
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-foreground/80">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-accent/10 text-accent">
                   <Phone size={15} />
                 </span>
                 <div className="min-w-0">
@@ -234,16 +234,16 @@ export default function ContactPageContent() {
                     Phone
                   </p>
                   <a
-                    href="tel:+923119777995"
-                    className="mt-0.5 block text-[13.5px] font-medium text-foreground transition-colors hover:underline"
+                    href="tel:+923430159930"
+                    className="mt-0.5 block text-[13.5px] font-medium text-foreground transition-colors hover:text-accent"
                   >
-                    +92 311 9777995
+                    +92 343 015 9930
                   </a>
                 </div>
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-foreground/80">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-accent/10 text-accent">
                   <MapPin size={15} />
                 </span>
                 <div className="min-w-0">
@@ -251,13 +251,13 @@ export default function ContactPageContent() {
                     Based in
                   </p>
                   <p className="mt-0.5 text-[13.5px] font-medium text-foreground">
-                    AJK, Pakistan
+                    Kotli, Azad Kashmir
                   </p>
                 </div>
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-foreground/80">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-accent/10 text-accent">
                   <Clock size={15} />
                 </span>
                 <div className="min-w-0">
@@ -298,7 +298,7 @@ export default function ContactPageContent() {
                   href="https://github.com/muhammadsameereng"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
+                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-accent/50 hover:bg-card hover:text-accent"
                 >
                   <GithubIcon size={13} />
                   GitHub
@@ -307,7 +307,7 @@ export default function ContactPageContent() {
                   href="https://www.linkedin.com/in/muhammad-sameer"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
+                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-accent/50 hover:bg-card hover:text-accent"
                 >
                   <LinkedInIcon size={13} />
                   LinkedIn
@@ -316,7 +316,7 @@ export default function ContactPageContent() {
                   href="https://www.instagram.com/m.sameer.dev/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
+                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-accent/50 hover:bg-card hover:text-accent"
                 >
                   <InstagramIcon size={13} />
                   Instagram
@@ -325,14 +325,14 @@ export default function ContactPageContent() {
                   href="https://gitlab.com/sameerorg-group/sameerorg-project/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
+                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-accent/50 hover:bg-card hover:text-accent"
                 >
                   <GitlabIcon size={13} />
                   GitLab
                 </a>
                 <a
                   href={`mailto:${EMAIL}`}
-                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
+                  className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-accent/50 hover:bg-card hover:text-accent"
                 >
                   <Mail size={13} />
                   Email
@@ -531,7 +531,7 @@ export default function ContactPageContent() {
                     setEmail("");
                     setMessage("");
                   }}
-                  className="mt-6 inline-flex h-9 cursor-pointer items-center rounded-full border border-border bg-background px-4 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
+                  className="mt-6 inline-flex h-9 cursor-pointer items-center rounded-full border border-border bg-background px-4 text-[12.5px] font-medium text-foreground transition-colors hover:border-accent/50 hover:bg-card hover:text-accent"
                 >
                   Send another
                 </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -22,9 +23,7 @@ export default function BlogPageContent({
 
   const filtered = useMemo(
     () =>
-      active === "All"
-        ? posts
-        : posts.filter((p) => p.category === active),
+      active === "All" ? posts : posts.filter((p) => p.category === active),
     [active, posts]
   );
 
@@ -41,10 +40,10 @@ export default function BlogPageContent({
       <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
         <SectionHead
           title="Blog"
-          description="Notes from the workbench — short writing on backend systems, frontend patterns, the path from Kashmir, and the quiet parts of building software."
+          description="Notes from the workbench — short writing on backend systems, offline-first architecture, multi-tenant SaaS, and mobile."
         />
 
-        {/* Category pills — only render when there's more than one option */}
+        {/* Category pills */}
         {categories.length > 1 && (
           <div className="mt-8 flex flex-wrap items-center gap-2">
             {allCategories.map((c) => {
@@ -61,7 +60,7 @@ export default function BlogPageContent({
                   className={`relative inline-flex h-8 cursor-pointer items-center rounded-full px-4 text-[12.5px] font-medium transition-colors duration-200 ${
                     isActive
                       ? "bg-foreground text-background"
-                      : "border border-border bg-background text-foreground/75 hover:border-foreground/40 hover:text-foreground"
+                      : "border border-border bg-background text-foreground/75 hover:border-accent/50 hover:text-accent"
                   }`}
                 >
                   {c}
@@ -78,8 +77,8 @@ export default function BlogPageContent({
           </div>
         )}
 
-        {/* List */}
-        <div className="mt-10 divide-y divide-border/60">
+        {/* Card grid */}
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout" initial={false}>
             {visible.map((p, i) => (
               <motion.div
@@ -92,42 +91,66 @@ export default function BlogPageContent({
               >
                 <Link
                   href={`/blog/${p.slug}`}
-                  className="group grid grid-cols-1 gap-5 py-7 sm:grid-cols-[1fr_auto] sm:gap-8"
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-accent/40 hover:shadow-[0_20px_48px_-22px_rgb(var(--bg-teal)/0.5)]"
                 >
-                  <div className="min-w-0">
-                    <h3 className="text-[18px] font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent">
-                      {p.title}
-                    </h3>
-                    <p className="mt-2 line-clamp-2 text-[13.5px] leading-relaxed text-muted-foreground">
-                      {p.excerpt}
-                    </p>
-                    <div className="mt-3 flex items-center gap-3 text-[11.5px] uppercase tracking-[0.18em] text-muted-foreground">
-                      <time dateTime={p.isoDate}>{p.date}</time>
-                      <span className="h-3 w-px bg-border" />
-                      <span>{p.readTime}</span>
-                      {p.tags[0] && (
-                        <>
-                          <span className="h-3 w-px bg-border" />
-                          <span className="text-foreground/75">{p.tags[0]}</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  <div className="relative h-[120px] w-full overflow-hidden rounded-xl border border-border bg-muted/30 transition-all duration-300 group-hover:border-accent/45 group-hover:shadow-[0_16px_38px_-18px_rgb(var(--bg-teal)/0.5)] sm:h-[120px] sm:w-[160px]">
+                  {/* Thumbnail */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/30">
                     <Image
                       src={p.thumb}
                       alt=""
                       fill
                       loading="lazy"
-                      sizes="(max-width: 640px) 100vw, 160px"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                     />
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgb(var(--bg-teal) / 0.28), transparent 55%)",
+                      }}
+                    />
+                    {p.category && (
+                      <span className="absolute left-3 top-3 rounded-full border border-border/60 bg-background/85 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-wider text-foreground backdrop-blur-sm">
+                        {p.category}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Body */}
+                  <div className="flex flex-1 flex-col p-5">
+                    <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                      <time dateTime={p.isoDate}>{p.date}</time>
+                      <span className="h-2.5 w-px bg-border" />
+                      <span>{p.readTime}</span>
+                    </div>
+                    <h3 className="mt-2.5 line-clamp-2 text-[16px] font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 flex-1 text-[13px] leading-relaxed text-muted-foreground">
+                      {p.excerpt}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1 text-[12.5px] font-medium text-accent">
+                      Read
+                      <ArrowRight
+                        size={13}
+                        className="transition-transform duration-200 group-hover:translate-x-0.5"
+                      />
+                    </span>
                   </div>
                 </Link>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
+
+        {filtered.length === 0 && (
+          <p className="mt-12 text-center text-[13.5px] text-muted-foreground">
+            Nothing here yet in{" "}
+            <span className="font-semibold text-foreground">{active}</span>.
+          </p>
+        )}
 
         {/* Load more */}
         <div className="mt-10 flex items-center justify-center">
@@ -150,13 +173,6 @@ export default function BlogPageContent({
             </p>
           ) : null}
         </div>
-
-        {filtered.length === 0 && (
-          <p className="mt-12 text-center text-[13.5px] text-muted-foreground">
-            Nothing here yet in{" "}
-            <span className="font-semibold text-foreground">{active}</span>.
-          </p>
-        )}
       </div>
     </section>
   );
