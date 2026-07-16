@@ -54,7 +54,7 @@ export default function OG() {
             color: "#737373",
           }}
         >
-          <span>sameer-khan.vercel.app</span>
+          <span>msameer.vercel.app</span>
           <span>● Available for work</span>
         </div>
       </div>

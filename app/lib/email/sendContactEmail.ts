@@ -53,8 +53,8 @@ export async function sendContactEmail(
   const isAi = source === "ask-saran-bot";
   const aiSuffix = isAi ? " (by AI)" : "";
   const subject = name
-    ? `Message from ${name} via sameer-khan.vercel.app${aiSuffix}`
-    : `Message via sameer-khan.vercel.app${aiSuffix}`;
+    ? `Message from ${name} via msameer.vercel.app${aiSuffix}`
+    : `Message via msameer.vercel.app${aiSuffix}`;
 
   const safeName = escapeHtml(name || "Visitor");
   const safeEmail = escapeHtml(email);
@@ -154,7 +154,7 @@ export async function sendContactEmail(
 
             <tr>
               <td style="padding:14px 24px 18px; border-top:1px solid #f0f0f0; font-size:11px; color:#a3a3a3;">
-                Sent ${escapeHtml(sentAt)} (PKT) from ${safeSourceLabel.toLowerCase()} on sameer-khan.vercel.app
+                Sent ${escapeHtml(sentAt)} (PKT) from ${safeSourceLabel.toLowerCase()} on msameer.vercel.app
               </td>
             </tr>
           </table>
@@ -165,7 +165,7 @@ export async function sendContactEmail(
 </html>`;
 
   const text = [
-    `Message from ${name || "Visitor"} via sameer-khan.vercel.app${
+    `Message from ${name || "Visitor"} via msameer.vercel.app${
       isAi ? " (by AI)" : ""
     }`,
     ...(isAi

@@ -22,7 +22,7 @@ export function JsonLd({ data }: { data: JsonValue }) {
   );
 }
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://msameer.vercel.app";
 
 /** Person schema — used on the home + about pages. */
 export const personSchema = {

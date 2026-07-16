@@ -2,7 +2,7 @@
 
 Personal portfolio of **Muhammad Sameer**, a full-stack software engineer from Kotli, Azad Kashmir — building React / Next.js frontends, Node.js & NestJS APIs, and React Native & Flutter apps.
 
-**🌐 Live:** [sameer-khan.vercel.app](https://sameer-khan.vercel.app)
+**🌐 Live:** [msameer.vercel.app](https://msameer.vercel.app)
 
 <p>
   <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs&logoColor=white">

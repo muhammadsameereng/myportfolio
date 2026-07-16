@@ -18,7 +18,7 @@ import { getPublicProjects } from "./lib/public/projects";
  * Reference: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
  */
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://msameer.vercel.app";
 
 // Strip query strings before emitting an image URL into the sitemap.
 // XML requires `&` to be entity-escaped as `&amp;`, but Next 16's

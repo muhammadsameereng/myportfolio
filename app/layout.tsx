@@ -29,7 +29,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://msameer.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

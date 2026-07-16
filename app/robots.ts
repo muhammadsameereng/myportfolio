@@ -23,7 +23,7 @@ import type { MetadataRoute } from "next";
  *   https://platform.openai.com/docs/gptbot
  */
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://msameer.vercel.app";
 
 export default function robots(): MetadataRoute.Robots {
   return {

@@ -8,7 +8,7 @@ import {
   getStaticProjectSlugs,
 } from "../../lib/public/projects";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://msameer.vercel.app";
 
 type Params = Promise<{ slug: string }>;
 

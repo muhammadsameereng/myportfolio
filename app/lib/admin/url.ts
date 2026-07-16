@@ -11,7 +11,7 @@ export { safeNextPath } from "./redirect";
  *                              so a forged Host/Origin header in production
  *                              can't trick us into emailing attacker-controlled
  *                              redirect URLs.
- *   3. https://sameer-khan.vercel.app — last-resort hard default.
+ *   3. https://msameer.vercel.app — last-resort hard default.
  */
 export async function getSiteOrigin(): Promise<string> {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -24,7 +24,7 @@ export async function getSiteOrigin(): Promise<string> {
     return `${proto}://${host}`;
   }
 
-  return "https://sameer-khan.vercel.app";
+  return "https://msameer.vercel.app";
 }
 
 function stripTrailingSlash(s: string) {

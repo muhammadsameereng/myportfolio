@@ -67,7 +67,7 @@ export default async function OG({
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 20, color: "#737373" }}>
-          <span>sameer-khan.vercel.app / blog</span>
+          <span>msameer.vercel.app / blog</span>
           <span>Muhammad Sameer</span>
         </div>
       </div>
