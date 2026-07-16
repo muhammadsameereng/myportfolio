@@ -5,19 +5,19 @@
 /* Palette derived from the hero portrait: petrol-teal (trousers),
    warm amber (garden bokeh), sage-charcoal (night background). */
 :root {
-  --background: #f6faf9;
-  --foreground: #132523;
-  /* WCAG AA: #45605b on #f6faf9 ≈ 6.6:1 ✓ */
-  --muted: #45605b;
-  --muted-foreground: #5f7b75;
+  --background: #f4f8fb;
+  --foreground: #0f1e26;
+  /* WCAG AA: #3e565f on #f4f8fb ≈ 8:1 ✓ */
+  --muted: #3e565f;
+  --muted-foreground: #5a727c;
   --accent: #0e7490;
   --accent-foreground: #ffffff;
-  --accent-warm: #c47d2e;
+  --accent-warm: #c9781f;
   --accent-warm-foreground: #ffffff;
   --primary: #0b5c73;
-  --border: #d3e4e0;
+  --border: #d9e6ec;
   --card: #ffffff;
-  --card-foreground: #132523;
+  --card-foreground: #0f1e26;
   --glow: rgba(14, 116, 144, 0.08);
   --gradient-start: #0e7490;
   --gradient-end: #d98a3d;

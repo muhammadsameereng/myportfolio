@@ -69,7 +69,7 @@ function setThemeExternal(theme: Theme) {
  */
 function crossfadeTransition(nextTheme: Theme) {
   // Target background — matches the real --background tokens in globals.css.
-  const targetBg = nextTheme === "dark" ? "#071413" : "#f6faf9";
+  const targetBg = nextTheme === "dark" ? "#071413" : "#f4f8fb";
 
   // Create overlay
   const overlay = document.createElement("div");

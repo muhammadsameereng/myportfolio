@@ -120,8 +120,8 @@ export default function AboutPageContent() {
               className="order-1 mx-auto w-full max-w-[260px] sm:max-w-[300px] md:max-w-none"
             >
               <TiltPortrait
-                src="/img/msameer-image.png"
-                alt="Muhammad Sameer — Full-Stack Software Engineer"
+                src="/img/msameer-image5.png"
+                alt="Muhammad Sameer — software engineer, in the Kashmir valley"
                 priority
                 sizes="(max-width: 768px) 300px, 380px"
                 overlay={

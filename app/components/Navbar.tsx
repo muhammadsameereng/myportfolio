@@ -226,42 +226,68 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Links */}
-              <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
+              {/* Links — staggered slide-in */}
+              <motion.nav
+                className="flex flex-1 flex-col gap-1 overflow-y-auto p-4"
+                initial="hidden"
+                animate="show"
+                variants={{
+                  show: {
+                    transition: { staggerChildren: 0.055, delayChildren: 0.12 },
+                  },
+                }}
+              >
                 {navLinks.map((link) => {
                   const active = isActive(link.href);
                   return (
-                    <Link
+                    <motion.div
                       key={link.label}
-                      href={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      aria-current={active ? "page" : undefined}
-                      className={`group flex items-center justify-between rounded-xl px-3.5 py-3 text-[15px] transition-colors ${
-                        active
-                          ? "bg-accent/10 font-semibold text-accent"
-                          : "text-foreground/80 hover:bg-foreground/[0.04] hover:text-foreground"
-                      }`}
+                      variants={{
+                        hidden: { opacity: 0, x: 26 },
+                        show: { opacity: 1, x: 0 },
+                      }}
+                      transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
                     >
-                      <span className="flex items-center gap-3">
-                        <span
-                          aria-hidden
-                          className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                            active ? "bg-accent" : "bg-foreground/25 group-hover:bg-foreground/60"
-                          }`}
+                      <Link
+                        href={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        aria-current={active ? "page" : undefined}
+                        className={`group flex items-center justify-between rounded-xl px-3.5 py-3 text-[15px] transition-colors ${
+                          active
+                            ? "bg-accent/10 font-semibold text-accent"
+                            : "text-foreground/80 hover:bg-foreground/[0.04] hover:text-foreground"
+                        }`}
+                      >
+                        <span className="flex items-center gap-3">
+                          <span
+                            aria-hidden
+                            className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                              active ? "bg-accent" : "bg-foreground/25 group-hover:bg-foreground/60"
+                            }`}
+                          />
+                          {link.label}
+                        </span>
+                        <ArrowUpRight
+                          size={14}
+                          className="text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground/70"
                         />
-                        {link.label}
-                      </span>
-                      <ArrowUpRight
-                        size={14}
-                        className="text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground/70"
-                      />
-                    </Link>
+                      </Link>
+                    </motion.div>
                   );
                 })}
-              </nav>
+              </motion.nav>
 
               {/* Socials + CTA */}
-              <div className="space-y-4 border-t border-border/60 p-4">
+              <motion.div
+                className="space-y-4 border-t border-border/60 p-4"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.12 + navLinks.length * 0.055,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
                 <div className="flex items-center gap-4">
                   {SOCIALS.map(({ label, href, icon: Icon }) => (
                     <a
@@ -284,7 +310,7 @@ export default function Navbar() {
                 >
                   Get in touch
                 </Link>
-              </div>
+              </motion.div>
             </motion.aside>
           </>
         )}

@@ -31,7 +31,7 @@ const LAYERS: Layer[] = [
     // Far — hazy, low amplitude
     d: "M0 200 L96 188 L192 196 L288 172 L384 190 L480 168 L576 186 L672 160 L768 184 L864 166 L960 188 L1056 170 L1152 192 L1248 174 L1344 190 L1440 178 L1440 320 L0 320 Z",
     alpha: 0.1,
-    height: "50vh",
+    height: "56vh",
     factor: 0.02,
     max: 55,
     scale: 0.04,
@@ -40,7 +40,7 @@ const LAYERS: Layer[] = [
     // Mid
     d: "M0 230 L120 176 L240 214 L360 150 L480 200 L600 140 L720 196 L840 152 L960 206 L1080 158 L1200 210 L1320 168 L1440 196 L1440 320 L0 320 Z",
     alpha: 0.16,
-    height: "56vh",
+    height: "64vh",
     factor: 0.05,
     max: 110,
     scale: 0.08,
@@ -51,7 +51,7 @@ const LAYERS: Layer[] = [
     caps:
       "M366 152 L400 128 L436 156 L400 146 Z M926 164 L960 140 L996 168 L960 156 Z M646 172 L680 150 L716 176 L680 164 Z",
     alpha: 0.24,
-    height: "64vh",
+    height: "76vh",
     factor: 0.085,
     max: 150,
     scale: 0.12,
@@ -60,7 +60,7 @@ const LAYERS: Layer[] = [
     // Foreground hills
     d: "M0 300 L110 262 L240 292 L380 244 L520 296 L680 258 L820 296 L960 262 L1120 298 L1280 270 L1440 292 L1440 320 L0 320 Z",
     alpha: 0.34,
-    height: "52vh",
+    height: "64vh",
     factor: 0.12,
     max: 158,
     scale: 0.16,
