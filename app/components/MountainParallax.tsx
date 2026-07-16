@@ -92,6 +92,28 @@ const SHOOTING = [
   { top: "19%", left: "45%", w: 92, dur: 13, delay: 7.5 },
 ];
 
+// Daytime clouds — soft puffs drifting across the sky (light mode).
+const CLOUDS = [
+  { top: "9%", w: 160, op: 0.95, dur: 95, delay: 0 },
+  { top: "17%", w: 110, op: 0.82, dur: 130, delay: -30 },
+  { top: "6%", w: 90, op: 0.7, dur: 165, delay: -80 },
+  { top: "24%", w: 130, op: 0.85, dur: 110, delay: -55 },
+  { top: "13%", w: 100, op: 0.75, dur: 145, delay: -110 },
+  { top: "30%", w: 145, op: 0.8, dur: 120, delay: -20 },
+  { top: "20%", w: 80, op: 0.6, dur: 175, delay: -140 },
+];
+
+// A small flock — birds gliding + flapping across the sky (light mode).
+const BIRDS = [
+  { top: "14%", size: 22, dur: 26, delay: 0, flap: 0.5 },
+  { top: "20%", size: 16, dur: 33, delay: -9, flap: 0.6 },
+  { top: "11%", size: 18, dur: 29, delay: -17, flap: 0.45 },
+  { top: "24%", size: 14, dur: 37, delay: -24, flap: 0.55 },
+  { top: "17%", size: 20, dur: 28, delay: -13, flap: 0.5 },
+  { top: "27%", size: 13, dur: 40, delay: -31, flap: 0.6 },
+  { top: "9%", size: 15, dur: 34, delay: -20, flap: 0.5 },
+];
+
 export default function MountainParallax() {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -174,6 +196,88 @@ export default function MountainParallax() {
               animation: `shooting-star ${s.dur}s ease-in ${s.delay}s infinite`,
             }}
           />
+        ))}
+      </div>
+
+      {/* Day sky — light mode only: sun, drifting clouds, a flock of birds. */}
+      <div className="block dark:hidden">
+        {/* Soft daytime sky wash */}
+        <div
+          className="absolute inset-x-0 top-0 h-[55vh]"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(176,208,230,0.55), transparent 75%)",
+          }}
+        />
+        {/* Sun */}
+        <div className="absolute" style={{ top: "8%", left: "74%" }}>
+          <div
+            className="absolute -inset-24 rounded-full blur-3xl"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(245,190,90,0.5), transparent 70%)",
+            }}
+          />
+          <div
+            className="sun-core relative h-28 w-28 rounded-full"
+            style={{
+              background: "radial-gradient(circle at 35% 35%, #fff6d8, #f4bf5a)",
+              boxShadow: "0 0 64px rgba(244,191,90,0.6)",
+              animation: "sun-breathe 6s ease-in-out infinite",
+            }}
+          />
+        </div>
+        {/* Clouds */}
+        {CLOUDS.map((c, i) => (
+          <div
+            key={`cl-${i}`}
+            className="day-cloud absolute left-0"
+            style={{
+              top: c.top,
+              opacity: c.op,
+              animation: `cloud-drift ${c.dur}s linear ${c.delay}s infinite`,
+            }}
+          >
+            <svg
+              width={c.w}
+              height={c.w * 0.5}
+              viewBox="0 0 120 60"
+              fill="#ffffff"
+            >
+              <circle cx="35" cy="38" r="20" />
+              <circle cx="62" cy="30" r="26" />
+              <circle cx="88" cy="40" r="18" />
+              <rect x="30" y="38" width="62" height="20" rx="10" />
+            </svg>
+          </div>
+        ))}
+        {/* Birds */}
+        {BIRDS.map((b, i) => (
+          <span
+            key={`bd-${i}`}
+            className="day-bird absolute left-0 block"
+            style={{
+              top: b.top,
+              animation: `bird-fly ${b.dur}s linear ${b.delay}s infinite`,
+            }}
+          >
+            <span
+              className="day-bird-flap block"
+              style={{ animation: `bird-flap ${b.flap}s ease-in-out infinite` }}
+            >
+              <svg
+                width={b.size}
+                height={b.size * 0.42}
+                viewBox="0 0 24 10"
+                fill="none"
+                stroke="rgb(55 78 74)"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              >
+                <path d="M1 7 Q6 1 12 7 Q18 1 23 7" />
+              </svg>
+            </span>
+          </span>
         ))}
       </div>
 

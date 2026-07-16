@@ -1,14 +1,16 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { SOCIALS } from "./socials";
 
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "/projects" },
+  { label: "Experience", href: "/experience" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
@@ -34,6 +36,14 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Lock body scroll while the mobile sidebar is open.
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   const toggleTheme = () => {
     const html = document.documentElement;
@@ -170,70 +180,102 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile drawer — full-bleed glass card with staggered link reveal */}
+      {/* Mobile navigation — slide-in sidebar with backdrop */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            key="mobile-drawer"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="px-3 pb-3 md:hidden"
-          >
-            <div className="overflow-hidden rounded-2xl border border-border/50 bg-background/95 shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-              <nav className="flex flex-col p-2">
-                {navLinks.map((link, i) => {
+          <>
+            {/* Backdrop */}
+            <motion.button
+              key="backdrop"
+              aria-label="Close menu"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
+            />
+
+            {/* Sidebar panel */}
+            <motion.aside
+              key="sidebar"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 380, damping: 40 }}
+              className="fixed right-0 top-0 z-50 flex h-full w-[82%] max-w-xs flex-col border-l border-border bg-background/95 shadow-[0_18px_50px_-12px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150 md:hidden"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-border/60 px-5 py-4">
+                <Link
+                  href="/"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-foreground"
+                >
+                  <span aria-hidden="true" className="text-[17px] leading-none text-accent">
+                    ✦
+                  </span>
+                  msameer
+                </Link>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="Close menu"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card/60 text-foreground transition-colors hover:bg-card"
+                >
+                  <X size={16} strokeWidth={1.8} />
+                </button>
+              </div>
+
+              {/* Links */}
+              <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
+                {navLinks.map((link) => {
                   const active = isActive(link.href);
                   return (
-                    <motion.div
+                    <Link
                       key={link.label}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        duration: 0.32,
-                        delay: 0.04 + i * 0.05,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      aria-current={active ? "page" : undefined}
+                      className={`group flex items-center justify-between rounded-xl px-3.5 py-3 text-[15px] transition-colors ${
+                        active
+                          ? "bg-accent/10 font-semibold text-accent"
+                          : "text-foreground/80 hover:bg-foreground/[0.04] hover:text-foreground"
+                      }`}
                     >
-                      <Link
-                        href={link.href}
-                        onClick={() => setMobileOpen(false)}
-                        className={`group flex items-center justify-between rounded-xl px-3 py-3 text-[15px] transition-colors ${
-                          active
-                            ? "bg-foreground/[0.05] text-foreground font-semibold"
-                            : "text-foreground/80 hover:bg-foreground/[0.04] hover:text-foreground"
-                        }`}
-                      >
-                        <span className="flex items-center gap-3">
-                          <span
-                            aria-hidden
-                            className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                              active ? "bg-foreground" : "bg-foreground/25 group-hover:bg-foreground/60"
-                            }`}
-                          />
-                          {link.label}
-                        </span>
-                        <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground/70 transition-colors group-hover:text-foreground/70">
-                          →
-                        </span>
-                      </Link>
-                    </motion.div>
+                      <span className="flex items-center gap-3">
+                        <span
+                          aria-hidden
+                          className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                            active ? "bg-accent" : "bg-foreground/25 group-hover:bg-foreground/60"
+                          }`}
+                        />
+                        {link.label}
+                      </span>
+                      <ArrowUpRight
+                        size={14}
+                        className="text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground/70"
+                      />
+                    </Link>
                   );
                 })}
               </nav>
 
-              {/* Footer strip — quick contact CTA matches design pills elsewhere */}
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.32,
-                  delay: 0.04 + navLinks.length * 0.05,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="border-t border-border/40 p-3"
-              >
+              {/* Socials + CTA */}
+              <div className="space-y-4 border-t border-border/60 p-4">
+                <div className="flex items-center gap-4">
+                  {SOCIALS.map(({ label, href, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      aria-label={label}
+                      className="text-muted-foreground transition-colors hover:text-accent"
+                    >
+                      <Icon size={17} />
+                    </a>
+                  ))}
+                </div>
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
@@ -242,9 +284,9 @@ export default function Navbar() {
                 >
                   Get in touch
                 </Link>
-              </motion.div>
-            </div>
-          </motion.div>
+              </div>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </motion.header>

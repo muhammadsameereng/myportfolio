@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import PublicChrome from "./components/PublicChrome";
@@ -102,9 +103,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Theme bootstrap — runs before paint to avoid FOUC */}
-        {/* suppressHydrationWarning: browser extensions inject attributes/src onto this tag */}
-        <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Theme bootstrap — runs before paint to avoid FOUC. next/script
+            with beforeInteractive injects it into the initial HTML head
+            (executes before hydration) and avoids React's "script tag in a
+            component" warning that a raw <script> triggers. */}
+        <Script id="theme-bootstrap" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
 
         {/* DNS-prefetch only — no above-the-fold images come from these
             origins, so a full preconnect would waste a handshake. */}

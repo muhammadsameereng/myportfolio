@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BlogPageContent from "../components/BlogPageContent";
+import { JsonLd, breadcrumbLd } from "../components/JsonLd";
 import {
   getPublicBlogCategories,
   getPublicPosts,
@@ -7,10 +8,28 @@ import {
 
 export const revalidate = 3600;
 
+const description =
+  "Writing by Muhammad Sameer on backend systems, offline-first architecture, multi-tenant SaaS, NestJS, and React Native — notes from the workbench in Azad Kashmir.";
+
 export const metadata: Metadata = {
   title: "Blog — Muhammad Sameer",
-  description:
-    "Notes from the workbench — short writing on backend systems, frontend patterns, and the path from Azad Kashmir.",
+  description,
+  keywords: [
+    "Muhammad Sameer blog",
+    "software engineering blog",
+    "backend development",
+    "offline-first architecture",
+    "NestJS",
+    "React Native",
+    "Next.js",
+  ],
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "Blog — Muhammad Sameer",
+    description,
+    url: "/blog",
+    type: "website",
+  },
 };
 
 export default async function BlogPage() {
@@ -21,6 +40,12 @@ export default async function BlogPage() {
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: "Blog", path: "/blog" },
+        ])}
+      />
       <BlogPageContent posts={posts} categories={categories} />
     </main>
   );

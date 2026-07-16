@@ -34,6 +34,28 @@ export const personSchema = {
   description:
     "Full-stack engineer from Azad Kashmir building React/Next.js frontends, NestJS APIs, and React Native apps.",
   image: `${SITE}/img/msameer-image.png`,
+  email: "mailto:msameerdevelops@gmail.com",
+  knowsAbout: [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "NestJS",
+    "React Native",
+    "Flutter",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis",
+    "Docker",
+    "AWS",
+    "Full-Stack Development",
+    "Backend Development",
+    "Mobile App Development",
+  ],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "University of Kotli, Azad Jammu & Kashmir",
+  },
   sameAs: [
     "https://github.com/muhammadsameereng",
     "https://www.linkedin.com/in/muhammad-sameer",
@@ -42,11 +64,25 @@ export const personSchema = {
   ],
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Azad Jammu and Kashmir",
+    addressLocality: "Kotli, Azad Jammu and Kashmir",
     addressRegion: "AJK",
     addressCountry: "PK",
   },
 };
+
+/** BreadcrumbList — pass a trail of { name, path } (paths are relative). */
+export function breadcrumbLd(trail: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.name,
+      item: `${SITE}${c.path}`,
+    })),
+  };
+}
 
 /** WebSite schema — search-action ready. */
 export const websiteSchema = {

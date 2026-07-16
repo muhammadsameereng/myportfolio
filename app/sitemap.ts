@@ -44,6 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE}/`, lastModified: buildTime },
     { url: `${SITE}/about`, lastModified: buildTime },
+    { url: `${SITE}/experience`, lastModified: buildTime },
     { url: `${SITE}/projects`, lastModified: buildTime },
     { url: `${SITE}/blog`, lastModified: buildTime },
     { url: `${SITE}/contact`, lastModified: buildTime },
