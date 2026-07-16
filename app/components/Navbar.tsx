@@ -84,7 +84,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="group flex items-center gap-2 pl-2 pr-1 text-[15px] font-semibold tracking-tight text-foreground"
+          className="group flex items-center gap-2 pl-2 pr-1 font-display text-[15px] font-semibold tracking-tight text-foreground"
         >
           <span
             aria-hidden="true"
@@ -210,7 +210,7 @@ export default function Navbar() {
                 <Link
                   href="/"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-foreground"
+                  className="flex items-center gap-2 font-display text-[15px] font-semibold tracking-tight text-foreground"
                 >
                   <span aria-hidden="true" className="text-[17px] leading-none text-accent">
                     ✦

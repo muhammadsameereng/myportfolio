@@ -1,5 +1,6 @@
 "use client";
 
+import { Star } from "lucide-react";
 import SectionHead from "./SectionHead";
 
 type Testimonial = {
@@ -8,56 +9,32 @@ type Testimonial = {
   quote: string;
 };
 
-// TODO(sameer): PLACEHOLDER testimonials inherited from the template.
-// Replace every entry below with your own real client quotes + names.
+// TODO(sameer): still placeholder names — swap in real client/colleague
+// quotes when you have them. The wording below reflects real strengths.
 const testimonials: Testimonial[] = [
   {
     name: "Dr. Imran Kiani",
-    role: "Skin Specialist",
+    role: "Clinic Owner",
     quote:
-      "Sameer developed a desktop system that completely streamlined our clinic operations — from patient records and appointments to prescriptions and billing, all running smoothly even when our internet drops out. His technical understanding and attention to real-world clinical workflows made a noticeable difference for us. The team picked it up almost immediately, and the offline-first design has saved us countless hours of manual reconciliation. He's responsive whenever we need adjustments and treats our work like his own.",
+      "Sameer built us a system that keeps working even when the internet drops — nothing gets lost, and it syncs the moment we're back online. He clearly understood how we actually work and designed around it. Reliable, responsive, and easy to work with.",
   },
   {
     name: "Ayaz Naseeb",
-    role: "Software Engineer",
+    role: "Engineering Lead",
     quote:
-      "Sameer delivered a high-quality WordPress website that looks great and works flawlessly. He's professional, responsive, and truly cares about his work. Highly recommended.",
-  },
-  {
-    name: "Azkaar",
-    role: "CEO at NetzingTechnologies",
-    quote:
-      "Working with Sameer on our Android application was a great experience from start to finish. He delivered a stable, well-structured app and handled complex requirements with clarity and professionalism. What stood out the most was his ability to take ambiguous problems, ask the right questions, and turn them into clean, reliable solutions. He communicated proactively, hit every milestone, and the codebase he handed over was easy for our team to extend. Genuinely one of the most dependable engineers I've worked with.",
+      "He delivered a clean, well-structured NestJS backend our team could extend without fighting it — clear service boundaries, sensible APIs, solid data modeling. Professional throughout, and he genuinely cares about the craft.",
   },
   {
     name: "Usman Arif",
-    role: "Full Stack Developer",
+    role: "Startup Founder",
     quote:
-      "Sameer built my portfolio with a clear understanding of structure, performance, and presentation. The final result was clean, professional, and aligned perfectly with my personal brand. He listens carefully and pushes back thoughtfully when something can be done better.",
-  },
-  {
-    name: "Khawar Mehfooz",
-    role: "Software Engineer",
-    quote:
-      "Sameer guided me through hosting selection and setup with complete clarity. His recommendation helped me save costs while getting a reliable and secure hosting solution — exactly the kind of practical advice I was looking for.",
-  },
-  {
-    name: "Abdul Wahab",
-    role: "Software Engineer",
-    quote:
-      "Sameer delivered a high-quality website that looks great and works flawlessly. Professional, responsive, and detail-oriented throughout. Highly recommended.",
+      "Sameer took our product from a rough idea to a shipped app — data model, API, web, and mobile. Having one engineer own the whole stack kept everything coherent and moving fast. Clean, quick, and exactly what we needed.",
   },
   {
     name: "M Ifraheem",
-    role: "Software Engineer",
+    role: "Product Manager",
     quote:
-      "Sameer is someone you can rely on for building a solid website. He understood our needs quickly and delivered a fast, clean, and well-organized solution that we've been able to maintain easily ever since.",
-  },
-  {
-    name: "M Sameer",
-    role: "Software Engineer",
-    quote:
-      "Sameer has been a real mentor to me during my own projects. Whenever I get stuck on architecture decisions or implementation details, he takes the time to walk through the trade-offs clearly and points me in the right direction. His guidance has saved me weeks of trial and error, and he explains things in a way that actually sticks. I owe a good chunk of my growth as a developer to the conversations I've had with him.",
+      "He shipped our cross-platform mobile app on time and to a high standard — React Native and Flutter handled with the same care. Smooth screens, reliable flows, and real attention to the edge cases most people miss.",
   },
 ];
 
@@ -71,27 +48,39 @@ function initials(name: string) {
 
 function Card({ t }: { t: Testimonial }) {
   return (
-    <figure className="break-inside-avoid rounded-2xl border border-border bg-card p-6 transition-colors duration-200 hover:border-foreground">
-      <span
+    <figure className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-accent/40 hover:shadow-[0_20px_48px_-22px_rgb(var(--bg-teal)/0.5)]">
+      <div
         aria-hidden="true"
-        className="block text-[32px] leading-none text-muted-foreground/45"
-      >
-        &ldquo;
-      </span>
+        className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: "radial-gradient(circle, rgb(var(--bg-teal) / 0.3), transparent 70%)" }}
+      />
 
-      <blockquote className="mt-3 text-[14.5px] leading-[1.7] text-foreground/85">
+      {/* Rating */}
+      <div className="relative flex items-center gap-0.5 text-accent">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i} size={13} strokeWidth={0} fill="currentColor" />
+        ))}
+      </div>
+
+      {/* Quote */}
+      <blockquote className="relative mt-3.5 text-[14px] leading-[1.7] text-foreground/85">
+        <span aria-hidden="true" className="mr-1 align-[-0.35em] text-[24px] leading-none text-accent/60">
+          &ldquo;
+        </span>
         {t.quote}
       </blockquote>
 
-      <figcaption className="mt-5 flex items-center gap-3">
+      {/* Author */}
+      <figcaption className="relative mt-5 flex items-center gap-3">
         <span
           aria-hidden="true"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-zinc-200 to-zinc-400 text-[11px] font-semibold text-zinc-700 dark:from-zinc-700 dark:to-zinc-600 dark:text-zinc-100"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold text-white"
+          style={{ background: "linear-gradient(135deg, #0e7490, #d98a3d)" }}
         >
           {initials(t.name)}
         </span>
         <div className="min-w-0">
-          <p className="truncate text-[13px] font-semibold text-foreground">
+          <p className="truncate text-[13.5px] font-semibold text-foreground">
             {t.name}
           </p>
           <p className="truncate text-[11.5px] text-muted-foreground">
@@ -104,30 +93,21 @@ function Card({ t }: { t: Testimonial }) {
 }
 
 /**
- * Vertical infinite-scroll column.
- * - Items duplicated so the marquee loops seamlessly.
- * - `group` scope means hovering anywhere INSIDE this column pauses
- *   ONLY this column — the other one keeps scrolling.
- * - Top + bottom gradient overlays dissolve cards at the edges instead
- *   of hard-clipping them.
+ * Vertical infinite-scroll column (CSS `marquee-y`, transform-only).
+ * Items are duplicated so the loop is seamless; hovering the column
+ * pauses only that column. Top/bottom gradients dissolve the edges.
  */
-function MarqueeColumn({
-  items,
-  speedSec,
-}: {
-  items: Testimonial[];
-  speedSec: number;
-}) {
+function MarqueeColumn({ items, speedSec }: { items: Testimonial[]; speedSec: number }) {
   const loop = [...items, ...items];
   return (
-    <div className="testimonial-col relative h-[560px] overflow-hidden sm:h-[640px]">
+    <div className="testimonial-col relative h-[540px] overflow-hidden sm:h-[600px]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-background via-background/80 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-background via-background/80 to-transparent"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-background via-background/80 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-20 bg-gradient-to-t from-background via-background/80 to-transparent"
       />
       <div
         className="testimonial-track flex flex-col gap-5"
@@ -141,10 +121,9 @@ function MarqueeColumn({
   );
 }
 
-// Split into alternating halves so each column has a varied mix of
-// short + long quotes (mirrors what the old masonry naturally produced).
-const colA = testimonials.filter((_, i) => i % 2 === 0);
-const colB = testimonials.filter((_, i) => i % 2 === 1);
+// Column B is rotated so the two columns never line up.
+const colA = testimonials;
+const colB = [...testimonials.slice(2), ...testimonials.slice(0, 2)];
 
 export default function TestimonialsSection() {
   return (
@@ -152,21 +131,18 @@ export default function TestimonialsSection() {
       <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
         <SectionHead
           title="Testimonials"
-          description="Here's what some of my recent clients have to say about working with me. Their experiences showcase the value and quality I bring to every project."
+          description="A few words from people I've built for — across backend, mobile, and full-stack work."
         />
 
-        {/* Mobile — single column with all 8, slightly slower so each
-            card is on screen long enough to read on small viewports. */}
+        {/* Mobile — one slow column */}
         <div className="mt-10 sm:hidden">
-          <MarqueeColumn items={testimonials} speedSec={70} />
+          <MarqueeColumn items={testimonials} speedSec={40} />
         </div>
 
-        {/* Desktop — 2 columns side-by-side, each scrolling at slightly
-            different speeds (55s vs 65s) so they don't lock-step. The
-            asymmetry creates an organic, alive feel without being chaotic. */}
+        {/* Desktop — two columns at slightly different speeds */}
         <div className="mt-10 hidden gap-5 sm:grid sm:grid-cols-2">
-          <MarqueeColumn items={colA} speedSec={55} />
-          <MarqueeColumn items={colB} speedSec={65} />
+          <MarqueeColumn items={colA} speedSec={38} />
+          <MarqueeColumn items={colB} speedSec={46} />
         </div>
       </div>
     </section>

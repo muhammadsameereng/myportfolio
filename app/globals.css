@@ -73,6 +73,7 @@
   --color-gradient-end: var(--gradient-end);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-grotesk);
 }
 
 body {
@@ -87,6 +88,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
+}
+
+/* Display font — Space Grotesk on all headings + the `.font-display`
+   utility (used on wordmarks). Body copy stays on Geist Sans. Slightly
+   tighter tracking suits Grotesk's geometric caps at large sizes. */
+h1, h2, h3, h4, h5, h6,
+.font-display {
+  font-family: var(--font-grotesk), var(--font-geist-sans), system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 /* Wave hand animation — bounce + tilt for the hero greeting badge. */

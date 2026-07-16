@@ -35,6 +35,7 @@ export default function Footer() {
           <span className="flex items-center gap-1.5 font-semibold">
             <span aria-hidden="true" className="text-accent">✦</span>
             <span
+              className="font-display"
               style={{ background: "linear-gradient(135deg, #0e7490, #d98a3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
             >
               msameer
