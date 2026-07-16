@@ -90,21 +90,23 @@ export default function GithubActivity() {
         </div>
 
         {/* Stated metrics */}
-        <div className="mt-4 grid grid-cols-3 gap-3">
+        <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3">
           {METRICS.map(({ icon: Icon, value, label }) => (
             <div
               key={label}
-              className="rounded-xl border border-border bg-background/50 p-4 text-center transition-colors hover:border-accent/40 sm:text-left"
+              className="flex items-center gap-3 rounded-xl border border-border bg-background/50 p-3.5 transition-colors hover:border-accent/40"
             >
-              <span className="inline-flex items-center gap-1.5 text-accent">
-                <Icon size={14} strokeWidth={1.9} />
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                <Icon size={15} strokeWidth={1.9} />
               </span>
-              <p className="mt-2 bg-gradient-to-br from-accent to-accent-warm bg-clip-text text-[24px] font-bold leading-none tabular-nums text-transparent sm:text-[26px]">
-                {value}
-              </p>
-              <p className="mt-1.5 text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground">
-                {label}
-              </p>
+              <div className="min-w-0">
+                <p className="bg-gradient-to-br from-accent to-accent-warm bg-clip-text text-[20px] font-bold leading-none tabular-nums text-transparent">
+                  {value}
+                </p>
+                <p className="mt-1 truncate text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                  {label}
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -119,9 +121,7 @@ export default function GithubActivity() {
             </p>
             <p className="text-[11px] text-muted-foreground/70">last year</p>
           </div>
-          <div className="-mx-1 overflow-x-auto px-1 pb-1">
-            <GithubHeatmap user={USERNAME} />
-          </div>
+          <GithubHeatmap user={USERNAME} />
         </div>
 
         {/* CTA line */}

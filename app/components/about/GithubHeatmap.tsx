@@ -69,7 +69,7 @@ export default function GithubHeatmap({ user }: { user: string }) {
   if (!data) {
     // Skeleton — matches the rendered footprint so layout doesn't jump.
     return (
-      <div className="h-[120px] w-full min-w-[640px] animate-pulse rounded-md bg-foreground/[0.04]" />
+      <div className="h-[120px] w-full animate-pulse rounded-md bg-foreground/[0.04]" />
     );
   }
 
@@ -77,10 +77,12 @@ export default function GithubHeatmap({ user }: { user: string }) {
   const height = ROWS * (CELL + GAP) - GAP;
 
   return (
-    <div className="min-w-[640px]">
+    <div>
+      {/* Graph scrolls horizontally on small screens */}
+      <div className="-mx-1 overflow-x-auto px-1 pb-1">
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="block h-auto w-full"
+        className="block h-auto w-full min-w-[560px]"
         role="img"
         aria-label={`GitHub contributions for ${user}, last year`}
       >
@@ -109,9 +111,10 @@ export default function GithubHeatmap({ user }: { user: string }) {
           </g>
         ))}
       </svg>
+      </div>
 
-      {/* Total + legend */}
-      <div className="mt-3 flex items-center justify-between">
+      {/* Total + legend — responsive (wraps on mobile) */}
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <p className="text-[12px] text-muted-foreground">
           <span className="font-semibold text-foreground tabular-nums">
             {total.toLocaleString()}
