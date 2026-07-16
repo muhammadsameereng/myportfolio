@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const runtime = "edge";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Saran Zafar — Software Engineer";
+export const alt = "Muhammad Sameer — Software Engineer";
 
 export default function OG() {
   return new ImageResponse(
@@ -25,7 +25,7 @@ export default function OG() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 28, fontWeight: 600 }}>
           <span>✦</span>
-          <span>saranzafar</span>
+          <span>msameer</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -40,8 +40,8 @@ export default function OG() {
             Software Engineer
           </div>
           <div style={{ fontSize: 32, color: "#525252", maxWidth: 900, lineHeight: 1.3 }}>
-            Full-stack engineer from Kashmir building calm software for noisy
-            work.
+            Full-stack engineer from Azad Kashmir — React/Next.js, NestJS &amp;
+            React Native.
           </div>
         </div>
 
@@ -54,7 +54,7 @@ export default function OG() {
             color: "#737373",
           }}
         >
-          <span>saranzafar.com</span>
+          <span>sameer-khan.vercel.app</span>
           <span>● Available for work</span>
         </div>
       </div>

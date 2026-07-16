@@ -51,274 +51,120 @@ export type Project = {
   conclusion?: string[];
 };
 
+const UNSPLASH = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?w=1600&q=80&auto=format&fit=crop`;
+
+/**
+ * Static project catalog — Muhammad Sameer's real work (from the CV).
+ * Used as the fallback whenever Supabase has no published projects, so the
+ * site is populated out of the box. Once real rows exist in the DB, they
+ * take over automatically (see app/lib/public/projects.ts).
+ */
 export const PROJECTS: Project[] = [
   {
-    slug: "multi-tenant-lms",
-    title: "Multi-Tenant Learning Management System",
+    slug: "nuxseed-saas",
+    title: "NuxseedSaaS — Multi-Tenant School Management Platform",
     description:
-      "A SaaS LMS that lets each institute brand, configure, and run their own classrooms — without forking the codebase.",
+      "A multi-tenant school management platform covering administration, finance/payroll and media broadcasting, with role-based web dashboards and a Flutter mobile app.",
     longDescription: [
-      "Built from the database up around a clean tenancy model: every school, training company, or coaching academy gets its own isolated workspace, custom domain, branding, and billing — running on shared infrastructure.",
-      "Onboarding a new tenant takes a three-field form. Course authoring, live classes, assignments, attendance, and progress reports all flow through a single API surface I designed to be boring on purpose — easy to evolve, easy to test.",
+      "NuxseedSaaS is a multi-tenant school management platform built to run the day-to-day operations of a school from one system — administration, finance and payroll, and media broadcasting — across multiple tenant roles.",
+      "On the backend I built NestJS / PostgreSQL modules for school administration, finance/payroll and media broadcasting, designed around clean service boundaries so each tenant's data stays isolated and each role only sees what it should. The web layer is a set of React / Next.js dashboards wired to the NestJS API and tailored per role.",
+      "The mobile side is a Flutter app covering the parts of school life that belong in a student's pocket — timetables, assignments and quizzes — secured with JWT authentication against the same API. The whole stack is containerised with Docker and nginx and deployed to AWS EC2 through a CI/CD pipeline, with Redis backing caching and background work.",
     ],
     category: "SaaS",
-    tags: ["NestJS", "PostgreSQL", "Redis", "Next.js", "TypeScript"],
-    thumb:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&q=80&auto=format&fit=crop",
+    tags: ["NestJS", "Next.js", "React", "PostgreSQL", "Redis", "Flutter", "Docker", "AWS EC2"],
+    thumb: UNSPLASH("1522202176988-66273c2fd55f"),
+    gallery: [
+      UNSPLASH("1577896851231-70ef18881754"),
+      UNSPLASH("1503676260728-1c00da094a0b"),
+      UNSPLASH("1509062522246-3755977927d7"),
+    ],
     year: 2025,
-    role: "Lead full-stack engineer",
-    liveUrl: "#",
-
-    techStack: [
-      { name: "TypeScript" },
-      { name: "Next.js" },
-      { name: "NestJS" },
-      { name: "PostgreSQL" },
-      { name: "Redis" },
-      { name: "Docker" },
-      { name: "Stripe" },
-    ],
-    overview: [
-      "I joined the project as the second engineer with the opportunity to take an existing single-tenant LMS and rebuild it as a true multi-tenant SaaS. The goal was simple — let any institute, training company, or coaching academy run their own classrooms on shared infrastructure, without forking code or duplicating ops.",
-      "The challenge was less about features and more about isolation, customisation, and onboarding. Every tenant needed their own brand, domain, billing, and data — but the platform team needed exactly one codebase to maintain.",
-    ],
-    objectives: [
-      "Design a tenancy model that scales to hundreds of institutes on shared infrastructure.",
-      "Reduce onboarding from a week of setup to a self-serve three-field form.",
-      "Provide deep theming and configuration without giving any tenant access to code.",
-      "Keep the API surface boring and predictable so feature work doesn't slow down over time.",
-    ],
-    domain: [
-      "Education-tech is full of platforms that look the same on the outside and behave very differently on the inside. Some institutes care about live classes; some care about assignments; some care almost entirely about attendance and report cards for parents.",
-      "We needed a model where each of those flavours felt like a first-class product — same engine, different surfaces. The shape of the data, the role of the tenant admin, and the rituals of the school calendar all shaped the design more than any framework choice did.",
-    ],
-    features: [
-      {
-        title: "Tenant Onboarding",
-        description:
-          "A self-serve flow where a new institute picks a subdomain, uploads a logo, sets a brand colour, and is in their own workspace within minutes — fully provisioned, zero ops involvement.",
-        images: [
-          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&q=80&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600&q=80&auto=format&fit=crop",
-        ],
-      },
-      {
-        title: "Course Authoring & Live Classes",
-        description:
-          "A clean drag-and-drop course authoring tool, paired with a stable live-class layer that handles attendance, breakout rooms, and recording — all surfaced through the same student dashboard.",
-        images: [
-          "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&q=80&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&q=80&auto=format&fit=crop",
-        ],
-      },
-      {
-        title: "Reporting & Analytics",
-        description:
-          "Daily, weekly, and term-level reports on attendance, assignments, performance, and engagement — exportable to PDF, schedulable over email, and drillable down to a single student.",
-        images: [
-          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&q=80&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80&auto=format&fit=crop",
-        ],
-      },
-      {
-        title: "Multi-Tenant Billing",
-        description:
-          "Stripe-backed billing with per-tenant plans, prorated upgrades, and proper invoicing — the platform team sees one consolidated revenue dashboard, while each institute sees only their own.",
-        images: [
-          "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=1600&q=80&auto=format&fit=crop",
-        ],
-      },
-    ],
-    outcome: [
-      "The platform now hosts dozens of institutes on a single deployment. New tenants self-serve onboarding in under five minutes, brand their workspace fully, and spin up their first cohort the same day.",
-      "Operationally, the platform team went from spending most of a week per institute to spending almost nothing — onboarding is fully automated and incidents are scoped to a single tenant by design.",
-      "Revenue follows usage cleanly, billing is reconciled automatically, and feature work no longer slows down as the number of institutes grows.",
-    ],
-    conclusion: [
-      "The hardest part of building a multi-tenant SaaS isn't the features — it's the discipline. Every shortcut you take in tenancy, isolation, or configuration shows up months later as an outage or a migration nightmare.",
-      "By keeping the data model boring and the API surface narrow, the system has stayed easy to evolve. Onboarding stays fast, customer trust stays high, and the team can ship features instead of fighting fires.",
-    ],
+    role: "Full-Stack Software Engineer",
+    featured: true,
   },
   {
-    slug: "clinic-desktop-app",
-    title: "Offline-First Clinic Desktop Application",
+    slug: "barqi-bazar",
+    title: "BarqiBazar — Offline-First Commerce & Delivery Platform",
     description:
-      "A desktop tool that works in silence — keeps working when the fibre goes out, and syncs when it comes back.",
+      "A commerce and delivery platform with a CouchDB/PouchDB point-of-sale that keeps taking orders through unreliable networks and reconciles cleanly on reconnect.",
     longDescription: [
-      "Designed for a real clinic in the valley where the internet is patchy. Patient records, appointments, prescriptions, billing — everything functions locally first, with conflict-aware sync to the cloud the moment connectivity returns.",
-      "Built on Electron + SQLite locally, with a NestJS sync server. The team got back about six hours a week of manual reconciliation work that they used to do by hand.",
-    ],
-    category: "Desktop",
-    tags: ["Electron", "SQLite", "TypeScript", "NestJS"],
-    thumb:
-      "https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=1600&q=80&auto=format&fit=crop",
-    year: 2024,
-    role: "Solo engineer",
-  },
-  {
-    slug: "multi-vendor-marketplace",
-    title: "Multi-Vendor E-Commerce Marketplace",
-    description:
-      "A marketplace where dozens of small vendors run independent storefronts on shared infrastructure.",
-    longDescription: [
-      "Each vendor manages their own products, orders, payouts, and customer messages — but the platform handles checkout, payments, taxes, shipping rules, and analytics centrally.",
-      "Designed the multi-vendor data model, the order-splitting and payout pipeline, and the vendor admin. Optimised for a couple of thousand SKUs with zero ops overhead per vendor.",
+      "BarqiBazar is a commerce and delivery platform built for markets where the network can't be trusted to stay up. The defining constraint was offline-first: a shop's point-of-sale has to keep taking orders through dead zones and reconcile cleanly the moment connectivity returns.",
+      "I built the NestJS / PostgreSQL backend services for vendor onboarding, product catalogue and wallet features, and engineered the offline-first POS flow on CouchDB / PouchDB with sync handling that treats conflicts as a product decision rather than an afterthought. RabbitMQ handles asynchronous work between services and Redis backs caching and queues.",
+      "On mobile, Flutter screens cover order placement and live delivery tracking via Firebase — so a customer watches their order move in real time while the vendor side keeps running locally even when the connection drops.",
     ],
     category: "E-Commerce",
-    tags: ["Next.js", "Sanity", "Stripe", "PostgreSQL", "TypeScript"],
-    thumb:
-      "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600&q=80&auto=format&fit=crop",
+    tags: ["NestJS", "PostgreSQL", "Redis", "RabbitMQ", "CouchDB / PouchDB", "Firebase", "Flutter", "AWS"],
+    thumb: UNSPLASH("1601584115197-04ecc0da31d7"),
+    gallery: [
+      UNSPLASH("1556742049-0cfed4f6a45d"),
+      UNSPLASH("1586528116311-ad8dd3c8310d"),
+      UNSPLASH("1607082348824-0a96f2a4b9da"),
+    ],
     year: 2025,
-    role: "Full-stack engineer",
-    liveUrl: "#",
+    role: "Backend & Mobile Engineer",
+    featured: true,
   },
   {
-    slug: "voltek-marketing-site",
-    title: "Voltek — High-Performance Marketing Website",
+    slug: "advara",
+    title: "Advara — AI-Powered Social Commerce Platform",
     description:
-      "Marketing site for a US-based engineering shop, built for fast loads and clear storytelling.",
+      "A social commerce platform blending social feeds and seller storefronts, powered by NestJS microservices with a Next.js web app and an Expo (React Native) mobile app.",
     longDescription: [
-      "A content-heavy marketing site that scores green across Lighthouse and reads like a clean magazine on every device. Custom MDX content pipeline, prefetched routes, and aggressively optimised media.",
-      "I led the build, the brand-page system, and the migration of the old WordPress site without breaking a single inbound link.",
+      "Advara is an AI-powered social commerce platform that blends a social feed with seller storefronts — the kind of experience where discovery and buying live in the same scroll.",
+      "I built NestJS / PostgreSQL microservices powering the social-commerce features and developed the Next.js web UI for the social feeds and seller storefront pages. Redis backs caching and real-time concerns, while Firebase handles notifications and realtime data.",
+      "On mobile, I shipped the feed and notification features in the Expo (React Native) app, sharing the same service layer as the web so the experience stays consistent across platforms. The system is containerised with Docker and deployed on AWS.",
     ],
     category: "Web",
-    tags: ["Next.js", "MDX", "Tailwind", "TypeScript"],
-    thumb:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&q=80&auto=format&fit=crop",
-    year: 2026,
-    role: "Engineering lead",
-    liveUrl: "https://voltekit.com",
-  },
-  {
-    slug: "realtime-sync-engine",
-    title: "Real-Time Sync Engine for Mobile + Web",
-    description:
-      "An event log between mobile and web that treats every connection as temporary and every write as a small, durable promise.",
-    longDescription: [
-      "Built so users can keep working — book, edit, scan, complete — even when the network drops mid-request. Writes are queued, deduplicated, replayed, and reconciled with a server-authoritative log.",
-      "Cut p95 sync latency from 1.4s to 280ms, and eliminated the 'lost write on reconnect' class of bug that had been haunting the team for months.",
+    tags: ["NestJS", "Next.js", "PostgreSQL", "Redis", "Firebase", "Expo", "React Native", "Docker"],
+    thumb: UNSPLASH("1677442136019-21780ecad995"),
+    gallery: [
+      UNSPLASH("1611162616305-c69b3fa7fbe0"),
+      UNSPLASH("1556155092-490a1ba16284"),
+      UNSPLASH("1551288049-bebda4e38f71"),
     ],
-    category: "SaaS",
-    tags: ["NestJS", "Redis", "React Native", "TypeScript", "WebSockets"],
-    thumb:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&q=80&auto=format&fit=crop",
     year: 2025,
-    role: "Backend lead",
+    role: "Full-Stack Software Engineer",
+    featured: true,
   },
   {
-    slug: "healthcare-trust-center",
-    title: "Healthcare Trust Center & Compliance Dashboard",
+    slug: "nexshare",
+    title: "NexShare — Full-Stack Social Sharing App",
     description:
-      "A compliance dashboard that turns months of audit prep into a one-screen status check.",
+      "A full-stack social sharing app built with Next.js and MongoDB, with authentication and the core create-and-share feed loop.",
     longDescription: [
-      "Aggregates security policies, third-party reports, sub-processor lists, data-residency facts, and incident history into a single public-facing page customers can self-serve.",
-      "Internally, the back office surfaces gaps and renewals before they become problems. Built to be embedded into the company's main marketing site as a micro-frontend.",
+      "NexShare is a full-stack social sharing application built with Next.js and MongoDB. It covers the core of a social product — authentication, a content feed, and the create/share loop — implemented end-to-end from the data model through the interface.",
+      "The app uses Next.js for both the frontend and API routes, with MongoDB as the data store. Authentication gates the experience, and the feed is built around the create-and-share interactions that make a social app feel alive. It's one of the personal projects where I got to own every layer of a product from scratch.",
     ],
     category: "Web",
-    tags: ["Next.js", "PostgreSQL", "TypeScript", "Tailwind"],
-    thumb:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80&auto=format&fit=crop",
-    year: 2026,
-    role: "Frontend engineer",
-  },
-  {
-    slug: "pos-mobile-app",
-    title: "Point-of-Sale Mobile Application",
-    description:
-      "A pocket POS for small retailers — scan, charge, print, repeat.",
-    longDescription: [
-      "Designed for shops that don't want a counter computer. Bluetooth scanner integration, thermal-printer support, and a one-tap settlement flow.",
-      "Works fully offline; settles to the cloud whenever the device sees a connection. A pleasure to use for the staff because there's almost nothing on the screen at any moment.",
+    tags: ["Next.js", "MongoDB", "TypeScript", "Authentication", "Full Stack"],
+    thumb: UNSPLASH("1517245386807-bb43f82c33c4"),
+    gallery: [
+      UNSPLASH("1498050108023-c5249f4df085"),
+      UNSPLASH("1460925895917-afdab827c52f"),
     ],
-    category: "Mobile",
-    tags: ["React Native", "TypeScript", "SQLite"],
-    thumb:
-      "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=1600&q=80&auto=format&fit=crop",
     year: 2024,
-    role: "Mobile engineer",
+    role: "Full-Stack Developer",
+    liveUrl: "https://nex-share.vercel.app",
   },
   {
-    slug: "clinic-reporting",
-    title: "Clinic Reporting & Analytics Suite",
+    slug: "s-shop",
+    title: "S-Shop — MERN E-Commerce Web App",
     description:
-      "Daily, weekly, monthly reports for clinics that previously did all of this in Excel.",
+      "An e-commerce web app on the MERN stack with authentication and product and cart flows — a complete, working store rather than a static demo.",
     longDescription: [
-      "Patient flow, revenue by service, doctor-level KPIs, repeat-visit cohorts, no-show analytics — all of it generated from the same operational database the clinic already uses.",
-      "Reports export to PDF, schedule themselves over email, and drill all the way down to a single appointment. Built so a non-technical manager can answer their own questions.",
-    ],
-    category: "Desktop",
-    tags: ["Electron", "TypeScript", "SQLite", "Recharts"],
-    thumb:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80&auto=format&fit=crop",
-    year: 2024,
-    role: "Solo engineer",
-  },
-  {
-    slug: "inventory-manager",
-    title: "Inventory & Stock Management Tool",
-    description:
-      "A desktop tool that quietly tracks stock across multiple branches without slowing anyone down.",
-    longDescription: [
-      "Real-time stock counts, low-stock alerts, and inter-branch transfers. Built to live alongside the existing POS and accounting tools, not replace them.",
-      "Sync runs in the background; conflict resolution prefers the most recent physical count. Audit log keeps every change traceable to a human.",
-    ],
-    category: "Desktop",
-    tags: ["Electron", "SQLite", "TypeScript"],
-    thumb:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=80&auto=format&fit=crop",
-    year: 2023,
-    role: "Solo engineer",
-  },
-  {
-    slug: "restaurant-ordering",
-    title: "Restaurant Online Ordering Platform",
-    description:
-      "An online-ordering platform with a kitchen display system on the other end.",
-    longDescription: [
-      "Customers order from a clean menu page; the kitchen sees a colour-coded queue with timers; the manager gets a live dashboard.",
-      "Designed around the staff workflow, not the marketing pitch. Reduced order errors by giving the kitchen the exact same words the customer saw.",
+      "S-Shop is an e-commerce web application built on the MERN stack (MongoDB, Express, React, Node.js). It implements the essentials of an online store — authentication, product browsing, and cart flows — as a complete, working commerce experience.",
+      "React drives the storefront, an Express / Node.js API handles the business logic, and MongoDB stores products, users and carts. It was a deliberate end-to-end MERN build: real auth, real product and cart state, and a checkout-shaped flow rather than a static demo.",
     ],
     category: "E-Commerce",
-    tags: ["Next.js", "PostgreSQL", "Stripe", "TypeScript"],
-    thumb:
-      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=1600&q=80&auto=format&fit=crop",
-    year: 2024,
-    role: "Full-stack engineer",
-  },
-  {
-    slug: "notes-tasks-pwa",
-    title: "Notes & Tasks — Offline-First PWA",
-    description:
-      "A small notes-and-tasks PWA built for the kind of phone signal you get in a valley.",
-    longDescription: [
-      "Local-first storage in IndexedDB, background sync via service workers, conflict resolution via last-write-wins with a soft merge for text fields.",
-      "Installable on every platform from a single PWA. A weekend project that turned into something I actually use every day.",
+    tags: ["React", "Node.js", "Express", "MongoDB", "MERN", "Ecommerce"],
+    thumb: UNSPLASH("1560179707-f14e90ef3623"),
+    gallery: [
+      UNSPLASH("1556742049-0cfed4f6a45d"),
+      UNSPLASH("1521295121783-8a321d551ad2"),
     ],
-    category: "Web",
-    tags: ["React", "IndexedDB", "Service Workers", "TypeScript"],
-    thumb:
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&q=80&auto=format&fit=crop",
-    year: 2025,
-    role: "Side project",
-    repoUrl: "https://github.com/saranzafar",
-  },
-  {
-    slug: "field-service-app",
-    title: "Field-Service Mobile App for Technicians",
-    description:
-      "A mobile app for technicians who spend their day on rooftops, in basements, and in dead-zones.",
-    longDescription: [
-      "Job tickets, photo-evidence capture, signed completion forms, and parts inventory — all functioning fully offline. The dispatcher's web console syncs whenever a tech regains signal.",
-      "Designed with thick-glove ergonomics in mind: bigger tap targets, fewer screens, very little typing.",
-    ],
-    category: "Mobile",
-    tags: ["React Native", "TypeScript", "WatermelonDB"],
-    thumb:
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1600&q=80&auto=format&fit=crop",
     year: 2024,
-    role: "Mobile + backend engineer",
+    role: "Full-Stack Developer",
+    liveUrl: "https://s-shop-beta.vercel.app",
   },
 ];
-

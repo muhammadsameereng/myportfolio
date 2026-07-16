@@ -46,15 +46,15 @@ export async function sendContactEmail(
 
   const { name, email, message, source } = input;
   const sourceLabel =
-    source === "ask-saran-bot" ? "Ask-Saran bot" : "Contact form";
+    source === "ask-saran-bot" ? "Ask-Sameer bot" : "Contact form";
   const idempotencyPrefix =
     source === "ask-saran-bot" ? "ask-saran" : "contact";
 
   const isAi = source === "ask-saran-bot";
   const aiSuffix = isAi ? " (by AI)" : "";
   const subject = name
-    ? `Message from ${name} via saranzafar.com${aiSuffix}`
-    : `Message via saranzafar.com${aiSuffix}`;
+    ? `Message from ${name} via sameer-khan.vercel.app${aiSuffix}`
+    : `Message via sameer-khan.vercel.app${aiSuffix}`;
 
   const safeName = escapeHtml(name || "Visitor");
   const safeEmail = escapeHtml(email);
@@ -96,7 +96,7 @@ export async function sendContactEmail(
                   <tr>
                     <td style="font-size:14px; font-weight:600; color:#0a0a0a;">
                       <span style="display:inline-block; vertical-align:middle; margin-right:6px;">&#10022;</span>
-                      saranzafar
+                      msameer
                     </td>
                     <td align="right" style="font-size:11px; color:#737373; text-transform:uppercase; letter-spacing:0.12em;">
                       ${safeSourceLabel}
@@ -125,7 +125,7 @@ export async function sendContactEmail(
                 <p style="margin:0 0 22px; font-size:15px; color:#0a0a0a;">
                   <strong>${safeName}</strong>
                   &nbsp;&middot;&nbsp;
-                  <a href="mailto:${safeEmail}" style="color:#2563eb; text-decoration:none;">${safeEmail}</a>
+                  <a href="mailto:${safeEmail}" style="color:#0e7490; text-decoration:none;">${safeEmail}</a>
                 </p>
 
                 <p style="margin:0 0 6px; font-size:11px; color:#737373; text-transform:uppercase; letter-spacing:0.16em;">Message</p>
@@ -154,7 +154,7 @@ export async function sendContactEmail(
 
             <tr>
               <td style="padding:14px 24px 18px; border-top:1px solid #f0f0f0; font-size:11px; color:#a3a3a3;">
-                Sent ${escapeHtml(sentAt)} (PKT) from ${safeSourceLabel.toLowerCase()} on saranzafar.com
+                Sent ${escapeHtml(sentAt)} (PKT) from ${safeSourceLabel.toLowerCase()} on sameer-khan.vercel.app
               </td>
             </tr>
           </table>
@@ -165,7 +165,7 @@ export async function sendContactEmail(
 </html>`;
 
   const text = [
-    `Message from ${name || "Visitor"} via saranzafar.com${
+    `Message from ${name || "Visitor"} via sameer-khan.vercel.app${
       isAi ? " (by AI)" : ""
     }`,
     ...(isAi

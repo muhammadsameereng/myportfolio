@@ -97,7 +97,7 @@ export default function AdminShell({
                 className="flex items-center gap-2 text-[14px] font-semibold text-foreground"
               >
                 <span aria-hidden="true">✦</span>
-                <span>saranzafar</span>
+                <span>msameer</span>
                 <span className="ml-1 rounded-full bg-foreground px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-[0.18em] text-background">
                   Admin
                 </span>
@@ -194,7 +194,7 @@ export default function AdminShell({
               className="flex items-center gap-2 text-[14px] font-semibold text-foreground md:hidden"
             >
               <span aria-hidden>✦</span>
-              <span>saranzafar</span>
+              <span>msameer</span>
             </Link>
 
             {/* Desktop spacer pushes utility cluster to the right */}

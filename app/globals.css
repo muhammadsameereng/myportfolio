@@ -2,38 +2,57 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Palette derived from the hero portrait: petrol-teal (trousers),
+   warm amber (garden bokeh), sage-charcoal (night background). */
 :root {
-  --background: #f8faff;
-  --foreground: #0f172a;
-  /* WCAG AA: #475569 on #f8faff ≈ 7.1:1 ✓ */
-  --muted: #475569;
-  --muted-foreground: #64748b;
-  --accent: #2563eb;
+  --background: #f6faf9;
+  --foreground: #132523;
+  /* WCAG AA: #45605b on #f6faf9 ≈ 6.6:1 ✓ */
+  --muted: #45605b;
+  --muted-foreground: #5f7b75;
+  --accent: #0e7490;
   --accent-foreground: #ffffff;
-  --primary: #1d4ed8;
-  --border: #dbeafe;
+  --accent-warm: #c47d2e;
+  --accent-warm-foreground: #ffffff;
+  --primary: #0b5c73;
+  --border: #d3e4e0;
   --card: #ffffff;
-  --card-foreground: #0f172a;
-  --glow: rgba(37, 99, 235, 0.07);
-  --gradient-start: #3b82f6;
-  --gradient-end: #7c3aed;
+  --card-foreground: #132523;
+  --glow: rgba(14, 116, 144, 0.08);
+  --gradient-start: #0e7490;
+  --gradient-end: #d98a3d;
+  /* Animated bokeh background — teal + amber pulled from the portrait.
+     Space-separated channels so they compose with rgb( … / alpha ). */
+  --bg-teal: 14 116 144;
+  --bg-amber: 217 138 61;
+  --orb-lo: 0.07;
+  --orb-hi: 0.20;
+  --aurora-op: 0.72;
 }
 
 .dark {
-  --background: #04091a;
-  --foreground: #e2e8f0;
-  /* WCAG AA in dark mode: #94a3b8 on #04091a ≈ 8.2:1 ✓ */
-  --muted: #94a3b8;
-  --muted-foreground: #7c8db0;
-  --accent: #60a5fa;
-  --accent-foreground: #04091a;
-  --primary: #60a5fa;
-  --border: #1e3558;
-  --card: #0d1a30;
-  --card-foreground: #e2e8f0;
-  --glow: rgba(96, 165, 250, 0.1);
-  --gradient-start: #3b82f6;
-  --gradient-end: #7c3aed;
+  --background: #071413;
+  --foreground: #e7efeb;
+  /* WCAG AA in dark mode: #9ab0aa on #071413 ≈ 8.0:1 ✓ */
+  --muted: #9ab0aa;
+  --muted-foreground: #85a099;
+  --accent: #3fbdd0;
+  --accent-foreground: #06110f;
+  --accent-warm: #e0a35a;
+  --accent-warm-foreground: #06110f;
+  --primary: #3fbdd0;
+  --border: #17322d;
+  --card: #0d1f1c;
+  --card-foreground: #e7efeb;
+  --glow: rgba(63, 189, 208, 0.12);
+  --gradient-start: #3fbdd0;
+  --gradient-end: #e0a35a;
+  /* Night-garden mood: brighter, more visible glows on the dark canvas. */
+  --bg-teal: 63 189 208;
+  --bg-amber: 224 163 90;
+  --orb-lo: 0.12;
+  --orb-hi: 0.30;
+  --aurora-op: 0.95;
 }
 
 @theme inline {
@@ -43,6 +62,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-warm: var(--accent-warm);
+  --color-accent-warm-foreground: var(--accent-warm-foreground);
   --color-border: var(--border);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -89,6 +110,110 @@ body {
 }
 .animate-floaty { animation: floaty 5s ease-in-out infinite; }
 .animate-floaty-delayed { animation: floaty 5s ease-in-out infinite; animation-delay: 1.5s; }
+
+/* ── Animated bokeh background ─────────────────────────────────────────
+   Large, soft teal/amber glows that drift and breathe behind the whole
+   site — echoing the out-of-focus garden lights in the hero portrait.
+   Only transform + opacity animate, so the compositor handles it on the
+   GPU with no layout/paint per frame. */
+@keyframes bg-orb-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(9%, -7%, 0) scale(1.24); }
+}
+@keyframes bg-orb-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.14); }
+  50%      { transform: translate3d(-10%, 8%, 0) scale(0.9); }
+}
+@keyframes bg-orb-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(7%, 11%, 0) scale(1.28); }
+}
+@keyframes bg-orb-pulse {
+  0%, 100% { opacity: var(--orb-lo); }
+  50%      { opacity: var(--orb-hi); }
+}
+.bg-orb {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform, opacity;
+  opacity: var(--orb-lo);
+}
+
+/* Aurora — two big, soft gradient discs centered on the viewport that
+   slowly counter-rotate. Because they only rotate (a transform), the
+   compositor animates them on the GPU with zero repaint per frame, yet
+   the overlap reads as a living, shifting gradient wash. */
+@keyframes bg-spin {
+  to { transform: translate3d(-50%, -50%, 0) rotate(360deg); }
+}
+@keyframes bg-spin-rev {
+  to { transform: translate3d(-50%, -50%, 0) rotate(-360deg); }
+}
+.bg-aurora {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200vmax;
+  height: 200vmax;
+  border-radius: 9999px;
+  opacity: var(--aurora-op);
+  will-change: transform;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+/* Respect the user's reduced-motion preference: hold everything still. */
+/* ── Night-sky stars (dark mode) ──────────────────────────────────────
+   Each star "splashes" in — pops from nothing with an overshoot — then
+   settles into a slow twinkle. Transform + opacity only. */
+@keyframes star-splash {
+  0%   { transform: scale(0); opacity: 0; }
+  55%  { transform: scale(1.8); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.32; }
+  50%      { opacity: 1; }
+}
+/* Occasional shooting star — streaks once, then idles for the rest of the
+   loop (long duration = rare). */
+@keyframes shooting-star {
+  0%   { transform: translate3d(0, 0, 0) rotate(16deg); opacity: 0; }
+  3%   { opacity: 0; }
+  7%   { opacity: 1; }
+  22%  { transform: translate3d(58vw, 21vh, 0) rotate(16deg); opacity: 0; }
+  100% { transform: translate3d(58vw, 21vh, 0) rotate(16deg); opacity: 0; }
+}
+.star {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform, opacity;
+}
+.shooting-star {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform, opacity;
+  transform: rotate(16deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-orb,
+  .bg-aurora,
+  .bg-twinkle-dot,
+  .animate-wave,
+  .animate-floaty,
+  .animate-floaty-delayed {
+    animation: none !important;
+  }
+  /* Keep stars visible but still. */
+  .star {
+    animation: none !important;
+    transform: none !important;
+    opacity: 0.7 !important;
+  }
+  .shooting-star {
+    display: none !important;
+  }
+}
 
 html {
   scroll-behavior: smooth;

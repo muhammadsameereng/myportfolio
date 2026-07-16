@@ -95,7 +95,7 @@ export default function BlogPageContent({
                   className="group grid grid-cols-1 gap-5 py-7 sm:grid-cols-[1fr_auto] sm:gap-8"
                 >
                   <div className="min-w-0">
-                    <h3 className="text-[18px] font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:underline">
+                    <h3 className="text-[18px] font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent">
                       {p.title}
                     </h3>
                     <p className="mt-2 line-clamp-2 text-[13.5px] leading-relaxed text-muted-foreground">
@@ -113,7 +113,7 @@ export default function BlogPageContent({
                       )}
                     </div>
                   </div>
-                  <div className="relative h-[120px] w-full overflow-hidden rounded-xl bg-muted/30 sm:h-[120px] sm:w-[160px]">
+                  <div className="relative h-[120px] w-full overflow-hidden rounded-xl border border-border bg-muted/30 transition-all duration-300 group-hover:border-accent/45 group-hover:shadow-[0_16px_38px_-18px_rgb(var(--bg-teal)/0.5)] sm:h-[120px] sm:w-[160px]">
                     <Image
                       src={p.thumb}
                       alt=""

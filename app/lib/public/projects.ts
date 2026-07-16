@@ -3,7 +3,7 @@ import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { createStaticClient } from "../supabase/static";
 import type { ProjectRow } from "../supabase/types";
-import { type Project } from "../projects";
+import { PROJECTS as STATIC_PROJECTS, type Project } from "../projects";
 
 const CACHE_TAG = "projects";
 const CACHE_TTL_SECONDS = 3600;
@@ -85,7 +85,10 @@ const fetchRows = cache(fetchPublishedRowsCached);
 
 async function getProjects(): Promise<Project[]> {
   const rows = await fetchRows();
-  if (!rows) return [];
+  // Fall back to the static catalog when the DB is unconfigured or has no
+  // published projects yet — so the site ships populated. Real DB rows
+  // take over automatically the moment they exist.
+  if (!rows || rows.length === 0) return STATIC_PROJECTS;
   return rows.map(rowToProject);
 }
 
@@ -97,7 +100,10 @@ export const getFeaturedProjects = cache(
   async (limit = 6): Promise<Project[]> => {
     const all = await getProjects();
     const flagged = all.filter((p) => p.featured === true);
-    return flagged.slice(0, limit);
+    // If nothing is explicitly featured (e.g. static fallback with no
+    // flags), surface the first few so the homepage never goes empty.
+    if (flagged.length > 0) return flagged.slice(0, limit);
+    return all.slice(0, limit);
   }
 );
 

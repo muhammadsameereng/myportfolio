@@ -50,14 +50,14 @@ const PART_RE =
   /\[ref:(projects|blog)\/([a-z0-9][a-z0-9-]*)(?:\|([^\]]+))?\]|\[([^\]\n]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/gi;
 
 const STARTER_PROMPTS = [
-  "What does Saran build?",
+  "What does Sameer build?",
   "Show me a project",
   "How do I hire him?",
-  "Email Saran for me",
+  "Email Sameer for me",
 ];
 
 const WELCOME_TEXT =
-  "Hi, I'm Caret — Saran's assistant. Ask me about his work, writing, or how to reach him.";
+  "Hi, I'm Caret — Sameer's assistant. Ask me about his work, writing, or how to reach him.";
 
 const MAX_CHARS = 2000;
 
@@ -336,7 +336,7 @@ const Composer = memo(
 
     return (
       <div className="border-t border-border/40 px-3 pt-3 pb-2.5">
-        <div className="group relative rounded-2xl border border-border bg-background transition-[border-color,box-shadow] duration-200 hover:border-foreground/30 focus-within:border-blue-400/70 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
+        <div className="group relative rounded-2xl border border-border bg-background transition-[border-color,box-shadow] duration-200 hover:border-foreground/30 focus-within:border-accent/70 focus-within:shadow-[0_0_0_3px_rgba(14,116,144,0.15)]">
           <textarea
             ref={inputRef}
             value={input}
@@ -348,7 +348,7 @@ const Composer = memo(
               }
             }}
             rows={1}
-            placeholder="Ask about Saran's work…"
+            placeholder="Ask about Sameer's work…"
             maxLength={MAX_CHARS}
             disabled={disabled}
             aria-label="Message Caret"
@@ -376,7 +376,7 @@ const Composer = memo(
             className="inline-flex cursor-pointer items-center gap-1.5 text-muted-foreground/80 transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Mail size={11} strokeWidth={2} />
-            Email Saran
+            Email Sameer
           </button>
           {charCountVisible && (
             <span className="tabular-nums">
@@ -603,7 +603,7 @@ export default function ChatPanel({
   );
 
   const handleEmailShortcut = useCallback(
-    () => send("I'd like to email Saran."),
+    () => send("I'd like to email Sameer."),
     [send]
   );
 

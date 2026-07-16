@@ -40,7 +40,7 @@ export function SupabaseSetupPanel() {
 {`NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...
-ADMIN_EMAILS=saran.development@gmail.com`}
+ADMIN_EMAILS=msameerdevelops@gmail.com`}
             </pre>
             <p className="mt-4 text-[12.5px] leading-relaxed text-muted-foreground">
               Then run the SQL schema (provided in{" "}

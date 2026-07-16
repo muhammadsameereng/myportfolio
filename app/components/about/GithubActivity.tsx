@@ -1,7 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  BookMarked,
+  CalendarClock,
+  Code2,
+  Lock,
+  type LucideIcon,
+} from "lucide-react";
 import GithubHeatmap from "./GithubHeatmap";
 
 function GithubMark({ size = 15 }: { size?: number }) {
@@ -12,29 +19,17 @@ function GithubMark({ size = 15 }: { size?: number }) {
   );
 }
 
-const USERNAME = "saranzafar";
+const USERNAME = "muhammadsameereng";
 
-// Monochrome theme — site is intentionally black/white/grey. Same widget
-// is rendered twice (light + dark variants) and toggled with Tailwind
-// `dark:` so the SVG matches whichever mode the visitor is in.
-const buildStreakUrl = (mode: "light" | "dark") => {
-  const fg     = mode === "light" ? "0a0a0a" : "fafafa";
-  const muted  = mode === "light" ? "6b7280" : "9ca3af";
-  return (
-    `https://streak-stats.demolab.com/?user=${USERNAME}` +
-    `&theme=transparent&hide_border=true&background=00000000` +
-    `&hide_current_streak=true` +
-    `&ring=${fg}&fire=${fg}` +
-    `&currStreakLabel=${fg}&currStreakNum=${fg}` +
-    `&sideLabels=${muted}&dates=${muted}&stroke=${muted}` +
-    `&sideNums=${fg}` +
-    `&card_width=520&card_height=200`
-  );
-};
-
-const STREAK_URL_LIGHT = buildStreakUrl("light");
-const STREAK_URL_DARK  = buildStreakUrl("dark");
-
+// GitHub is private — most work lives in private client/company repos. So
+// instead of live widgets (which can't read a private profile), the numbers
+// below are stated directly. Edit them as they grow.
+type Metric = { icon: LucideIcon; value: string; label: string };
+const METRICS: Metric[] = [
+  { icon: BookMarked, value: "100+", label: "Repositories" },
+  { icon: CalendarClock, value: "3+ yrs", label: "Active on GitHub" },
+  { icon: Code2, value: "15+", label: "Technologies" },
+];
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 12 },
@@ -52,23 +47,21 @@ export default function GithubActivity() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4 sm:px-6">
         <div className="flex items-center gap-2.5">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/[0.05] text-foreground/75">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent">
             <GithubMark size={15} />
           </span>
           <div>
             <p className="text-[13px] font-semibold tracking-tight text-foreground">
               On GitHub
             </p>
-            <p className="text-[11.5px] text-muted-foreground">
-              Live signal — pulled straight from {`@${USERNAME}`}
-            </p>
+            <p className="text-[11.5px] text-muted-foreground">{`@${USERNAME}`}</p>
           </div>
         </div>
         <a
           href={`https://github.com/${USERNAME}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-4 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/50 hover:bg-card"
+          className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-4 text-[12.5px] font-medium text-foreground transition-colors hover:border-accent/50 hover:bg-card"
         >
           Visit profile
           <ArrowUpRight
@@ -78,37 +71,70 @@ export default function GithubActivity() {
         </a>
       </div>
 
-      {/* Streak card — Total Contributions (left) + Longest Streak (right).
-          Centre "Current Streak" panel is hidden via `hide_current_streak`. */}
-      <div className="flex justify-center px-4 py-6 sm:px-6">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={STREAK_URL_LIGHT}
-          alt={`GitHub streak stats for ${USERNAME}`}
-          loading="lazy"
-          className="block h-auto w-full max-w-[520px] dark:hidden"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={STREAK_URL_DARK}
-          alt={`GitHub streak stats for ${USERNAME}`}
-          loading="lazy"
-          className="hidden h-auto w-full max-w-[520px] dark:block"
-        />
-      </div>
+      <div className="p-5 sm:p-6">
+        {/* Private note */}
+        <div className="flex items-start gap-3 rounded-xl border border-accent/25 bg-[rgb(var(--bg-teal)/0.06)] p-4">
+          <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+            <Lock size={15} strokeWidth={1.9} />
+          </span>
+          <div>
+            <p className="text-[13.5px] font-semibold text-foreground">
+              My GitHub is private
+            </p>
+            <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+              Most of my work lives in private client and company repositories.
+              The shape of it is below — and I&apos;m always happy to walk
+              through code, architecture, or a specific project on request.
+            </p>
+          </div>
+        </div>
 
-      {/* Contribution heatmap */}
-      <div className="border-t border-border bg-background/40 px-4 py-6 sm:px-6">
-        <div className="mb-3 flex items-center justify-between">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            Contribution graph
-          </p>
-          <p className="text-[11px] text-muted-foreground/70">last year</p>
+        {/* Stated metrics */}
+        <div className="mt-4 grid grid-cols-3 gap-3">
+          {METRICS.map(({ icon: Icon, value, label }) => (
+            <div
+              key={label}
+              className="rounded-xl border border-border bg-background/50 p-4 text-center transition-colors hover:border-accent/40 sm:text-left"
+            >
+              <span className="inline-flex items-center gap-1.5 text-accent">
+                <Icon size={14} strokeWidth={1.9} />
+              </span>
+              <p className="mt-2 bg-gradient-to-br from-accent to-accent-warm bg-clip-text text-[24px] font-bold leading-none tabular-nums text-transparent sm:text-[26px]">
+                {value}
+              </p>
+              <p className="mt-1.5 text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                {label}
+              </p>
+            </div>
+          ))}
         </div>
-        {/* Horizontal scroll on mobile so the full year is preserved */}
-        <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-          <GithubHeatmap user={USERNAME} />
+
+        {/* Contribution graph — reflects public + private contributions
+            (when "include private contributions" is enabled on the profile),
+            without exposing any private repo details. Falls back gracefully. */}
+        <div className="mt-5 border-t border-border pt-5">
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              Contribution graph
+            </p>
+            <p className="text-[11px] text-muted-foreground/70">last year</p>
+          </div>
+          <div className="-mx-1 overflow-x-auto px-1 pb-1">
+            <GithubHeatmap user={USERNAME} />
+          </div>
         </div>
+
+        {/* CTA line */}
+        <p className="mt-5 text-[12.5px] text-muted-foreground">
+          Want a closer look?{" "}
+          <a
+            href="/contact"
+            className="font-medium text-accent underline-offset-2 hover:underline"
+          >
+            Ask for a code walkthrough
+          </a>
+          .
+        </p>
       </div>
     </motion.div>
   );

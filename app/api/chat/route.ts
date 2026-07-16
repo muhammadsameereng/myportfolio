@@ -194,7 +194,7 @@ export async function POST(req: Request) {
         if (!emittedAnything) {
           send("token", {
             text:
-              "I couldn't generate a response. Try rephrasing — or ask me to email Saran directly.",
+              "I couldn't generate a response. Try rephrasing — or ask me to email Sameer directly.",
           });
         }
         send("done", {});

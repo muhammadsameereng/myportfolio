@@ -27,7 +27,7 @@ export default function LoginForm({
       {/* Soft gradient backdrop */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(60rem_30rem_at_50%_-10%,rgba(59,130,246,0.10),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(60rem_30rem_at_50%_-10%,rgba(14,116,144,0.10),transparent_60%)]"
       />
 
       <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-6">
@@ -37,7 +37,7 @@ export default function LoginForm({
           className="mb-8 inline-flex items-center gap-2 text-[14px] font-semibold text-foreground"
         >
           <span aria-hidden>✦</span>
-          <span>saranzafar</span>
+          <span>msameer</span>
           <span className="ml-1 rounded-full bg-foreground px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-[0.18em] text-background">
             Admin
           </span>
@@ -71,7 +71,7 @@ export default function LoginForm({
                   >
                     Email
                   </label>
-                  <div className="mt-2 flex items-center gap-2 rounded-xl border border-border bg-background px-3 transition-all duration-200 focus-within:border-blue-400/70 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
+                  <div className="mt-2 flex items-center gap-2 rounded-xl border border-border bg-background px-3 transition-all duration-200 focus-within:border-accent/70 focus-within:shadow-[0_0_0_3px_rgba(14,116,144,0.15)]">
                     <Mail
                       size={14}
                       strokeWidth={1.8}

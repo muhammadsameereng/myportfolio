@@ -41,9 +41,9 @@ export type SocialItem = {
 };
 
 export const SOCIALS: SocialItem[] = [
-  { label: "GitHub",    href: "https://github.com/saranzafar",            icon: GithubIcon },
-  { label: "LinkedIn",  href: "https://www.linkedin.com/in/saranzafar",   icon: LinkedInIcon },
-  { label: "Instagram", href: "https://www.instagram.com/saran.devvv/",   icon: InstagramIcon },
-  { label: "GitLab",    href: "https://gitlab.com/saranzafar",            icon: GitlabIcon },
-  { label: "Email",     href: "mailto:saran.development@gmail.com",       icon: Mail },
+  { label: "GitHub",    href: "https://github.com/muhammadsameereng",                icon: GithubIcon },
+  { label: "LinkedIn",  href: "https://www.linkedin.com/in/muhammad-sameer",         icon: LinkedInIcon },
+  { label: "Instagram", href: "https://www.instagram.com/m.sameer.dev/",             icon: InstagramIcon },
+  { label: "GitLab",    href: "https://gitlab.com/sameerorg-group/sameerorg-project/", icon: GitlabIcon },
+  { label: "Email",     href: "mailto:msameerdevelops@gmail.com",                    icon: Mail },
 ];

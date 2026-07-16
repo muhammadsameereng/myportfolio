@@ -6,9 +6,9 @@ import ContactPageContent from "../components/ContactPageContent";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Contact — Saran Zafar",
+  title: "Contact — Muhammad Sameer",
   description:
-    "Get in touch with Saran Zafar — full-stack engineer based in Kashmir. Replies within 24 hours.",
+    "Get in touch with Muhammad Sameer — full-stack engineer based in Azad Kashmir. Replies within 24 hours.",
 };
 
 export default function ContactPage() {

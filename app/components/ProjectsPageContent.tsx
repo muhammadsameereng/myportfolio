@@ -88,19 +88,27 @@ export default function ProjectsPageContent({
                 whileHover={{ y: -3 }}
               >
                 <Link href={`/projects/${p.slug}`} className="group flex flex-col">
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted/30">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-muted/30 transition-all duration-300 group-hover:border-accent/45 group-hover:shadow-[0_18px_44px_-18px_rgb(var(--bg-teal)/0.5)]">
                     <Image
                       src={p.thumb}
                       alt={p.title}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                     />
-                    <span className="absolute top-2.5 left-2.5 rounded-full bg-background/85 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-wider text-foreground backdrop-blur-sm">
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgb(var(--bg-teal) / 0.28), transparent 55%)",
+                      }}
+                    />
+                    <span className="absolute top-2.5 left-2.5 rounded-full border border-border/60 bg-background/85 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-wider text-foreground backdrop-blur-sm">
                       {p.category}
                     </span>
                   </div>
-                  <p className="mt-2.5 line-clamp-2 text-[12.5px] leading-snug text-foreground transition-colors group-hover:text-foreground">
+                  <p className="mt-2.5 line-clamp-2 text-[12.5px] leading-snug text-foreground transition-colors group-hover:text-accent">
                     {p.title}
                   </p>
                 </Link>

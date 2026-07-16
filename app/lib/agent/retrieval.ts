@@ -14,7 +14,7 @@ export type ScoredPost = { post: BlogPost; score: number };
 const STOPWORDS = new Set([
   "a", "an", "and", "are", "as", "at", "be", "by", "do", "for", "from",
   "has", "have", "he", "him", "his", "how", "i", "in", "is", "it", "me",
-  "my", "of", "on", "or", "saran", "show", "the", "to", "what", "where",
+  "my", "of", "on", "or", "sameer", "show", "the", "to", "what", "where",
   "who", "why", "with", "you", "your", "tell", "about", "any", "some",
   "all", "this", "that", "those", "these", "can", "could", "would", "do",
   "does", "did", "will", "shall", "should", "may", "might", "us", "we",
@@ -116,14 +116,14 @@ export function classifyIntent(query: string): Intent {
 
 const INTENT_HINT: Record<Intent, string> = {
   projects:
-    "The visitor is asking about Saran's work. Cite specific projects from the expanded section when relevant.",
-  blog: "The visitor is asking about Saran's writing. Cite specific posts from the expanded section when relevant.",
+    "The visitor is asking about Sameer's work. Cite specific projects from the expanded section when relevant.",
+  blog: "The visitor is asking about Sameer's writing. Cite specific posts from the expanded section when relevant.",
   contact:
-    "The visitor wants to reach Saran. Offer the email tool early — collect name, email, and message, summarize, then call sendEmailToSaran on confirmation.",
+    "The visitor wants to reach Sameer. Offer the email tool early — collect name, email, and message, summarize, then call sendEmailToSaran on confirmation.",
   about:
-    "The visitor wants to know about Saran himself. Use the Knowledge section. Keep it human and short.",
+    "The visitor wants to know about Sameer himself. Use the Knowledge section. Keep it human and short.",
   other:
-    "The intent is unclear. Briefly reorient the visitor to what you can help with (work, writing, contacting Saran).",
+    "The intent is unclear. Briefly reorient the visitor to what you can help with (work, writing, contacting Sameer).",
 };
 
 export function describeIntent(intent: Intent): string {

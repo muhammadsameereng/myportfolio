@@ -22,23 +22,23 @@ export function JsonLd({ data }: { data: JsonValue }) {
   );
 }
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
 
 /** Person schema — used on the home + about pages. */
 export const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Saran Zafar",
+  name: "Muhammad Sameer",
   url: SITE,
   jobTitle: "Software Engineer",
   description:
-    "Full-stack engineer from Kashmir building calm software for noisy work.",
-  image: `${SITE}/img/saranzafar-image.png`,
+    "Full-stack engineer from Azad Kashmir building React/Next.js frontends, NestJS APIs, and React Native apps.",
+  image: `${SITE}/img/msameer-image.png`,
   sameAs: [
-    "https://github.com/saranzafar",
-    "https://www.linkedin.com/in/saranzafar",
-    "https://www.instagram.com/saran.devvv/",
-    "https://gitlab.com/saranzafar",
+    "https://github.com/muhammadsameereng",
+    "https://www.linkedin.com/in/muhammad-sameer",
+    "https://www.instagram.com/m.sameer.dev/",
+    "https://gitlab.com/sameerorg-group/sameerorg-project/",
   ],
   address: {
     "@type": "PostalAddress",
@@ -52,9 +52,9 @@ export const personSchema = {
 export const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Saran Zafar",
+  name: "Muhammad Sameer",
   url: SITE,
-  author: { "@type": "Person", name: "Saran Zafar" },
+  author: { "@type": "Person", name: "Muhammad Sameer" },
 };
 
 export function articleSchema(post: {
@@ -73,8 +73,8 @@ export function articleSchema(post: {
     image: post.thumb,
     datePublished: post.isoDate,
     dateModified: post.isoDate,
-    author: { "@type": "Person", name: "Saran Zafar", url: SITE },
-    publisher: { "@type": "Person", name: "Saran Zafar" },
+    author: { "@type": "Person", name: "Muhammad Sameer", url: SITE },
+    publisher: { "@type": "Person", name: "Muhammad Sameer" },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${SITE}/blog/${post.slug}`,
@@ -99,7 +99,7 @@ export function projectSchema(project: {
     description: project.description,
     image: project.thumb,
     url: `${SITE}/projects/${project.slug}`,
-    creator: { "@type": "Person", name: "Saran Zafar", url: SITE },
+    creator: { "@type": "Person", name: "Muhammad Sameer", url: SITE },
     datePublished: `${project.year}-01-01`,
     keywords: [project.category, ...project.tags].join(", "),
   };

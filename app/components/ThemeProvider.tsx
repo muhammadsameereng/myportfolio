@@ -68,8 +68,8 @@ function setThemeExternal(theme: Theme) {
  * all change while the overlay covers everything.
  */
 function crossfadeTransition(nextTheme: Theme) {
-  // Determine the target background color
-  const targetBg = nextTheme === "dark" ? "#09090b" : "#fafafa";
+  // Target background — matches the real --background tokens in globals.css.
+  const targetBg = nextTheme === "dark" ? "#071413" : "#f6faf9";
 
   // Create overlay
   const overlay = document.createElement("div");

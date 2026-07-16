@@ -45,7 +45,7 @@ function GitlabIcon({ size = 14 }: { size?: number }) {
 }
 import SectionHead from "./SectionHead";
 
-const EMAIL = "saran.development@gmail.com";
+const EMAIL = "msameerdevelops@gmail.com";
 
 function GithubIcon({ size = 14 }: { size?: number }) {
   return (
@@ -70,10 +70,13 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] as const },
 });
 
+const TOPICS = ["New project", "Job / role", "Collaboration", "Just saying hi"];
+
 export default function ContactPageContent() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [topic, setTopic] = useState("");
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -140,7 +143,7 @@ export default function ContactPageContent() {
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
-          message: message.trim(),
+          message: topic ? `[${topic}] ${message.trim()}` : message.trim(),
           turnstileToken: turnstileToken || undefined,
         }),
       });
@@ -292,7 +295,7 @@ export default function ContactPageContent() {
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <a
-                  href="https://github.com/saranzafar"
+                  href="https://github.com/muhammadsameereng"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
@@ -301,7 +304,7 @@ export default function ContactPageContent() {
                   GitHub
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/saranzafar"
+                  href="https://www.linkedin.com/in/muhammad-sameer"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
@@ -310,7 +313,7 @@ export default function ContactPageContent() {
                   LinkedIn
                 </a>
                 <a
-                  href="https://www.instagram.com/saran.devvv/"
+                  href="https://www.instagram.com/m.sameer.dev/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
@@ -319,7 +322,7 @@ export default function ContactPageContent() {
                   Instagram
                 </a>
                 <a
-                  href="https://gitlab.com/saranzafar"
+                  href="https://gitlab.com/sameerorg-group/sameerorg-project/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3.5 text-[12.5px] font-medium text-foreground transition-colors hover:border-foreground/40 hover:bg-card"
@@ -352,7 +355,35 @@ export default function ContactPageContent() {
                   Tell me what you&apos;re building and how I can help.
                 </p>
 
-                <div className="mt-6 space-y-4">
+                {/* Topic quick-select — prepended to the message so I can
+                    triage the note at a glance. */}
+                <div className="mt-6">
+                  <p className="block text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    What&apos;s this about?
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap gap-2">
+                    {TOPICS.map((t) => {
+                      const active = topic === t;
+                      return (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setTopic(active ? "" : t)}
+                          aria-pressed={active}
+                          className={`rounded-full border px-3 py-1.5 text-[12.5px] font-medium transition-colors ${
+                            active
+                              ? "border-accent/50 bg-accent/10 text-accent"
+                              : "border-border bg-background text-muted-foreground hover:border-foreground/30 hover:text-foreground"
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-4">
                   {/* Name */}
                   <div>
                     <label
@@ -367,7 +398,7 @@ export default function ContactPageContent() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       autoComplete="name"
-                      className="mt-2 h-11 w-full appearance-none rounded-xl border border-border bg-background px-3.5 font-sans text-[14px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-blue-400/70 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] focus-visible:outline-none"
+                      className="mt-2 h-11 w-full appearance-none rounded-xl border border-border bg-background px-3.5 font-sans text-[14px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-accent/70 focus:shadow-[0_0_0_3px_rgba(14,116,144,0.15)] focus-visible:outline-none"
                       placeholder="What should I call you?"
                     />
                   </div>
@@ -387,7 +418,7 @@ export default function ContactPageContent() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoComplete="email"
-                      className="mt-2 h-11 w-full appearance-none rounded-xl border border-border bg-background px-3.5 font-sans text-[14px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-blue-400/70 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] focus-visible:outline-none"
+                      className="mt-2 h-11 w-full appearance-none rounded-xl border border-border bg-background px-3.5 font-sans text-[14px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-accent/70 focus:shadow-[0_0_0_3px_rgba(14,116,144,0.15)] focus-visible:outline-none"
                       placeholder="you@example.com"
                     />
                   </div>
@@ -406,9 +437,14 @@ export default function ContactPageContent() {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       rows={6}
-                      className="mt-2 w-full resize-none appearance-none rounded-xl border border-border bg-background px-3.5 py-3 font-sans text-[14px] leading-[1.6] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-blue-400/70 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] focus-visible:outline-none"
+                      className="mt-2 w-full resize-none appearance-none rounded-xl border border-border bg-background px-3.5 py-3 font-sans text-[14px] leading-[1.6] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-accent/70 focus:shadow-[0_0_0_3px_rgba(14,116,144,0.15)] focus-visible:outline-none"
                       placeholder="A short note about the project, the timeline, and what success looks like."
                     />
+                    <p className="mt-1.5 text-right text-[11px] text-muted-foreground/70">
+                      {message.trim().length < 12
+                        ? "A sentence or two helps me reply well."
+                        : `${message.trim().length} characters`}
+                    </p>
                   </div>
                 </div>
 
@@ -483,8 +519,8 @@ export default function ContactPageContent() {
                   Message on its way.
                 </h3>
                 <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
-                  Saran is reading this on his phone, in Kashmir, probably with
-                  chai. Expect a reply within 24 hours.
+                  Sameer is reading this on his phone, in Azad Kashmir, probably
+                  with chai. Expect a reply within 24 hours.
                 </p>
                 <button
                   type="button"

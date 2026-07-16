@@ -80,7 +80,7 @@ export default function ConfirmEmailPill({
     return (
       <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-[12px] font-medium text-emerald-700 dark:text-emerald-400">
         <Check size={13} strokeWidth={2.4} />
-        Sent — Saran replies within 24h.
+        Sent — Sameer replies within 24h.
       </div>
     );
   }
@@ -110,7 +110,7 @@ export default function ConfirmEmailPill({
         <div className="space-y-1 text-[13px] leading-relaxed">
           <p className="truncate">
             <span className="text-muted-foreground">To </span>
-            <span className="font-medium text-foreground">Saran</span>
+            <span className="font-medium text-foreground">Sameer</span>
             <span className="text-muted-foreground"> · from </span>
             <span className="font-medium text-foreground">{draft.name}</span>
             <span className="text-muted-foreground"> · </span>
@@ -140,7 +140,7 @@ export default function ConfirmEmailPill({
             label="Message"
             value={draft.message}
             onChange={(v) => setDraft({ ...draft, message: v })}
-            placeholder="Anything you want Saran to know."
+            placeholder="Anything you want Sameer to know."
           />
         </div>
       )}
@@ -224,7 +224,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="mt-1 h-9 w-full appearance-none rounded-xl border border-border bg-background px-3 font-sans text-[13px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-blue-400/70 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] focus-visible:outline-none"
+        className="mt-1 h-9 w-full appearance-none rounded-xl border border-border bg-background px-3 font-sans text-[13px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-accent/70 focus:shadow-[0_0_0_3px_rgba(14,116,144,0.15)] focus-visible:outline-none"
       />
     </label>
   );
@@ -251,7 +251,7 @@ function FieldArea({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={3}
-        className="mt-1 w-full resize-none appearance-none rounded-xl border border-border bg-background px-3 py-2 font-sans text-[13px] leading-relaxed text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-blue-400/70 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] focus-visible:outline-none"
+        className="mt-1 w-full resize-none appearance-none rounded-xl border border-border bg-background px-3 py-2 font-sans text-[13px] leading-relaxed text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-accent/70 focus:shadow-[0_0_0_3px_rgba(14,116,144,0.15)] focus-visible:outline-none"
       />
     </label>
   );

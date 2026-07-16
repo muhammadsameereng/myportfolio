@@ -8,55 +8,56 @@ type Testimonial = {
   quote: string;
 };
 
-// Quotes from saranzafar.com — gently expanded with natural context.
+// TODO(sameer): PLACEHOLDER testimonials inherited from the template.
+// Replace every entry below with your own real client quotes + names.
 const testimonials: Testimonial[] = [
   {
     name: "Dr. Imran Kiani",
     role: "Skin Specialist",
     quote:
-      "Saran developed a desktop system that completely streamlined our clinic operations — from patient records and appointments to prescriptions and billing, all running smoothly even when our internet drops out. His technical understanding and attention to real-world clinical workflows made a noticeable difference for us. The team picked it up almost immediately, and the offline-first design has saved us countless hours of manual reconciliation. He's responsive whenever we need adjustments and treats our work like his own.",
+      "Sameer developed a desktop system that completely streamlined our clinic operations — from patient records and appointments to prescriptions and billing, all running smoothly even when our internet drops out. His technical understanding and attention to real-world clinical workflows made a noticeable difference for us. The team picked it up almost immediately, and the offline-first design has saved us countless hours of manual reconciliation. He's responsive whenever we need adjustments and treats our work like his own.",
   },
   {
     name: "Ayaz Naseeb",
     role: "Software Engineer",
     quote:
-      "Saran delivered a high-quality WordPress website that looks great and works flawlessly. He's professional, responsive, and truly cares about his work. Highly recommended.",
+      "Sameer delivered a high-quality WordPress website that looks great and works flawlessly. He's professional, responsive, and truly cares about his work. Highly recommended.",
   },
   {
     name: "Azkaar",
     role: "CEO at NetzingTechnologies",
     quote:
-      "Working with Saran on our Android application was a great experience from start to finish. He delivered a stable, well-structured app and handled complex requirements with clarity and professionalism. What stood out the most was his ability to take ambiguous problems, ask the right questions, and turn them into clean, reliable solutions. He communicated proactively, hit every milestone, and the codebase he handed over was easy for our team to extend. Genuinely one of the most dependable engineers I've worked with.",
+      "Working with Sameer on our Android application was a great experience from start to finish. He delivered a stable, well-structured app and handled complex requirements with clarity and professionalism. What stood out the most was his ability to take ambiguous problems, ask the right questions, and turn them into clean, reliable solutions. He communicated proactively, hit every milestone, and the codebase he handed over was easy for our team to extend. Genuinely one of the most dependable engineers I've worked with.",
   },
   {
     name: "Usman Arif",
     role: "Full Stack Developer",
     quote:
-      "Saran built my portfolio with a clear understanding of structure, performance, and presentation. The final result was clean, professional, and aligned perfectly with my personal brand. He listens carefully and pushes back thoughtfully when something can be done better.",
+      "Sameer built my portfolio with a clear understanding of structure, performance, and presentation. The final result was clean, professional, and aligned perfectly with my personal brand. He listens carefully and pushes back thoughtfully when something can be done better.",
   },
   {
     name: "Khawar Mehfooz",
     role: "Software Engineer",
     quote:
-      "Saran guided me through hosting selection and setup with complete clarity. His recommendation helped me save costs while getting a reliable and secure hosting solution — exactly the kind of practical advice I was looking for.",
+      "Sameer guided me through hosting selection and setup with complete clarity. His recommendation helped me save costs while getting a reliable and secure hosting solution — exactly the kind of practical advice I was looking for.",
   },
   {
     name: "Abdul Wahab",
     role: "Software Engineer",
     quote:
-      "Saran delivered a high-quality website that looks great and works flawlessly. Professional, responsive, and detail-oriented throughout. Highly recommended.",
+      "Sameer delivered a high-quality website that looks great and works flawlessly. Professional, responsive, and detail-oriented throughout. Highly recommended.",
   },
   {
     name: "M Ifraheem",
     role: "Software Engineer",
     quote:
-      "Saran is someone you can rely on for building a solid website. He understood our needs quickly and delivered a fast, clean, and well-organized solution that we've been able to maintain easily ever since.",
+      "Sameer is someone you can rely on for building a solid website. He understood our needs quickly and delivered a fast, clean, and well-organized solution that we've been able to maintain easily ever since.",
   },
   {
     name: "M Sameer",
     role: "Software Engineer",
     quote:
-      "Saran has been a real mentor to me during my own projects. Whenever I get stuck on architecture decisions or implementation details, he takes the time to walk through the trade-offs clearly and points me in the right direction. His guidance has saved me weeks of trial and error, and he explains things in a way that actually sticks. I owe a good chunk of my growth as a developer to the conversations I've had with him.",
+      "Sameer has been a real mentor to me during my own projects. Whenever I get stuck on architecture decisions or implementation details, he takes the time to walk through the trade-offs clearly and points me in the right direction. His guidance has saved me weeks of trial and error, and he explains things in a way that actually sticks. I owe a good chunk of my growth as a developer to the conversations I've had with him.",
   },
 ];
 

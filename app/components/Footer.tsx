@@ -1,7 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { SOCIALS } from "./socials";
+
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Projects", href: "/projects" },
+  { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+];
 
 export default function Footer() {
   return (
@@ -16,18 +25,18 @@ export default function Footer() {
       <div
         aria-hidden="true"
         className="h-px w-full"
-        style={{ background: "linear-gradient(to right, transparent, #3b82f6 30%, #7c3aed 70%, transparent)" }}
+        style={{ background: "linear-gradient(to right, transparent, #0e7490 30%, #d98a3d 70%, transparent)" }}
       />
 
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-6 sm:flex-row">
         {/* Left — logo + copyright */}
         <div className="flex flex-wrap items-center gap-3 text-[12.5px] text-muted-foreground">
           <span className="flex items-center gap-1.5 font-semibold">
-            <span aria-hidden="true" className="text-blue-500">✦</span>
+            <span aria-hidden="true" className="text-accent">✦</span>
             <span
-              style={{ background: "linear-gradient(135deg, #3b82f6, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
+              style={{ background: "linear-gradient(135deg, #0e7490, #d98a3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
             >
-              saranzafar
+              msameer
             </span>
           </span>
           {/* `new Date()` is a moving value evaluated on BOTH the server (UTC,
@@ -37,7 +46,7 @@ export default function Footer() {
               React's documented fix for unavoidably time-dependent text — the
               server-rendered year is kept and never patched. */}
           <span suppressHydrationWarning>
-            © {new Date().getFullYear()} Saran Zafar. All rights reserved.
+            © {new Date().getFullYear()} Muhammad Sameer. All rights reserved.
           </span>
         </div>
 
@@ -58,15 +67,28 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom strip */}
+      {/* Bottom strip — quick nav + tagline */}
       <div className="border-t border-border/40">
-        <p className="mx-auto max-w-5xl px-6 py-4 text-center text-[12px] text-muted-foreground">
-          Made with{" "}
-          <span aria-label="love" role="img" className="text-rose-500">
-            ❤️
-          </span>{" "}
-          in Azad Kashmir, Pakistan
-        </p>
+        <div className="mx-auto max-w-5xl px-6 py-5">
+          <nav className="mb-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            {NAV_LINKS.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="text-[12.5px] text-muted-foreground transition-colors hover:text-accent"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+          <p className="text-center text-[12px] text-muted-foreground">
+            Made with{" "}
+            <span aria-label="love" role="img" className="text-rose-500">
+              ❤️
+            </span>{" "}
+            in Azad Kashmir, Pakistan
+          </p>
+        </div>
       </div>
     </motion.footer>
   );

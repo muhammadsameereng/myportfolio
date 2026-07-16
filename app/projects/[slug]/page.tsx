@@ -8,7 +8,7 @@ import {
   getStaticProjectSlugs,
 } from "../../lib/public/projects";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
 
 type Params = Promise<{ slug: string }>;
 
@@ -31,9 +31,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = await getPublicProjectBySlug(slug);
-  if (!project) return { title: "Project not found — Saran Zafar" };
+  if (!project) return { title: "Project not found — Muhammad Sameer" };
   return {
-    title: `${project.title} — Saran Zafar`,
+    title: `${project.title} — Muhammad Sameer`,
     description: project.description,
     openGraph: {
       title: project.title,

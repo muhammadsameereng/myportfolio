@@ -63,7 +63,7 @@ export default function NotFound() {
         {/* Soft gradient backdrop — subtle, no FOUC, no JS */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(60rem_30rem_at_50%_-10%,rgba(59,130,246,0.10),transparent_60%)]"
+          className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(60rem_30rem_at_50%_-10%,rgba(14,116,144,0.10),transparent_60%)]"
         />
 
         <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-20 text-center md:py-28">

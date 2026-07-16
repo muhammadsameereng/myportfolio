@@ -8,7 +8,7 @@ import {
   getStaticPostSlugs,
 } from "../../lib/public/blog";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
 
 type Params = Promise<{ slug: string }>;
 
@@ -30,9 +30,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPublicPostBySlug(slug);
-  if (!post) return { title: "Post not found — Saran Zafar" };
+  if (!post) return { title: "Post not found — Muhammad Sameer" };
   return {
-    title: `${post.title} — Saran Zafar`,
+    title: `${post.title} — Muhammad Sameer`,
     description: post.excerpt,
     openGraph: {
       title: post.title,

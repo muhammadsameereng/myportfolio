@@ -32,41 +32,66 @@ type Role = {
 const experience: Role[] = [
   {
     title: "Software Engineer",
-    company: "Voltekit",
-    period: "2026 — Present",
-    workType: "Remote",
-    location: "Remote",
+    company: "Doonkhav Pvt Ltd",
+    period: "Jul 2025 — Present",
+    workType: "On-site",
+    location: "Kotli, AJK",
     summary:
-      "Working in a hybrid software-engineer and full-stack developer role. Day to day means owning features end-to-end — shaping the data model, writing the backend, building the interface, and shipping the result to production. The focus is on scalable architecture, reliable APIs and clean, fast frontends, with TypeScript running through the whole stack.",
+      "Build frontend, backend, and mobile features across three concurrent production SaaS platforms — education, social commerce, and delivery/e-commerce. Ship React / Next.js interfaces and role-based dashboards wired to NestJS REST APIs and PostgreSQL, develop cross-platform mobile screens in React Native and Flutter, and contribute to API design, schema changes, and Docker deployments to AWS EC2.",
     isCurrent: true,
   },
   {
-    title: "Full Stack Software Engineer",
+    title: "MERN Stack Developer",
     company: "Logicexer Pvt Ltd",
-    period: "Aug 2024 — 2026",
+    period: "Jun 2024 — Jun 2025",
     workType: "On-site",
-    location: "AJK, Pakistan",
+    location: "Kotli, AJK",
     summary:
-      "Promoted from intern into a full-stack role that touched almost everything the team shipped — backend services and APIs, web applications, offline-capable desktop systems, content and marketing sites, and the deployment pipelines underneath all of it. The breadth meant moving comfortably between architecture decisions, day-to-day feature work and the quiet fixes that keep production calm.",
+      "Built full-stack features on the MERN stack for internal tools and client-facing products — designing REST APIs and MongoDB data models that powered core functionality. Led a partial migration to NestJS and PostgreSQL, gaining production experience across both stacks, and took part in sprint planning, code review, and release cycles.",
   },
   {
-    title: "Software Engineering Intern",
+    title: "Frontend & React Native Developer",
     company: "Logicexer Pvt Ltd",
-    period: "Jul 2024 — Aug 2024",
+    period: "Jun 2023 — May 2024",
     workType: "On-site",
-    location: "AJK, Pakistan",
+    location: "Kotli, AJK",
     summary:
-      "First step into shipping production code. Built features that real users would touch, fixed real bugs from real issue trackers, and learned how a working engineering team moves a product forward week to week.",
+      "Built responsive React interfaces and cross-platform React Native (Expo) screens for company products. Implemented reusable UI components, navigation, and state management across web and mobile, and integrated backend REST APIs into both clients.",
+  },
+  {
+    title: "Frontend Developer — Intern",
+    company: "Logicexer Pvt Ltd",
+    period: "Feb 2023 — May 2023",
+    workType: "On-site",
+    location: "Kotli, AJK",
+    summary:
+      "First step into shipping production code. Fixed frontend bugs and built small React UI components on a live production codebase, and learned Git workflow, code review, and agile sprint practices within a real engineering team.",
   },
 ];
 
 type Stat = { label: string; value: string; icon: LucideIcon };
 
 const stats: Stat[] = [
-  { label: "Years building", value: "02+", icon: CalendarClock },
-  { label: "Live websites", value: "17+", icon: Globe },
-  { label: "Countries served", value: "05+", icon: Compass },
+  { label: "Years building", value: "03+", icon: CalendarClock },
+  { label: "Products shipped", value: "08+", icon: Globe },
+  { label: "SaaS platforms", value: "03+", icon: Compass },
   { label: "Cups of chai", value: "∞", icon: Coffee },
+];
+
+const STACK = [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "Node.js",
+  "NestJS",
+  "React Native",
+  "Flutter",
+  "PostgreSQL",
+  "MongoDB",
+  "Redis",
+  "CouchDB / PouchDB",
+  "Docker",
+  "AWS",
 ];
 
 const fadeUp = (delay = 0) => ({
@@ -83,109 +108,135 @@ function PinIcon({ className }: { className?: string }) {
 export default function AboutPageContent() {
   return (
     <>
-      {/* ── Hero / intro ─────────────────────────────────────────── */}
+      {/* ── Hero — big framed portrait + identity ──────────────────── */}
       <section className="relative">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 pt-12 pb-6 md:grid-cols-[auto_1fr] md:gap-12 md:pt-16 md:pb-8">
-          {/* Profile chip — same composition as the home hero */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
-            className="relative inline-block h-[150px] w-[160px]"
-          >
-            <div className="absolute bottom-0 left-0 right-0 h-[105px] rounded-2xl border border-foreground/20 bg-zinc-100 dark:bg-zinc-800" />
-            <Image
-              src="/img/saranzafar-image.png"
-              alt="Saran Zafar"
-              // True intrinsic dimensions of the source PNG (300×291).
-              width={300}
-              height={291}
-              priority
-              fetchPriority="high"
-              sizes="160px"
-              style={{ height: "150px", width: "auto" }}
-              className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 select-none"
-            />
-          </motion.div>
-
-          {/* Identity */}
-          <div>
-            <motion.p
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.05 }}
-              className="text-[12.5px] uppercase tracking-[0.22em] text-muted-foreground"
+        <div className="mx-auto max-w-5xl px-6 pt-10 pb-6 md:pt-14 md:pb-8">
+          <div className="grid gap-9 md:grid-cols-[0.82fr_1.18fr] md:items-center md:gap-12">
+            {/* Portrait */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="relative order-1 mx-auto w-full max-w-[260px] sm:max-w-[300px] md:max-w-none"
             >
-              About me
-            </motion.p>
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-5 -z-10 rounded-[2.25rem] opacity-70 blur-2xl"
+                style={{
+                  background:
+                    "radial-gradient(60% 55% at 30% 20%, rgba(14,116,144,0.38), transparent 70%), radial-gradient(55% 55% at 82% 88%, rgba(217,138,61,0.32), transparent 70%)",
+                }}
+              />
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-[0_30px_70px_-30px_rgba(0,0,0,0.4)]">
+                <Image
+                  src="/img/msameer-image.png"
+                  alt="Muhammad Sameer — Full-Stack Software Engineer"
+                  fill
+                  priority
+                  fetchPriority="high"
+                  sizes="(max-width: 768px) 300px, 380px"
+                  className="select-none object-cover object-top"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/35 to-transparent"
+                />
+                {/* Location chip pinned to the frame */}
+                <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+                  <MapPin size={11} strokeWidth={1.8} />
+                  Kotli, Azad Kashmir
+                </div>
+              </div>
+            </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.1, ease: "easeOut" }}
-              className="mt-3 text-[36px] font-bold leading-[1.05] tracking-tight text-foreground sm:text-[48px]"
-            >
-              Saran Zafar.
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.18 }}
-              className="mt-3 max-w-[520px] text-[15.5px] font-semibold leading-snug text-foreground"
-            >
-              Software engineer from AJK, Pakistan — full-stack across
-              backend and frontend, with 2+ years shipping production
-              systems.
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-              className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[12.5px] text-muted-foreground"
-            >
-              <span className="inline-flex items-center gap-1.5">
-                <PinIcon /> AJK, Pakistan
-              </span>
-              <span className="h-3 w-px bg-border" />
-              <span className="inline-flex items-center gap-1.5">
+            {/* Identity */}
+            <div className="order-2">
+              <motion.p
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.05 }}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur-sm"
+              >
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 </span>
-                Ready to work
-              </span>
-            </motion.p>
+                Available for work
+              </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.32 }}
-              className="mt-6 flex flex-wrap items-center gap-2.5"
-            >
-              <a
-                href="/saranzafar-cv.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full bg-foreground px-5 text-[13px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95"
+              <motion.h1
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.1, ease: "easeOut" }}
+                className="mt-4 text-[38px] font-bold leading-[1.03] tracking-tight text-foreground sm:text-[52px]"
               >
-                <Eye size={14} strokeWidth={1.9} />
-                View resume
-              </a>
-              <a
-                href="/saranzafar-cv.pdf"
-                download="Saran-Zafar-Resume.pdf"
-                className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-5 text-[13px] font-medium text-foreground transition-colors duration-200 hover:border-foreground/50 hover:bg-card"
+                Muhammad{" "}
+                <span className="bg-gradient-to-r from-accent to-accent-warm bg-clip-text text-transparent">
+                  Sameer
+                </span>
+                .
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.18 }}
+                className="mt-4 max-w-[540px] text-[15.5px] leading-[1.7] text-muted-foreground"
               >
-                <Download
-                  size={14}
-                  strokeWidth={1.9}
-                  className="transition-transform duration-200 group-hover:translate-y-0.5"
-                />
-                Download
-              </a>
-            </motion.div>
+                Software engineer from Kotli, Azad Kashmir — full-stack across
+                React / Next.js, NestJS, and React Native, with{" "}
+                <span className="font-semibold text-foreground">
+                  3+ years
+                </span>{" "}
+                shipping production web and mobile products.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.26 }}
+                className="mt-6 flex flex-wrap items-center gap-2.5"
+              >
+                <a
+                  href="/msameer-cv.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full bg-foreground px-5 text-[13px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95"
+                >
+                  <Eye size={14} strokeWidth={1.9} />
+                  View resume
+                </a>
+                <a
+                  href="/msameer-cv.pdf"
+                  download="Muhammad-Sameer-Resume.pdf"
+                  className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-5 text-[13px] font-medium text-foreground transition-colors duration-200 hover:border-accent/50 hover:bg-card"
+                >
+                  <Download
+                    size={14}
+                    strokeWidth={1.9}
+                    className="transition-transform duration-200 group-hover:translate-y-0.5"
+                  />
+                  Download
+                </a>
+              </motion.div>
+
+              {/* Core stack pills */}
+              <motion.ul
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.34 }}
+                className="mt-7 flex flex-wrap gap-2"
+              >
+                {STACK.map((s) => (
+                  <li
+                    key={s}
+                    className="rounded-full border border-border bg-card/60 px-2.5 py-1 text-[12px] text-muted-foreground"
+                  >
+                    {s}
+                  </li>
+                ))}
+              </motion.ul>
+            </div>
           </div>
         </div>
       </section>
@@ -198,8 +249,7 @@ export default function AboutPageContent() {
             description="Where I'm from, what I work on, and the path that got me here."
           />
 
-          {/* Stats strip — sits high so the headline numbers anchor the
-              section before the long-form copy starts. */}
+          {/* Stats — accent-lit cards */}
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {stats.map((s, i) => {
               const Icon = s.icon;
@@ -207,18 +257,18 @@ export default function AboutPageContent() {
                 <motion.div
                   key={s.label}
                   {...fadeUp(0.04 * i)}
-                  whileHover={{ y: -3 }}
-                  className="group rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/30"
+                  whileHover={{ y: -4 }}
+                  className="group rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:border-accent/40 hover:shadow-[0_18px_44px_-20px_rgb(var(--bg-teal)/0.5)]"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/[0.05] text-foreground/75 transition-colors group-hover:bg-foreground/[0.08] group-hover:text-foreground">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent/15">
                       <Icon size={15} strokeWidth={1.8} />
                     </span>
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                       {s.label}
                     </p>
                   </div>
-                  <p className="mt-4 text-[28px] font-semibold leading-none tracking-tight tabular-nums text-foreground sm:text-[30px]">
+                  <p className="mt-4 bg-gradient-to-br from-accent to-accent-warm bg-clip-text text-[30px] font-bold leading-none tracking-tight tabular-nums text-transparent sm:text-[32px]">
                     {s.value}
                   </p>
                 </motion.div>
@@ -226,46 +276,61 @@ export default function AboutPageContent() {
             })}
           </div>
 
+          {/* Story prose */}
           <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
             <motion.div {...fadeUp(0)} className="space-y-5 text-[15.5px] leading-[1.75] text-foreground/85">
               <p>
-                I&apos;m Saran — a software engineer from AJK, Pakistan.
-                I build full-stack production systems across a
-                handful of industries — education, retail, healthcare,
-                logistics and e-commerce — from multi-tenant SaaS platforms
-                to marketing sites that have to load fast on a thin
-                connection.
+                I&apos;m Sameer — a software engineer from Kotli, Azad
+                Kashmir. I build full-stack production systems across a
+                handful of domains — education / LMS, social commerce, and
+                delivery / e-commerce — from multi-tenant SaaS platforms to
+                the mobile apps that sit on top of them.
               </p>
               <p>
                 My core stack is{" "}
-                <span className="font-medium text-foreground">NestJS</span>{" "}
-                for backend APIs and{" "}
                 <span className="font-medium text-foreground">Next.js + React</span>{" "}
-                for the web, with{" "}
-                <span className="font-medium text-foreground">WordPress / WooCommerce</span>{" "}
-                whenever a client needs to ship and edit a site themselves.
-                TypeScript end-to-end, Docker on AWS, and a strong bias
-                for whatever the problem actually needs — not whatever&apos;s
+                on the frontend and{" "}
+                <span className="font-medium text-foreground">Node.js / NestJS</span>{" "}
+                for APIs, with{" "}
+                <span className="font-medium text-foreground">React Native &amp; Flutter</span>{" "}
+                whenever a product needs to reach mobile. TypeScript
+                end-to-end, Docker on AWS EC2, and a strong bias for
+                whatever the problem actually needs — not whatever&apos;s
                 trendy.
+              </p>
+              <p className="text-muted-foreground">
+                Currently a Software Engineer at Doonkhav, building across
+                three concurrent SaaS platforms. Previously at Logicexer —
+                from frontend intern to MERN and NestJS developer. BSc
+                Software Engineering from the University of Kotli.
               </p>
             </motion.div>
 
-            <motion.div {...fadeUp(0.05)} className="space-y-5 text-[15.5px] leading-[1.75] text-foreground/85">
-              <p>
-                The valley shaped how I build. The internet here is good
-                most days, and gone for stretches that nobody can predict.
-                So offline-first isn&apos;t a buzzword to me — it&apos;s a
-                rule. The Electron + CouchDB/PouchDB systems I&apos;ve
-                shipped have run for months in clinics and shops without a
-                single lost write.
+            {/* Philosophy callout — accent-tinted highlight */}
+            <motion.div
+              {...fadeUp(0.05)}
+              className="relative overflow-hidden rounded-2xl border border-accent/25 p-6 sm:p-7"
+              style={{ background: "rgb(var(--bg-teal) / 0.06)" }}
+            >
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full blur-2xl"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgb(var(--bg-teal) / 0.28), transparent 70%)",
+                }}
+              />
+              <p className="relative text-[11px] uppercase tracking-[0.2em] text-accent">
+                Philosophy
               </p>
-              <p className="text-muted-foreground">
-                Currently working as a Software Engineer and Backend
-                Engineer at Voltekit. Previously a Full-Stack Developer at
-                Logicexer, promoted from intern in 2024. BSc Software
-                Engineering from the University of Kotli. Always up to
-                talk about products, teams, and the quiet parts of
-                software.
+              <p className="relative mt-4 text-[17px] font-medium leading-[1.65] text-foreground/90">
+                &ldquo;The valley shaped how I build. Offline-first isn&apos;t
+                a buzzword to me — it&apos;s a rule. The CouchDB / PouchDB
+                sync flows I&apos;ve shipped keep a point-of-sale running
+                through dead zones without losing a single order.&rdquo;
+              </p>
+              <p className="relative mt-5 text-[13px] text-muted-foreground">
+                Offline-first · Graceful degradation · Typed end-to-end
               </p>
             </motion.div>
           </div>
@@ -290,7 +355,7 @@ export default function AboutPageContent() {
         <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
           <SectionHead
             title="On GitHub"
-            description="A live snapshot of the streak, the longest run, and the year so far."
+            description="Most of my work is private — here's the shape of it, and an open door to a code walkthrough."
           />
           <div className="mt-8">
             <GithubActivity />
@@ -298,7 +363,7 @@ export default function AboutPageContent() {
         </div>
       </section>
 
-      {/* ── Experience ─────────────────────────────────────────── */}
+      {/* ── Experience — card timeline ───────────────────────────── */}
       <section className="relative">
         <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
           <SectionHead
@@ -306,47 +371,49 @@ export default function AboutPageContent() {
             description="The places I've shown up. Newest first."
           />
 
-          {/* Timeline */}
-          <div className="relative mt-8 pl-7 sm:pl-9">
-            <span className="absolute top-2 bottom-2 left-[3px] w-px bg-border sm:left-[7px]" />
+          <div className="relative mt-8 space-y-4 sm:pl-8">
+            {/* Rail (desktop) */}
+            <span className="absolute top-3 bottom-3 left-[7px] hidden w-px bg-border sm:block" />
 
-            <div className="space-y-9">
-              {experience.map((role, i) => (
-                <motion.div
-                  key={`${role.title}-${role.company}`}
-                  {...fadeUp(0.05 + 0.05 * i)}
-                  className="relative"
-                >
-                  <span
-                    className={`absolute top-[6px] -left-7 h-[8px] w-[8px] rounded-full sm:-left-9 ${
-                      role.isCurrent
-                        ? "bg-foreground ring-2 ring-background"
-                        : "border border-foreground/45 bg-background"
-                    }`}
-                  />
+            {experience.map((role, i) => (
+              <motion.div
+                key={`${role.title}-${role.company}`}
+                {...fadeUp(0.05 + 0.05 * i)}
+                className="relative"
+              >
+                {/* Dot on the rail */}
+                <span
+                  className={`absolute top-6 -left-[26px] hidden h-[9px] w-[9px] rounded-full sm:block ${
+                    role.isCurrent
+                      ? "bg-accent ring-4 ring-accent/15"
+                      : "border border-foreground/40 bg-background"
+                  }`}
+                />
 
-                  <div className="flex flex-wrap items-baseline gap-x-3">
-                    <h3
-                      className={`text-[17px] font-semibold tracking-tight sm:text-[18px] ${
-                        role.isCurrent ? "text-foreground" : "text-foreground/85"
-                      }`}
-                    >
-                      {role.title}
-                    </h3>
-                    {role.isCurrent && (
-                      <span className="inline-flex h-5 items-center rounded-full bg-foreground px-2 text-[10px] font-medium uppercase tracking-[0.16em] text-background">
-                        Now
-                      </span>
-                    )}
+                <div className="rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:border-accent/40 hover:shadow-[0_18px_44px_-22px_rgb(var(--bg-teal)/0.5)] sm:p-6">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1.5">
+                    <div className="flex flex-wrap items-baseline gap-x-3">
+                      <h3
+                        className={`text-[17px] font-semibold tracking-tight sm:text-[18px] ${
+                          role.isCurrent ? "text-foreground" : "text-foreground/90"
+                        }`}
+                      >
+                        {role.title}
+                      </h3>
+                      {role.isCurrent && (
+                        <span className="inline-flex h-5 items-center rounded-full bg-accent px-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-accent-foreground">
+                          Now
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[12.5px] tabular-nums text-muted-foreground">
+                      {role.period}
+                    </span>
                   </div>
 
-                  <div className="mt-1.5 flex flex-wrap items-center text-[13px] text-muted-foreground">
-                    <span className="text-foreground/85">{role.company}</span>
-                    <span className="mx-2 text-muted-foreground/60">·</span>
-                    <span>{role.period}</span>
-                  </div>
-
-                  <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] uppercase tracking-[0.14em] text-muted-foreground/80">
+                  <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11.5px] uppercase tracking-[0.12em] text-muted-foreground/80">
+                    <span className="font-medium text-accent/90">{role.company}</span>
+                    <span className="h-2.5 w-px bg-border" />
                     <span>{role.workType}</span>
                     <span className="h-2.5 w-px bg-border" />
                     <span className="inline-flex items-center gap-1.5">
@@ -355,26 +422,21 @@ export default function AboutPageContent() {
                     </span>
                   </div>
 
-                  <p className="mt-3 max-w-2xl text-[14.5px] leading-[1.7] text-foreground/85">
+                  <p className="mt-3.5 text-[14.5px] leading-[1.7] text-foreground/85">
                     {role.summary}
                   </p>
-                </motion.div>
-              ))}
-            </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Outside of work + CTA ───────────────────────────────────
-          Two-card bento row. Long form on the left, sharp call to action
-          on the right — same bottom rhythm so the page exits as one
-          confident beat instead of two trailing thoughts. */}
+      {/* ── Outside of work + CTA ─────────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 py-10 md:py-14">
+        <div className="mx-auto max-w-5xl px-6 py-10 md:py-16">
           <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-            {/* Outside of work — paragraph prose, with the key
-                personal touchstones (reading, walks, chai, etc.) bolded
-                so they stand out as a scan-friendly read. */}
+            {/* Outside of work */}
             <motion.div
               {...fadeUp(0)}
               className="flex flex-col rounded-2xl border border-border bg-card p-6 sm:p-8"
@@ -401,9 +463,7 @@ export default function AboutPageContent() {
                 </p>
                 <p>
                   I&apos;m a{" "}
-                  <span className="font-semibold text-foreground">slow learner of new languages</span>,
-                  a stubborn collector of{" "}
-                  <span className="font-semibold text-foreground">half-finished side projects</span>,
+                  <span className="font-semibold text-foreground">stubborn collector of half-finished side projects</span>{" "}
                   and a very loud{" "}
                   <span className="font-semibold text-foreground">cheerleader for self-taught devs</span>{" "}
                   learning to code from a place that doesn&apos;t make it
@@ -412,16 +472,33 @@ export default function AboutPageContent() {
               </div>
             </motion.div>
 
-            {/* CTA */}
+            {/* CTA — aurora-lit */}
             <motion.div
               {...fadeUp(0.05)}
-              className="flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
+              className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-accent/25 bg-card p-6 sm:p-8"
             >
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-2xl"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgb(var(--bg-teal) / 0.28), transparent 70%)",
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full blur-2xl"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgb(var(--bg-amber) / 0.22), transparent 70%)",
+                }}
+              />
+
+              <div className="relative">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-accent">
                   Let&apos;s talk
                 </p>
-                <h2 className="mt-3 text-[22px] font-bold leading-tight tracking-tight text-foreground sm:text-[24px]">
+                <h2 className="mt-3 text-[22px] font-bold leading-tight tracking-tight text-foreground sm:text-[25px]">
                   Got something to build?
                 </h2>
                 <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">
@@ -430,7 +507,7 @@ export default function AboutPageContent() {
                 </p>
               </div>
 
-              <div className="mt-6 flex flex-wrap items-center gap-2.5">
+              <div className="relative mt-6 flex flex-wrap items-center gap-2.5">
                 <Link
                   href="/contact"
                   className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full bg-foreground px-5 text-[13px] font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:opacity-95"
@@ -443,7 +520,7 @@ export default function AboutPageContent() {
                 </Link>
                 <Link
                   href="/projects"
-                  className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-5 text-[13px] font-medium text-foreground transition-colors duration-200 hover:border-foreground/50 hover:bg-card"
+                  className="group inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-5 text-[13px] font-medium text-foreground transition-colors duration-200 hover:border-accent/50 hover:bg-card"
                 >
                   See my work
                   <ArrowUpRight

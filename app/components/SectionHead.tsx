@@ -42,7 +42,7 @@ export default function SectionHead({
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         className="hidden h-px origin-left sm:block"
-        style={{ background: "linear-gradient(to right, #3b82f6, #7c3aed, transparent)" }}
+        style={{ background: "linear-gradient(to right, #0e7490, #d98a3d, transparent)" }}
       />
     </div>
   );

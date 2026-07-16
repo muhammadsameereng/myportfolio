@@ -32,7 +32,7 @@ export type GeminiChunk =
 const sendEmailToolDeclaration = {
   name: "sendEmailToSaran",
   description:
-    "Compose an email to Saran on behalf of the visitor. Only call AFTER the visitor has supplied name, email, message AND explicitly confirmed they want it sent.",
+    "Compose an email to Sameer on behalf of the visitor. Only call AFTER the visitor has supplied name, email, message AND explicitly confirmed they want it sent.",
   parameters: {
     type: "OBJECT",
     properties: {
@@ -43,7 +43,7 @@ const sendEmailToolDeclaration = {
       },
       message: {
         type: "STRING",
-        description: "The message Saran will receive.",
+        description: "The message Sameer will receive.",
       },
     },
     required: ["name", "email", "message"],

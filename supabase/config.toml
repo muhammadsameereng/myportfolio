@@ -4,18 +4,18 @@
 # file. If you only use the hosted dashboard, treat this as documentation —
 # mirror the same values under Auth → URL Configuration and Auth → Email Templates.
 
-project_id = "saranzafar-portfolio"
+project_id = "eslsngtqwirbmegcysor"
 
 [auth]
 # Where Supabase rewrites bare {{ .SiteURL }} references in emails. Production only.
-site_url = "https://saranzafar.com"
+site_url = "https://sameer-khan.vercel.app"
 
 # Every URL the user is allowed to be redirected to after a magic-link click.
 # Both the production confirm route and the local-dev confirm route must be
 # listed here, or Supabase will reject the redirect with "redirect_to not allowed".
 additional_redirect_urls = [
-  "https://saranzafar.com/api/admin/auth/callback",
-  "https://saranzafar.com/api/admin/auth/confirm",
+  "https://sameer-khan.vercel.app/api/admin/auth/callback",
+  "https://sameer-khan.vercel.app/api/admin/auth/confirm",
   "http://localhost:3000/api/admin/auth/callback",
   "http://localhost:3000/api/admin/auth/confirm",
 ]
@@ -27,5 +27,5 @@ double_confirm_changes = true
 enable_confirmations = true
 
 [auth.email.template.magic_link]
-subject = "Your saranzafar.com admin sign-in link"
+subject = "Your sameer-khan.vercel.app admin sign-in link"
 content_path = "./supabase/templates/magic-link.html"

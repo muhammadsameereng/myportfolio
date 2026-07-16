@@ -62,57 +62,57 @@ export default function Navbar() {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ease-out ${
-        scrolled
-          ? "px-3 pt-3 pb-3"
-          : "bg-background border-b border-border/60 shadow-[0_1px_0_0_rgb(0_0_0_/_0.02)]"
-      }`}
+      className="sticky top-0 z-50 w-full px-3 pt-3 pb-1"
     >
       <nav
-        className={`mx-auto flex items-center justify-between transition-all duration-300 ease-out ${
+        className={`mx-auto flex max-w-5xl items-center justify-between gap-3 rounded-full border bg-background/70 px-2.5 py-2 backdrop-blur-xl backdrop-saturate-150 transition-[box-shadow,background-color,border-color] duration-300 ease-out ${
           scrolled
-            ? "max-w-5xl rounded-full border border-border/40 bg-background/65 px-5 py-3 shadow-[0_8px_24px_-14px_rgba(0,0,0,0.12)] backdrop-blur-xl backdrop-saturate-150"
-            : "max-w-5xl px-6 py-5"
+            ? "border-border/60 bg-background/85 shadow-[0_12px_32px_-16px_rgba(0,0,0,0.28)]"
+            : "border-border/40 shadow-[0_6px_20px_-16px_rgba(0,0,0,0.15)]"
         }`}
       >
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-[15px] font-semibold text-foreground"
+          className="group flex items-center gap-2 pl-2 pr-1 text-[15px] font-semibold tracking-tight text-foreground"
         >
-          <span aria-hidden="true">✦</span>
-          <span>saranzafar</span>
+          <span
+            aria-hidden="true"
+            className="text-[17px] leading-none text-accent transition-transform duration-300 group-hover:rotate-90"
+          >
+            ✦
+          </span>
+          <span>msameer</span>
         </Link>
 
-        {/* Desktop nav links */}
-        <div className="hidden items-center gap-8 md:flex">
+        {/* Desktop nav — segmented pill with a sliding active indicator */}
+        <div className="hidden items-center gap-0.5 rounded-full border border-border/50 bg-card/40 p-1 md:flex">
           {navLinks.map((link) => {
             const active = isActive(link.href);
             return (
               <Link
                 key={link.label}
                 href={link.href}
-                className={`relative text-[14px] transition-colors duration-200 ${
+                className={`relative rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors duration-200 ${
                   active
                     ? "text-foreground"
-                    : "text-foreground/70 hover:text-foreground"
+                    : "text-foreground/60 hover:text-foreground"
                 }`}
               >
-                {link.label}
                 {active && (
                   <motion.span
                     layoutId="nav-active"
-                    className="absolute -bottom-1.5 left-0 right-0 h-px"
-                    style={{ background: "linear-gradient(to right, #3b82f6, #7c3aed)" }}
-                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    className="absolute inset-0 rounded-full border border-border/60 bg-background shadow-sm"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 )}
+                <span className="relative z-10">{link.label}</span>
               </Link>
             );
           })}
         </div>
 
-        {/* Right side — theme toggle (always visible) + hamburger (mobile only) */}
+        {/* Right side — theme toggle + desktop CTA + mobile hamburger */}
         <div className="flex items-center gap-2">
           <motion.button
             onClick={toggleTheme}
@@ -140,6 +140,13 @@ export default function Navbar() {
               </motion.span>
             </AnimatePresence>
           </motion.button>
+
+          <Link
+            href="/contact"
+            className="hidden h-9 items-center rounded-full bg-foreground px-4 text-[13px] font-medium text-background transition-all duration-200 hover:scale-[1.03] hover:opacity-90 md:inline-flex"
+          >
+            Let&apos;s talk
+          </Link>
 
           <button
             onClick={() => setMobileOpen((v) => !v)}
@@ -231,7 +238,7 @@ export default function Navbar() {
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
                   className="flex h-10 w-full items-center justify-center rounded-full text-[13px] font-medium text-white transition-opacity hover:opacity-90"
-                  style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
+                  style={{ background: "linear-gradient(135deg, #0e7490, #d98a3d)" }}
                 >
                   Get in touch
                 </Link>

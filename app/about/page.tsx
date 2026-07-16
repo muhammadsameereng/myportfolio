@@ -4,9 +4,9 @@ import AboutPageContent from "../components/AboutPageContent";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "About — Saran Zafar",
+  title: "About — Muhammad Sameer",
   description:
-    "About Saran Zafar — a full-stack engineer from Kashmir building calm, dependable software.",
+    "About Muhammad Sameer — a full-stack engineer from Azad Kashmir building React/Next.js frontends, NestJS APIs, and React Native apps.",
 };
 
 export default function AboutPage() {

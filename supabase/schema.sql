@@ -112,7 +112,7 @@ begin
   email := lower(coalesce(auth.jwt() ->> 'email', ''));
   return email in (
     -- ⬇️  EDIT THIS LIST  ⬇️
-    'saran.development@gmail.com'
+    'msameerdevelops@gmail.com'
   );
 end
 $$ language plpgsql stable security definer;

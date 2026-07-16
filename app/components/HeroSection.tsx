@@ -1,24 +1,16 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Check, Download } from "lucide-react";
 import { useRef, useState } from "react";
 
-// Desktop-only mocks (ProjectsCard + PodcastPlayer). Code-split + skip
-// SSR — they never render on mobile (`hidden md:block`), and on desktop
-// they hydrate after the critical hero text. This keeps ~30 KB of
-// useState/useRef/useEffect + framer-motion springs out of the initial
-// JS bundle that gates LCP.
-const HeroMocks = dynamic(() => import("./HeroMocks"), { ssr: false });
-
 const skills = [
-  "Backend APIs with NestJS, Node.js & TypeScript",
-  "Web apps with Next.js, React & Tailwind CSS",
-  "Multi-tenant SaaS architecture & REST design",
-  "Offline-first desktop apps with Electron, CouchDB & PouchDB",
-  "Docker, GitLab CI/CD, AWS EC2 & Linux",
+  "React & Next.js frontends with TypeScript & Tailwind CSS",
+  "Backend APIs with Node.js, NestJS & Express",
+  "Cross-platform mobile with React Native & Flutter",
+  "Multi-tenant SaaS — LMS, social commerce & delivery",
+  "Docker, AWS EC2, nginx & CI/CD pipelines",
 ];
 
 function ResumeDownloadButton() {
@@ -39,8 +31,8 @@ function ResumeDownloadButton() {
     <>
       <a
         ref={linkRef}
-        href="/saranzafar-cv.pdf"
-        download="Saran-Zafar-CV.pdf"
+        href="/msameer-cv.pdf"
+        download="Muhammad-Sameer-CV.pdf"
         aria-hidden="true"
         tabIndex={-1}
         className="hidden"
@@ -52,7 +44,7 @@ function ResumeDownloadButton() {
         disabled={state !== "idle"}
         whileTap={state === "idle" ? { scale: 0.97 } : undefined}
         className="group relative inline-flex h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full pl-6 pr-5 text-[13.5px] font-medium text-white transition-all duration-200 hover:scale-[1.02] hover:opacity-95 disabled:cursor-default disabled:hover:scale-100 disabled:hover:opacity-100"
-        style={{ background: "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)" }}
+        style={{ background: "linear-gradient(135deg, #0e7490 0%, #d98a3d 100%)" }}
         aria-live="polite"
       >
         <AnimatePresence>
@@ -140,75 +132,102 @@ function ResumeDownloadButton() {
 
 export default function HeroSection() {
   return (
-    <section id="home" className="relative">
-      <div className="mx-auto grid max-w-5xl items-center gap-12 px-6 pt-14 pb-12 md:grid-cols-[1fr_1fr] md:gap-10 md:pt-20 md:pb-16">
-        {/* ── LEFT — identity ─────────────────────────────────────────
-            No entrance animation here by design (the elements render at
-            their final state). Kept as plain HTML — not framer-motion —
-            so the LCP <h1> and hero block don't carry motion's hydration
-            and layout cost into the critical render path. */}
-        <div>
-          <div className="relative inline-block h-[150px] w-[160px]">
-            <div className="absolute bottom-0 left-0 right-0 h-[105px] rounded-2xl border border-foreground/20 bg-zinc-100 dark:bg-zinc-800" />
+    <section id="home" className="relative overflow-hidden">
+      {/* Ambient palette wash — teal + amber, pulled from the portrait.
+          Purely decorative, sits behind everything and never intercepts
+          clicks. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(45% 40% at 78% 12%, var(--glow), transparent 70%), radial-gradient(40% 35% at 10% 90%, color-mix(in oklab, var(--accent-warm) 14%, transparent), transparent 70%)",
+        }}
+      />
 
+      <div className="mx-auto grid max-w-5xl items-center gap-10 px-6 pt-10 pb-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:pt-16 md:pb-20">
+        {/* ── PORTRAIT — big, framed, first on mobile ─────────────────── */}
+        <div className="relative order-1 mx-auto w-full max-w-[300px] sm:max-w-[340px] md:order-2 md:max-w-none">
+          {/* Soft color glow behind the frame */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-5 -z-10 rounded-[2.25rem] opacity-70 blur-2xl"
+            style={{
+              background:
+                "radial-gradient(60% 55% at 32% 18%, rgba(14,116,144,0.38), transparent 70%), radial-gradient(55% 55% at 82% 88%, rgba(217,138,61,0.32), transparent 70%)",
+            }}
+          />
+
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-[0_30px_70px_-30px_rgba(0,0,0,0.4)]">
             <Image
-              src="/img/saranzafar-image.png"
-              alt="Saran Zafar"
-              width={300}
-              height={291}
+              src="/img/msameer-image.png"
+              alt="Muhammad Sameer — Full-Stack Software Engineer"
+              fill
               priority
               fetchPriority="high"
-              sizes="160px"
-              style={{ height: "150px", width: "auto" }}
-              className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 select-none"
+              sizes="(max-width: 768px) 340px, 460px"
+              className="select-none object-cover object-top"
             />
-
-            <span
+            {/* Bottom fade so the frame reads as one object against any bg */}
+            <div
               aria-hidden="true"
-              className="absolute -right-1 -bottom-2.5 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-background text-[17px] shadow-md ring-1 ring-border/60"
-            >
-              <span className="animate-wave">👋</span>
-            </span>
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/25 to-transparent"
+            />
           </div>
 
-          <h1 className="mt-5 text-[58px] font-bold leading-[1.02] tracking-tight text-foreground sm:text-[64px]">
+          {/* Waving badge, overlapping the top-right corner */}
+          <span
+            aria-hidden="true"
+            className="absolute -right-2 -top-2 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-background text-[20px] shadow-md ring-1 ring-border/60"
+          >
+            <span className="animate-wave">👋</span>
+          </span>
+        </div>
+
+        {/* ── IDENTITY — text, second on mobile ───────────────────────── */}
+        <div className="order-2 md:order-1">
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground backdrop-blur-sm">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            </span>
+            Available for work
+          </p>
+
+          <h1 className="mt-5 text-[46px] font-bold leading-[1.03] tracking-tight text-foreground sm:text-[56px]">
             Hello,
             <br />
-            I&apos;m Saran.
+            I&apos;m{" "}
+            <span className="bg-gradient-to-r from-accent to-accent-warm bg-clip-text text-transparent">
+              Sameer
+            </span>
+            .
           </h1>
 
-          <p className="mt-5 max-w-[440px] text-[18px] font-bold leading-snug text-foreground">
-            Software Engineer | Full-Stack Developer for Backend &amp; Frontend
+          <p className="mt-5 max-w-[460px] text-[17px] font-semibold leading-snug text-foreground">
+            Full-Stack Software Engineer — React &amp; Next.js · Node.js &amp;
+            NestJS · React Native
           </p>
 
-          <p className="mt-4 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground">
-            I&apos;m a software engineer from AJK, Pakistan. I build production
-            systems across healthcare, retail and e-commerce — NestJS REST APIs,
-            multi-tenant SaaS, offline-first Electron desktop apps that sync
-            without losing a write, and WordPress / WooCommerce sites clients
-            can run themselves.
+          <p className="mt-4 max-w-[460px] text-[14.5px] leading-[1.7] text-muted-foreground">
+            I&apos;m a software engineer from Kotli, Azad Kashmir. I build
+            production systems end-to-end — React / Next.js interfaces backed
+            by Node.js and NestJS APIs, multi-tenant SaaS platforms, and
+            cross-platform mobile apps.
           </p>
 
-          <p className="mt-3 max-w-[440px] text-[14.5px] leading-[1.7] text-muted-foreground">
-            Production websites and enterprise-grade systems shipped, used
-            in the real world. Looking to ship something that just works?
-            I can help.
-          </p>
-
-          <ul className="mt-3 space-y-1.5 text-[14px] text-muted-foreground">
+          <ul className="mt-5 flex flex-wrap gap-2">
             {skills.map((s) => (
-              <li key={s} className="flex items-start gap-2.5">
-                <span className="mt-[9px] inline-block h-1.5 w-1.5 rounded-full bg-accent/80" />
-                <span>{s}</span>
+              <li
+                key={s}
+                className="rounded-full border border-border bg-card/60 px-3 py-1 text-[12.5px] text-muted-foreground"
+              >
+                {s}
               </li>
             ))}
-            <li className="flex items-start gap-2.5">
-              <span className="mt-[9px] inline-block h-1.5 w-1.5 rounded-full bg-accent/30" />
-              <span>and more...</span>
-            </li>
           </ul>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="mt-7 flex flex-wrap items-center gap-3">
             <ResumeDownloadButton />
             <a
               href="/contact"
@@ -218,9 +237,6 @@ export default function HeroSection() {
             </a>
           </div>
         </div>
-
-        {/* ── RIGHT — desktop-only decorative mocks, lazily hydrated ─── */}
-        <HeroMocks />
       </div>
     </section>
   );

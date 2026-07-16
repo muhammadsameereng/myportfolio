@@ -8,9 +8,9 @@ import {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Projects — Saran Zafar",
+  title: "Projects — Muhammad Sameer",
   description:
-    "Selected work across SaaS, web, desktop, mobile, and e-commerce — projects shipped by Saran Zafar.",
+    "Selected work across SaaS, web, desktop, mobile, and e-commerce — projects shipped by Muhammad Sameer.",
 };
 
 export default async function ProjectsPage() {

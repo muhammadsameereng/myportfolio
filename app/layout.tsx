@@ -20,43 +20,45 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://saranzafar.com";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://sameer-khan.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Saran Zafar — Software Engineer",
+    default: "Muhammad Sameer — Software Engineer",
     template: "%s",
   },
   description:
-    "Full-stack engineer from Kashmir, building scalable backend systems and modern web applications.",
-  applicationName: "Saran Zafar",
-  authors: [{ name: "Saran Zafar", url: SITE_URL }],
-  creator: "Saran Zafar",
+    "Full-stack engineer from Azad Kashmir, building React/Next.js frontends backed by Node.js & NestJS APIs and React Native apps.",
+  applicationName: "Muhammad Sameer",
+  authors: [{ name: "Muhammad Sameer", url: SITE_URL }],
+  creator: "Muhammad Sameer",
   keywords: [
-    "Saran Zafar",
+    "Muhammad Sameer",
     "Software Engineer",
     "Full Stack Developer",
-    "NestJS",
+    "React",
     "Next.js",
+    "NestJS",
+    "Node.js",
+    "React Native",
     "TypeScript",
-    "Backend Engineer",
-    "Kashmir",
+    "Azad Kashmir",
   ],
   openGraph: {
     type: "website",
-    siteName: "Saran Zafar",
+    siteName: "Muhammad Sameer",
     url: SITE_URL,
-    title: "Saran Zafar — Software Engineer",
+    title: "Muhammad Sameer — Software Engineer",
     description:
-      "Full-stack engineer from Kashmir, building scalable backend systems and modern web applications.",
+      "Full-stack engineer from Azad Kashmir, building React/Next.js frontends backed by Node.js & NestJS APIs and React Native apps.",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Saran Zafar — Software Engineer",
+    title: "Muhammad Sameer — Software Engineer",
     description:
-      "Full-stack engineer from Kashmir, building scalable backend systems and modern web applications.",
+      "Full-stack engineer from Azad Kashmir, building React/Next.js frontends backed by Node.js & NestJS APIs and React Native apps.",
   },
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
@@ -67,8 +69,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8faff" },
-    { media: "(prefers-color-scheme: dark)", color: "#04091a" },
+    { media: "(prefers-color-scheme: light)", color: "#f6faf9" },
+    { media: "(prefers-color-scheme: dark)", color: "#071413" },
   ],
   colorScheme: "light dark",
 };

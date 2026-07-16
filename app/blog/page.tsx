@@ -8,9 +8,9 @@ import {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Blog — Saran Zafar",
+  title: "Blog — Muhammad Sameer",
   description:
-    "Notes from the workbench — short writing on backend systems, frontend patterns, and the path from Kashmir.",
+    "Notes from the workbench — short writing on backend systems, frontend patterns, and the path from Azad Kashmir.",
 };
 
 export default async function BlogPage() {

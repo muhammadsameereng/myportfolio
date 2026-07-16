@@ -7,9 +7,9 @@ import remarkGfm from "remark-gfm";
 import { createClient } from "@/app/lib/supabase/client";
 
 const inputCls =
-  "h-10 w-full appearance-none rounded-xl border border-border bg-background px-3.5 font-sans text-[14px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-blue-400/70 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] focus-visible:outline-none disabled:opacity-60";
+  "h-10 w-full appearance-none rounded-xl border border-border bg-background px-3.5 font-sans text-[14px] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-accent/70 focus:shadow-[0_0_0_3px_rgba(14,116,144,0.15)] focus-visible:outline-none disabled:opacity-60";
 const textareaCls =
-  "w-full resize-none appearance-none rounded-xl border border-border bg-background px-3.5 py-2.5 font-sans text-[14px] leading-[1.65] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-blue-400/70 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] focus-visible:outline-none disabled:opacity-60";
+  "w-full resize-none appearance-none rounded-xl border border-border bg-background px-3.5 py-2.5 font-sans text-[14px] leading-[1.65] text-foreground outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground/70 hover:border-foreground/30 focus:border-accent/70 focus:shadow-[0_0_0_3px_rgba(14,116,144,0.15)] focus-visible:outline-none disabled:opacity-60";
 
 export function Field({
   label,

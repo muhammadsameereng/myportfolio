@@ -6,7 +6,7 @@ import { getPublicPostBySlug } from "../../lib/public/blog";
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Blog — Saran Zafar";
+export const alt = "Blog — Muhammad Sameer";
 
 export default async function OG({
   params,
@@ -39,7 +39,7 @@ export default async function OG({
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 26, fontWeight: 600 }}>
           <span>✦</span>
-          <span>saranzafar</span>
+          <span>msameer</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
@@ -67,8 +67,8 @@ export default async function OG({
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 20, color: "#737373" }}>
-          <span>saranzafar.com / blog</span>
-          <span>Saran Zafar</span>
+          <span>sameer-khan.vercel.app / blog</span>
+          <span>Muhammad Sameer</span>
         </div>
       </div>
     ),

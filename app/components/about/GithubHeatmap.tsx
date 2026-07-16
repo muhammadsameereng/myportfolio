@@ -13,6 +13,11 @@ const GAP = 3;
 const RADIUS = 3;
 const ROWS = 7;
 
+// Contribution intensity → teal alpha (atmospheric, matches the site accent).
+const LEVEL_ALPHA = [0.08, 0.3, 0.52, 0.74, 1] as const;
+const levelFill = (level: number) =>
+  `rgb(var(--bg-teal) / ${LEVEL_ALPHA[level] ?? LEVEL_ALPHA[0]})`;
+
 export default function GithubHeatmap({ user }: { user: string }) {
   const [data, setData] = useState<Day[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -40,16 +45,18 @@ export default function GithubHeatmap({ user }: { user: string }) {
     if (!data || data.length === 0) return [];
     const start = new Date(data[0].date);
     const startDow = start.getDay(); // 0 = Sun
-    const padded: (Day | null)[] = [
-      ...Array(startDow).fill(null),
-      ...data,
-    ];
+    const padded: (Day | null)[] = [...Array(startDow).fill(null), ...data];
     const cols: (Day | null)[][] = [];
     for (let i = 0; i < padded.length; i += ROWS) {
       cols.push(padded.slice(i, i + ROWS));
     }
     return cols;
   }, [data]);
+
+  const total = useMemo(
+    () => (data ? data.reduce((s, d) => s + d.count, 0) : 0),
+    [data]
+  );
 
   if (error) {
     return (
@@ -70,42 +77,61 @@ export default function GithubHeatmap({ user }: { user: string }) {
   const height = ROWS * (CELL + GAP) - GAP;
 
   return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      className="block h-auto w-full"
-      style={{ minWidth: 640 }}
-      role="img"
-      aria-label={`GitHub contributions for ${user}, last year`}
-    >
-      {weeks.map((week, x) => (
-        <g key={x} transform={`translate(${x * (CELL + GAP)}, 0)`}>
-          {week.map((day, y) => {
-            if (!day) return null;
-            const filled = day.level > 0;
-            return (
-              <rect
-                key={y}
-                x={0}
-                y={y * (CELL + GAP)}
-                width={CELL}
-                height={CELL}
-                rx={RADIUS}
-                ry={RADIUS}
-                className={
-                  filled
-                    ? "fill-foreground"
-                    : "fill-foreground/[0.06] dark:fill-foreground/[0.08]"
-                }
-              >
-                <title>
-                  {day.date}: {day.count} contribution
-                  {day.count === 1 ? "" : "s"}
-                </title>
-              </rect>
-            );
-          })}
-        </g>
-      ))}
-    </svg>
+    <div className="min-w-[640px]">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="block h-auto w-full"
+        role="img"
+        aria-label={`GitHub contributions for ${user}, last year`}
+      >
+        {weeks.map((week, x) => (
+          <g key={x} transform={`translate(${x * (CELL + GAP)}, 0)`}>
+            {week.map((day, y) => {
+              if (!day) return null;
+              return (
+                <rect
+                  key={y}
+                  x={0}
+                  y={y * (CELL + GAP)}
+                  width={CELL}
+                  height={CELL}
+                  rx={RADIUS}
+                  ry={RADIUS}
+                  style={{ fill: levelFill(day.level) }}
+                >
+                  <title>
+                    {day.date}: {day.count} contribution
+                    {day.count === 1 ? "" : "s"}
+                  </title>
+                </rect>
+              );
+            })}
+          </g>
+        ))}
+      </svg>
+
+      {/* Total + legend */}
+      <div className="mt-3 flex items-center justify-between">
+        <p className="text-[12px] text-muted-foreground">
+          <span className="font-semibold text-foreground tabular-nums">
+            {total.toLocaleString()}
+          </span>{" "}
+          contributions in the last year
+        </p>
+        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/80">
+          <span>Less</span>
+          <div className="flex items-center gap-[3px]">
+            {LEVEL_ALPHA.map((_, i) => (
+              <span
+                key={i}
+                className="h-[11px] w-[11px] rounded-[3px]"
+                style={{ background: levelFill(i) }}
+              />
+            ))}
+          </div>
+          <span>More</span>
+        </div>
+      </div>
+    </div>
   );
 }

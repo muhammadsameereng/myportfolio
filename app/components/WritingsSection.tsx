@@ -33,17 +33,19 @@ export default function WritingsSection({ posts }: { posts: BlogPost[] }) {
                 className="group grid grid-cols-1 gap-5 py-7 sm:grid-cols-[1fr_auto] sm:gap-8"
               >
                 <div className="min-w-0">
-                  <h3 className="text-[16px] font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:underline">
+                  <h3 className="text-[16px] font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent">
                     {p.title}
                   </h3>
                   <p className="mt-2 text-[12.5px] leading-relaxed text-muted-foreground">
                     {p.excerpt}
                   </p>
-                  <p className="mt-3 text-[11px] text-muted-foreground/85">
-                    {p.date}
-                  </p>
+                  <div className="mt-3 flex items-center gap-2 text-[11px] text-muted-foreground/85">
+                    <span>{p.date}</span>
+                    <span className="h-2.5 w-px bg-border" />
+                    <span>{p.readTime} read</span>
+                  </div>
                 </div>
-                <div className="relative h-[120px] w-full overflow-hidden rounded-xl bg-muted/30 sm:h-[120px] sm:w-[160px]">
+                <div className="relative h-[120px] w-full overflow-hidden rounded-xl border border-border bg-muted/30 transition-all duration-300 group-hover:border-accent/45 group-hover:shadow-[0_16px_38px_-18px_rgb(var(--bg-teal)/0.5)] sm:h-[120px] sm:w-[160px]">
                   <Image
                     src={p.thumb}
                     alt=""

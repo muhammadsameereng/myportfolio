@@ -6,7 +6,7 @@ import { isAdminEmail } from "@/app/lib/admin/auth";
 import { createClient } from "@/app/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Admin · Saran Zafar",
+  title: "Admin · Muhammad Sameer",
   robots: { index: false, follow: false },
 };
 
