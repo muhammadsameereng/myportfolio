@@ -42,8 +42,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes — lastmod = build time, since "the page" changes when
   // we redeploy. Refines naturally on every Vercel deploy.
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE}/`, lastModified: buildTime },
-    { url: `${SITE}/about`, lastModified: buildTime },
+    {
+      url: `${SITE}/`,
+      lastModified: buildTime,
+      images: [`${SITE}/img/msameer-image.png`],
+    },
+    {
+      url: `${SITE}/about`,
+      lastModified: buildTime,
+      images: [`${SITE}/img/msameer-image5.png`],
+    },
     { url: `${SITE}/experience`, lastModified: buildTime },
     { url: `${SITE}/projects`, lastModified: buildTime },
     { url: `${SITE}/blog`, lastModified: buildTime },

@@ -34,7 +34,7 @@ export default async function HomeProjects() {
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-muted/30 transition-all duration-300 group-hover:border-accent/45 group-hover:shadow-[0_18px_44px_-18px_rgb(var(--bg-teal)/0.5)]">
                 <Image
                   src={p.thumb}
-                  alt={p.title}
+                  alt={`${p.title} — ${p.category} project by Muhammad Sameer`}
                   fill
                   quality={60}
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 256px"

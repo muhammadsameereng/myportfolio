@@ -301,7 +301,7 @@ export default function ProjectDetailContent({
         >
           <Image
             src={project.thumb}
-            alt={project.title}
+            alt={`${project.title} — ${project.category} project by Muhammad Sameer`}
             width={1600}
             height={900}
             preload

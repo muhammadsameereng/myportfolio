@@ -48,7 +48,7 @@ export default function WritingsSection({ posts }: { posts: BlogPost[] }) {
                 <div className="relative h-[120px] w-full overflow-hidden rounded-xl border border-border bg-muted/30 transition-all duration-300 group-hover:border-accent/45 group-hover:shadow-[0_16px_38px_-18px_rgb(var(--bg-teal)/0.5)] sm:h-[120px] sm:w-[160px]">
                   <Image
                     src={p.thumb}
-                    alt=""
+                    alt={`${p.title} — article by Muhammad Sameer`}
                     fill
                     loading="lazy"
                     sizes="(max-width: 640px) 100vw, 160px"

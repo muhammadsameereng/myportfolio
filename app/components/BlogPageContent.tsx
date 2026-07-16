@@ -97,7 +97,7 @@ export default function BlogPageContent({
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/30">
                     <Image
                       src={p.thumb}
-                      alt=""
+                      alt={`${p.title} — article by Muhammad Sameer`}
                       fill
                       loading="lazy"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"

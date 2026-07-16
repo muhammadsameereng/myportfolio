@@ -91,7 +91,7 @@ export default function BlogDetailContent({
         >
           <Image
             src={post.thumb}
-            alt={post.title}
+            alt={`${post.title} — article by Muhammad Sameer`}
             width={1600}
             height={900}
             priority
