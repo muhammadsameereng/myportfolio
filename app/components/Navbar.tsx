@@ -202,7 +202,7 @@ export default function Navbar() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 380, damping: 40 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="fixed right-0 top-0 z-50 flex h-full w-[82%] max-w-xs flex-col border-l border-border bg-background/95 shadow-[0_18px_50px_-12px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150 md:hidden"
             >
               {/* Header */}
@@ -226,68 +226,42 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Links — staggered slide-in */}
-              <motion.nav
-                className="flex flex-1 flex-col gap-1 overflow-y-auto p-4"
-                initial="hidden"
-                animate="show"
-                variants={{
-                  show: {
-                    transition: { staggerChildren: 0.055, delayChildren: 0.12 },
-                  },
-                }}
-              >
+              {/* Links */}
+              <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
                 {navLinks.map((link) => {
                   const active = isActive(link.href);
                   return (
-                    <motion.div
+                    <Link
                       key={link.label}
-                      variants={{
-                        hidden: { opacity: 0, x: 26 },
-                        show: { opacity: 1, x: 0 },
-                      }}
-                      transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      aria-current={active ? "page" : undefined}
+                      className={`group flex items-center justify-between rounded-xl px-3.5 py-3 text-[15px] transition-colors ${
+                        active
+                          ? "bg-accent/10 font-semibold text-accent"
+                          : "text-foreground/80 hover:bg-foreground/[0.04] hover:text-foreground"
+                      }`}
                     >
-                      <Link
-                        href={link.href}
-                        onClick={() => setMobileOpen(false)}
-                        aria-current={active ? "page" : undefined}
-                        className={`group flex items-center justify-between rounded-xl px-3.5 py-3 text-[15px] transition-colors ${
-                          active
-                            ? "bg-accent/10 font-semibold text-accent"
-                            : "text-foreground/80 hover:bg-foreground/[0.04] hover:text-foreground"
-                        }`}
-                      >
-                        <span className="flex items-center gap-3">
-                          <span
-                            aria-hidden
-                            className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                              active ? "bg-accent" : "bg-foreground/25 group-hover:bg-foreground/60"
-                            }`}
-                          />
-                          {link.label}
-                        </span>
-                        <ArrowUpRight
-                          size={14}
-                          className="text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground/70"
+                      <span className="flex items-center gap-3">
+                        <span
+                          aria-hidden
+                          className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                            active ? "bg-accent" : "bg-foreground/25 group-hover:bg-foreground/60"
+                          }`}
                         />
-                      </Link>
-                    </motion.div>
+                        {link.label}
+                      </span>
+                      <ArrowUpRight
+                        size={14}
+                        className="text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground/70"
+                      />
+                    </Link>
                   );
                 })}
-              </motion.nav>
+              </nav>
 
               {/* Socials + CTA */}
-              <motion.div
-                className="space-y-4 border-t border-border/60 p-4"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.4,
-                  delay: 0.12 + navLinks.length * 0.055,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
+              <div className="space-y-4 border-t border-border/60 p-4">
                 <div className="flex items-center gap-4">
                   {SOCIALS.map(({ label, href, icon: Icon }) => (
                     <a
@@ -310,7 +284,7 @@ export default function Navbar() {
                 >
                   Get in touch
                 </Link>
-              </motion.div>
+              </div>
             </motion.aside>
           </>
         )}
