@@ -3,7 +3,12 @@ import Script from "next/script";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import PublicChrome from "./components/PublicChrome";
-import { JsonLd, personSchema, websiteSchema } from "./components/JsonLd";
+import {
+  JsonLd,
+  organizationSchema,
+  personSchema,
+  websiteSchema,
+} from "./components/JsonLd";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -131,6 +136,7 @@ export default function RootLayout({
 
         {/* Site-wide structured data */}
         <JsonLd data={personSchema} />
+        <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
       </head>
       {/* suppressHydrationWarning: browser extensions inject __processed_* and bis_register attrs */}

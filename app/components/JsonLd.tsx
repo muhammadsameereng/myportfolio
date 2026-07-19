@@ -98,11 +98,48 @@ export function breadcrumbLd(trail: { name: string; path: string }[]) {
 }
 
 /**
- * WebSite schema — linked to the Person via @id so Google understands this
- * site *is about* Muhammad Sameer. `name` + `alternateName` are the fields
- * Google reads for the site-name shown in search results. (Note: on a
- * `*.vercel.app` subdomain Google may still surface "Vercel" as the site
- * name; a custom domain is the definitive fix.)
+ * Organization schema — a strong "this-is-a-site" anchor for Google's
+ * site-name picker. A lone Person node is a weaker signal; pairing it with
+ * an Organization (as established sites like schools/businesses do) gives
+ * Google a confident name to display instead of falling back to the host
+ * platform's brand. `name` is what should appear as the site name.
+ */
+export const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE}/#organization`,
+  name: "Muhammad Sameer",
+  alternateName: ["Muhammad Sameer — Software Engineer", "Muhammad Sameer AJK"],
+  url: SITE,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE}/img/msameer-image.png`,
+  },
+  image: `${SITE}/img/msameer-image.png`,
+  email: "mailto:msameerdevelops@gmail.com",
+  founder: { "@id": `${SITE}/#person` },
+  employee: { "@id": `${SITE}/#person` },
+  description:
+    "Software engineering by Muhammad Sameer — full-stack React/Next.js, Node.js & NestJS APIs, and React Native mobile apps.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Kotli, Azad Jammu and Kashmir",
+    addressRegion: "AJK",
+    addressCountry: "PK",
+  },
+  sameAs: [
+    "https://github.com/muhammadsameereng",
+    "https://www.linkedin.com/in/muhammad-sameer",
+    "https://www.instagram.com/m.sameer.dev/",
+    "https://gitlab.com/sameerorg-group/sameerorg-project/",
+  ],
+};
+
+/**
+ * WebSite schema — linked to the Person and Organization via @id so Google
+ * understands this site *is about* Muhammad Sameer and is *published by* the
+ * Muhammad Sameer organization. `name` + `alternateName` are the fields
+ * Google reads for the site-name shown in search results.
  */
 export const websiteSchema = {
   "@context": "https://schema.org",
@@ -114,7 +151,7 @@ export const websiteSchema = {
   inLanguage: "en",
   about: { "@id": `${SITE}/#person` },
   mainEntity: { "@id": `${SITE}/#person` },
-  publisher: { "@id": `${SITE}/#person` },
+  publisher: { "@id": `${SITE}/#organization` },
   author: { "@id": `${SITE}/#person` },
 };
 
