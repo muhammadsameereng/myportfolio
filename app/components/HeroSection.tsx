@@ -174,18 +174,19 @@ export default function HeroSection() {
           </p>
 
           <h1 className="mt-5 text-[46px] font-bold leading-[1.03] tracking-tight text-foreground sm:text-[56px]">
-            Hello,
-            <br />
-            I&apos;m{" "}
+            Hi, I&apos;m{" "}
             <span className="bg-gradient-to-r from-accent to-accent-warm bg-clip-text text-transparent">
-              Sameer
+              Muhammad Sameer
             </span>
-            .
+            <br />
+            <span className="text-[30px] font-semibold sm:text-[34px]">
+              Software Engineer
+            </span>
           </h1>
 
           <p className="mt-5 max-w-[460px] text-[17px] font-semibold leading-snug text-foreground">
-            Full-Stack Software Engineer — React &amp; Next.js · Node.js &amp;
-            NestJS · React Native
+            Full-Stack Software Engineer &amp; Developer — React &amp; Next.js ·
+            Node.js &amp; NestJS · React Native
           </p>
 
           <p className="mt-4 max-w-[460px] text-[14.5px] leading-[1.7] text-muted-foreground">

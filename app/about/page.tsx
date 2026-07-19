@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import AboutPageContent from "../components/AboutPageContent";
-import { JsonLd, breadcrumbLd } from "../components/JsonLd";
+import { JsonLd, breadcrumbLd, profilePageSchema } from "../components/JsonLd";
 
 export const revalidate = 3600;
 
@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main>
+      <JsonLd data={profilePageSchema} />
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },

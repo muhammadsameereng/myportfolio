@@ -28,9 +28,22 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://msameer.vercel.app";
 export const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${SITE}/#person`,
   name: "Muhammad Sameer",
+  alternateName: ["Sameer", "Muhammad Sameer AJK", "M. Sameer"],
   url: SITE,
+  mainEntityOfPage: `${SITE}/about`,
   jobTitle: "Software Engineer",
+  hasOccupation: {
+    "@type": "Occupation",
+    name: "Full-Stack Software Engineer",
+    occupationLocation: {
+      "@type": "City",
+      name: "Kotli, Azad Jammu and Kashmir",
+    },
+    skills:
+      "React, Next.js, TypeScript, Node.js, NestJS, React Native, Flutter, PostgreSQL, Docker, AWS",
+  },
   description:
     "Full-stack engineer from Azad Kashmir building React/Next.js frontends, NestJS APIs, and React Native apps.",
   image: `${SITE}/img/msameer-image.png`,
@@ -84,13 +97,41 @@ export function breadcrumbLd(trail: { name: string; path: string }[]) {
   };
 }
 
-/** WebSite schema — search-action ready. */
+/**
+ * WebSite schema — linked to the Person via @id so Google understands this
+ * site *is about* Muhammad Sameer. `name` + `alternateName` are the fields
+ * Google reads for the site-name shown in search results. (Note: on a
+ * `*.vercel.app` subdomain Google may still surface "Vercel" as the site
+ * name; a custom domain is the definitive fix.)
+ */
 export const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${SITE}/#website`,
   name: "Muhammad Sameer",
+  alternateName: ["Muhammad Sameer — Software Engineer", "Muhammad Sameer AJK"],
   url: SITE,
-  author: { "@type": "Person", name: "Muhammad Sameer" },
+  inLanguage: "en",
+  about: { "@id": `${SITE}/#person` },
+  mainEntity: { "@id": `${SITE}/#person` },
+  publisher: { "@id": `${SITE}/#person` },
+  author: { "@id": `${SITE}/#person` },
+};
+
+/**
+ * ProfilePage schema — Google's dedicated type for "a page about a person".
+ * Placed on /about and linked to the same #person node, it tells Google the
+ * canonical page describing Muhammad Sameer.
+ */
+export const profilePageSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": `${SITE}/about#profilepage`,
+  url: `${SITE}/about`,
+  name: "About Muhammad Sameer",
+  mainEntity: { "@id": `${SITE}/#person` },
+  about: { "@id": `${SITE}/#person` },
+  isPartOf: { "@id": `${SITE}/#website` },
 };
 
 export function articleSchema(post: {
